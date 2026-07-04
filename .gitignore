@@ -8,6 +8,7 @@
 .pytest_cache/*
 build/
 dist/
+output/
 tmp_weights/
 tmp_weights_DELETE/
 store/
