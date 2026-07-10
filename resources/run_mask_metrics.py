@@ -1,19 +1,20 @@
 #!/usr/bin/env python
 """
-Compute QC metrics for a set of segmentation masks and print them as a table.
+Compute per-structure mask quality-control metrics for a set of segmentation masks and
+print them as a table.
 
 Usage:
-    python resources/run_qc_metrics.py -m <mask_dir_or_multilabel.nii.gz> [-c ct.nii.gz] [-ta total] [-o out.json] [-report_csv out.csv]
+    python resources/run_mask_metrics.py -m <mask_dir_or_multilabel.nii.gz> [-c ct.nii.gz] [-ta total] [-o out.json] [-report_csv out.csv]
 
 Examples:
     # Directory of per-structure masks (e.g. a non --ml TotalSegmentator run), with CT for HU stats
-    python resources/run_qc_metrics.py -m output/ -c ct.nii.gz
+    python resources/run_mask_metrics.py -m output/ -c ct.nii.gz
 
     # Single --ml multilabel output, task determines the label->name mapping
-    python resources/run_qc_metrics.py -m output.nii.gz -ta total -c ct.nii.gz -o qc_metrics.json
+    python resources/run_mask_metrics.py -m output.nii.gz -ta total -c ct.nii.gz -o qc_metrics.json
 
     # Write every structure/metric to a CSV (e.g. to open in Excel or load with pandas)
-    python resources/run_qc_metrics.py -m output/ -c ct.nii.gz -report_csv qc_metrics.csv
+    python resources/run_mask_metrics.py -m output/ -c ct.nii.gz -report_csv qc_metrics.csv
 """
 import argparse
 import csv
@@ -21,7 +22,7 @@ import json
 import sys
 from pathlib import Path
 
-from totalsegmentator.qc import calculate_mask_metrics
+from totalsegmentator.mask_metrics import calculate_mask_metrics
 
 # Curated subset shown in the table by default; pass --all for every computed metric.
 DEFAULT_COLUMNS = [
@@ -88,7 +89,9 @@ def main():
     if not args.mask_path.exists():
         parser.error(f"mask_path does not exist: {args.mask_path}")
 
-    metrics = calculate_mask_metrics(args.mask_path, ct_path=args.ct_path, task=args.task)
+    result = calculate_mask_metrics(args.mask_path, ct_path=args.ct_path, task=args.task)
+    metrics = result["structures"]
+    orientation = result["orientation"]
 
     if not metrics:
         print("No structures found.", file=sys.stderr)
@@ -105,10 +108,12 @@ def main():
 
     n_empty = sum(m["is_empty"] for m in metrics.values())
     print(f"\n{len(metrics)} structures, {n_empty} empty" + (" (no CT given: HU metrics skipped)" if args.ct_path is None else ""))
+    print(f"Orientation: input was {''.join(orientation['original_axcodes'])}, "
+          f"reoriented to canonical {''.join(orientation['canonical_axcodes'])} before computing shape metrics.")
 
     if args.output is not None:
         with open(args.output, "w") as f:
-            json.dump(metrics, f, indent=2)
+            json.dump({"structures": metrics, "orientation": orientation}, f, indent=2)
         print(f"Full metrics written to {args.output}")
 
     if args.report_csv is not None:

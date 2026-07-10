@@ -20,6 +20,9 @@ import nibabel as nib
 from scipy import ndimage
 
 from totalsegmentator.statistics import touches_border
+from totalsegmentator.alignment import as_closest_canonical
+
+CANONICAL_AXCODES = ["R", "A", "S"]
 
 
 def volume_metrics(mask: np.ndarray, spacing: tuple) -> dict:
@@ -50,6 +53,13 @@ def shape_metrics(mask: np.ndarray, spacing: tuple) -> dict:
     Centroid and bbox extents are expressed as fractions of the image size along each axis,
     so they are comparable across images of different dimensions. bbox extents use an
     inclusive-max convention (max_idx - min_idx + 1).
+
+    centroid_x/y/z_rel and bbox_x/y/z_rel are only comparable across different scans if mask's
+    array axes consistently mean the same anatomical direction in every call - NIfTI files can
+    store the same anatomy along differently ordered/flipped axes (see nib.aff2axcodes), so
+    callers should reorient to a fixed orientation (e.g. via
+    totalsegmentator.alignment.as_closest_canonical) before calling this, as
+    calculate_mask_metrics does.
 
     spacing: (x, y, z) voxel spacing in mm.
 
@@ -164,6 +174,12 @@ def intensity_metrics(mask: np.ndarray, ct: np.ndarray) -> dict:
 _EMPTY_INTENSITY_METRICS = {"mean_HU": None, "median_HU": None, "std_HU": None, "p05_HU": None, "p95_HU": None}
 
 
+def _reorient_to_canonical(img: nib.Nifti1Image):
+    """Return (canonical_img, original_axcodes). See calculate_mask_metrics for why."""
+    original_axcodes = list(nib.aff2axcodes(img.affine))
+    return as_closest_canonical(img), original_axcodes
+
+
 def calculate_mask_metrics(mask_path: Union[str, Path], ct_path: Union[str, Path, None] = None,
                            task: str = "total", class_map: dict = None) -> dict:
     """
@@ -178,20 +194,31 @@ def calculate_mask_metrics(mask_path: Union[str, Path], ct_path: Union[str, Path
 
     ct_path: optional path to the CT the masks were derived from, used for intensity_metrics.
         If not given, the intensity_metrics keys are set to None. Must have the same shape as
-        each mask (raises ValueError otherwise), since a shape mismatch means the CT and mask
-        are not in the same space and any HU statistics computed from them would be meaningless.
+        each mask after reorientation (raises ValueError otherwise), since a shape mismatch
+        means the CT and mask are not in the same space and any HU statistics computed from
+        them would be meaningless.
 
     task, class_map: only used for a multilabel file, to map label index -> structure name.
         class_map (e.g. {1: "spleen", ...}) takes precedence if given; otherwise it is looked up
         from the task registry for `task` (default "total").
 
-    Returns: {structure_name: {**volume_metrics, **shape_metrics, **component_metrics,
-        **boundary_metrics, **intensity_metrics}}
+    Every mask (and the CT, if given) is reoriented to the closest canonical RAS orientation
+    (totalsegmentator.alignment.as_closest_canonical) before shape_metrics is computed. NIfTI
+    files can store the same anatomy with array axes in any order/flip depending on the
+    scanner/conversion pipeline (see nib.aff2axcodes) - without this, centroid_x/y/z_rel and
+    bbox_x/y/z_rel from two different scans would not be comparable even though the field
+    names look identical. The orientation actually detected (before reorientation) is reported
+    under "orientation" so this correction is auditable rather than an invisible assumption.
+
+    Returns: {"structures": {structure_name: {**volume_metrics, **shape_metrics,
+        **component_metrics, **boundary_metrics, **intensity_metrics}},
+        "orientation": {"original_axcodes": [...], "canonical_axcodes": ["R", "A", "S"]}}
     """
     mask_path = Path(mask_path)
     ct = None
+    original_axcodes = None
     if ct_path is not None:
-        ct_img = nib.load(ct_path)
+        ct_img, original_axcodes = _reorient_to_canonical(nib.load(ct_path))
         ct = ct_img.get_fdata()
 
     def metrics_for(mask: np.ndarray, spacing: tuple) -> dict:
@@ -207,15 +234,20 @@ def calculate_mask_metrics(mask_path: Union[str, Path], ct_path: Union[str, Path
 
     if mask_path.is_dir():
         mask_files = sorted(mask_path.glob("*.nii.gz"))
-        metrics = {}
+        structures = {}
         for mask_file in mask_files:
-            img = nib.load(mask_file)
+            img, mask_axcodes = _reorient_to_canonical(nib.load(mask_file))
+            if original_axcodes is None:
+                original_axcodes = mask_axcodes
             mask = img.get_fdata() > 0
             structure_name = mask_file.name[:-len(".nii.gz")]
-            metrics[structure_name] = metrics_for(mask, img.header.get_zooms())
-        return metrics
+            structures[structure_name] = metrics_for(mask, img.header.get_zooms())
+        return {"structures": structures,
+                "orientation": {"original_axcodes": original_axcodes, "canonical_axcodes": list(CANONICAL_AXCODES)}}
 
-    img = nib.load(mask_path)
+    img, mask_axcodes = _reorient_to_canonical(nib.load(mask_path))
+    if original_axcodes is None:
+        original_axcodes = mask_axcodes
     spacing = img.header.get_zooms()
     data = img.get_fdata()
 
@@ -223,7 +255,8 @@ def calculate_mask_metrics(mask_path: Union[str, Path], ct_path: Union[str, Path
         from totalsegmentator.registry import get_task_classes
         class_map = get_task_classes(task)
 
-    metrics = {}
+    structures = {}
     for label_idx, structure_name in class_map.items():
-        metrics[structure_name] = metrics_for(data == label_idx, spacing)
-    return metrics
+        structures[structure_name] = metrics_for(data == label_idx, spacing)
+    return {"structures": structures,
+            "orientation": {"original_axcodes": original_axcodes, "canonical_axcodes": list(CANONICAL_AXCODES)}}

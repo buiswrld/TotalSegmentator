@@ -5,7 +5,7 @@ import numpy as np
 import nibabel as nib
 import pytest
 
-from totalsegmentator.qc import (
+from totalsegmentator.mask_metrics import (
     volume_metrics, shape_metrics, component_metrics, boundary_metrics, intensity_metrics,
     calculate_mask_metrics,
 )
@@ -182,12 +182,14 @@ def test_calculate_mask_metrics_directory_mode(tmp_path):
     kidney = np.zeros((10, 10, 10), dtype=np.uint8)
     _write_nifti(mask_dir / "kidney_right.nii.gz", kidney)  # empty mask
 
-    metrics = calculate_mask_metrics(mask_dir)
+    result = calculate_mask_metrics(mask_dir)
+    metrics = result["structures"]
 
     assert metrics["spleen"]["num_voxels"] == 27
     assert metrics["spleen"]["is_empty"] == 0
     assert metrics["kidney_right"]["is_empty"] == 1
     assert metrics["kidney_right"]["mean_HU"] is None  # no ct_path given
+    assert result["orientation"]["canonical_axcodes"] == ["R", "A", "S"]
 
 
 def test_calculate_mask_metrics_multilabel_mode(tmp_path):
@@ -197,7 +199,7 @@ def test_calculate_mask_metrics_multilabel_mode(tmp_path):
     _write_nifti(mask_file, data)
 
     class_map = {1: "spleen", 2: "liver"}
-    metrics = calculate_mask_metrics(mask_file, class_map=class_map)
+    metrics = calculate_mask_metrics(mask_file, class_map=class_map)["structures"]
 
     assert set(metrics) == {"spleen", "liver"}
     assert metrics["spleen"]["num_voxels"] == 27
@@ -215,7 +217,7 @@ def test_calculate_mask_metrics_with_ct_computes_intensity(tmp_path):
     ct_file = tmp_path / "ct.nii.gz"
     _write_nifti(ct_file, ct)
 
-    metrics = calculate_mask_metrics(mask_file, ct_path=ct_file, class_map={1: "spleen"})
+    metrics = calculate_mask_metrics(mask_file, ct_path=ct_file, class_map={1: "spleen"})["structures"]
 
     assert metrics["spleen"]["mean_HU"] == 40.0
 
@@ -233,6 +235,29 @@ def test_calculate_mask_metrics_ct_shape_mismatch_raises(tmp_path):
         calculate_mask_metrics(mask_file, ct_path=ct_file, class_map={1: "spleen"})
 
 
+def test_calculate_mask_metrics_reports_original_orientation(tmp_path):
+    """
+    A mask stored with flipped axes (LPS-like: negative x/y direction cosines) must be
+    reoriented before shape_metrics is computed, and the orientation actually detected in
+    the file must be reported rather than silently discarded.
+    """
+    data = np.zeros((10, 10, 10), dtype=np.uint8)
+    data[6:9, 6:9, 6:9] = 1  # near the max-index corner in LPS storage order
+    lps_affine = np.diag([-1.0, -1.0, 1.0, 1.0])  # L, P, S direction cosines
+    mask_file = tmp_path / "seg.nii.gz"
+    nib.save(nib.Nifti1Image(data.astype(np.float32), lps_affine), mask_file)
+
+    result = calculate_mask_metrics(mask_file, class_map={1: "spleen"})
+
+    assert result["orientation"]["original_axcodes"] == ["L", "P", "S"]
+    assert result["orientation"]["canonical_axcodes"] == ["R", "A", "S"]
+    # after reorientation to RAS, the block moves to the opposite corner along x and y
+    m = result["structures"]["spleen"]
+    assert m["centroid_x_rel"] < 0.5
+    assert m["centroid_y_rel"] < 0.5
+    assert m["centroid_z_rel"] > 0.5
+
+
 # ---- regression check against the repo's real reference fixtures ----
 
 def test_calculate_mask_metrics_matches_reference_statistics():
@@ -243,7 +268,7 @@ def test_calculate_mask_metrics_matches_reference_statistics():
     get_basic_statistics (the tool's own runtime stats function) on the same data.
     volume_mm3 uses the same units as statistics.json's "volume" field (mm3), so this is
     a direct comparison with no unit conversion. Agreement here is evidence the
-    volume/intensity math in qc.py is correct, not just internally consistent on synthetic
+    volume/intensity math in mask_metrics.py is correct, not just internally consistent on synthetic
     arrays.
     """
     mask_dir = REFERENCE_DIR / "example_seg_fast"
@@ -251,7 +276,7 @@ def test_calculate_mask_metrics_matches_reference_statistics():
     with open(mask_dir / "statistics.json") as f:
         ref_stats = json.load(f)
 
-    metrics = calculate_mask_metrics(mask_dir, ct_path=ct_path)
+    metrics = calculate_mask_metrics(mask_dir, ct_path=ct_path)["structures"]
 
     checked = 0
     for structure_name, ref in ref_stats.items():
@@ -260,7 +285,7 @@ def test_calculate_mask_metrics_matches_reference_statistics():
         m = metrics[structure_name]
         if m["is_empty"]:
             # get_basic_statistics uses 0.0 as a "no data" sentinel for empty/border-excluded
-            # masks; qc.py deliberately uses None instead, so there's nothing to compare here.
+            # masks; mask_metrics.py deliberately uses None instead, so there's nothing to compare here.
             continue
         assert m["volume_mm3"] == pytest.approx(ref["volume"], abs=1.0)
         assert m["mean_HU"] == pytest.approx(ref["intensity"], abs=0.01)
