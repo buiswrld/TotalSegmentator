@@ -31,7 +31,7 @@ from matplotlib.colors import ListedColormap, BoundaryNorm
 import glob, os, csv, subprocess
 from collections import defaultdict
 
-from mask_metrics import (volume_metrics, shape_metrics, component_metrics,
+from totalsegmentator.mask_metrics import (volume_metrics, shape_metrics, component_metrics,
                           boundary_metrics, intensity_metrics,
                           _EMPTY_INTENSITY_METRICS)
 
