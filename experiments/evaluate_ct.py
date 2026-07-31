@@ -37,21 +37,21 @@ from totalsegmentator.mask_metrics import (volume_metrics, shape_metrics, compon
 
 # ============================ CONFIG ============================
 DATASET   = r"C:\Users\ansar\Downloads\Totalsegmentator_dataset_v201"
-PRED_ROOT = r"C:\Users\ansar\Algoverse\predictions_ct"
-REPORT    = r"C:\Users\ansar\Algoverse\report_ct"
+PRED_ROOT = r"C:\Users\ansar\Algoverse\predictions_ct_val"
+REPORT    = r"C:\Users\ansar\Algoverse\report_ct_val"
 
 IMAGE_NAME = "ct.nii.gz"            # CT dataset uses ct.nii.gz, not mri.nii.gz
 TS_EXTRA   = ["-ta", "total"]       # CT task; add "-f" for the 3mm fast model
 
-SPLIT   = "train"   # meta.csv split. Use train/val to BUILD the classifier,
+SPLIT   = "val"   # meta.csv split. Use train/val to BUILD the classifier,
                     # and keep "test" held out for the paper's evaluation.
-LIMIT   = 20        # subjects for this pilot run; None = all
+LIMIT   = None        # subjects for this pilot run; None = all
 RUN_TS  = True
 
 MIN_VOXELS    = 20     # below this a mask counts as absent (kills 1-voxel FOV slivers)
 DICE_FLAG     = 0.50
 IOU_ACCEPT    = 0.90   # label threshold: IoU >= this  ->  accept (1)
-OVERLAY_LIMIT = 10     # how many subjects get an overlay PNG
+OVERLAY_LIMIT = 20     # how many subjects get an overlay PNG
 
 CT_WINDOW = (-150, 250)   # HU window for display only (soft tissue)
 # ================================================================
