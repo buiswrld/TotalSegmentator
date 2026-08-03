@@ -116,6 +116,45 @@ Do not hardcode task or class names from source in scripts/tests where avoidable
 functions (`totalsegmentator.registry.list_tasks`, `get_task_classes`, `task_registry`) are
 generated from the same data the CLI validates against.
 
+## QC pipeline (staged, resumable — `experiments/pipeline/`)
+
+The ground-truth-free QC classifier pipeline is six independent CLI stages under
+`experiments/pipeline/`, each resumable from any prior stage's output on disk, with no
+hardcoded paths (everything is an argparse flag):
+
+1. `run_inference.py` — run TotalSegmentator over a dataset split.
+2. `compute_metrics.py` — score predictions vs. ground truth + compute
+   `totalsegmentator/mask_metrics.py`'s ground-truth-free features (CT and MR both go
+   through this one script via `--modality {ct,mr}`).
+3. `build_reference_table.py` — per-organ reference stats from ground-truth masks
+   (`train` split only).
+4. `curate_dataset.py` — join reference z-scores, drop empty-prediction rows, assign the
+   accept/reject label; writes one classifier-ready CSV per split.
+5. `train.py` — cross-validated model search + persists every fitted model
+   (`.joblib`) to disk.
+6. `test.py` — scores persisted models against a held-out curated test set.
+
+`experiments/pipeline/run_pipeline.py --run-dir <dir> --dataset-dir <dir> --modality
+{ct,mr}` runs all six with a consistent directory layout, skipping stages whose output
+already exists (`--force` to redo). See `RESEARCH.md` section 0 for the full
+architecture and the mapping from these stages back to the (now-retired) monolithic
+scripts referenced elsewhere in that document's historical sections.
+
+This pipeline is being used as source material for a research paper, so its column
+names and the reasoning behind them need to stay documented and current. Whenever a new
+feature/metric column is added, read, or computed anywhere in this pipeline:
+
+1. Add a constant for it to `totalsegmentator/qc_columns.py` (long descriptive label,
+   short form in parentheses) — this is the single source of truth every writer/reader
+   of these CSVs imports from, not a translation layer.
+2. Add its row to the "Feature & Metric Glossary" table in `RESEARCH.md` (section 6a),
+   noting whether it's a `feature` (fed to the classifier), `label/leak` (ground-truth
+   derived, excluded from training features), `identifier`, or `diagnostic`
+   (experiment/paper-only, never fed to the model).
+
+Do this even for small/one-off additions — the glossary is what makes the pipeline's CSVs
+self-explanatory to someone writing about them later without re-reading the code.
+
 ## Style
 
 Ruff line-length is 550 (effectively unbounded) — this codebase does not wrap lines. `F401`

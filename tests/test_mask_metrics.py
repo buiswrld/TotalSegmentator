@@ -9,6 +9,15 @@ from totalsegmentator.mask_metrics import (
     volume_metrics, shape_metrics, component_metrics, boundary_metrics, intensity_metrics,
     calculate_mask_metrics,
 )
+from totalsegmentator.qc_columns import (
+    COL_NUM_VOXELS, COL_VOLUME_MM3, COL_IS_EMPTY,
+    COL_CENTROID_X_REL, COL_CENTROID_Y_REL, COL_CENTROID_Z_REL,
+    COL_BBOX_X_REL, COL_BBOX_Y_REL, COL_BBOX_Z_REL,
+    COL_BBOX_VOLUME_MM3, COL_MASK_TO_BBOX_RATIO,
+    COL_NUM_COMPONENTS, COL_LARGEST_COMPONENT_FRACTION,
+    COL_TOUCHES_BOUNDARY, COL_BOUNDARY_FRACTION,
+    COL_MEAN_HU, COL_MEDIAN_HU, COL_STD_HU, COL_P05_HU, COL_P95_HU,
+)
 
 REFERENCE_DIR = Path(__file__).parent / "reference_files"
 
@@ -21,9 +30,9 @@ def test_volume_metrics_counts_voxels_and_volume():
 
     m = volume_metrics(mask, spacing=(2, 2, 2))
 
-    assert m["num_voxels"] == 27
-    assert m["volume_mm3"] == round(27 * 8, 2)
-    assert m["is_empty"] == 0
+    assert m[COL_NUM_VOXELS] == 27
+    assert m[COL_VOLUME_MM3] == round(27 * 8, 2)
+    assert m[COL_IS_EMPTY] == 0
 
 
 def test_volume_metrics_empty_mask():
@@ -31,9 +40,9 @@ def test_volume_metrics_empty_mask():
 
     m = volume_metrics(mask, spacing=(1, 1, 1))
 
-    assert m["num_voxels"] == 0
-    assert m["volume_mm3"] == 0.0
-    assert m["is_empty"] == 1
+    assert m[COL_NUM_VOXELS] == 0
+    assert m[COL_VOLUME_MM3] == 0.0
+    assert m[COL_IS_EMPTY] == 1
 
 
 # ---- shape_metrics ----
@@ -44,14 +53,14 @@ def test_shape_metrics_cube_at_known_position():
 
     m = shape_metrics(mask, spacing=(1, 1, 1))
 
-    assert m["centroid_x_rel"] == 0.3
-    assert m["centroid_y_rel"] == 0.3
-    assert m["centroid_z_rel"] == 0.3
-    assert m["bbox_x_rel"] == 0.3
-    assert m["bbox_y_rel"] == 0.3
-    assert m["bbox_z_rel"] == 0.3
-    assert m["bbox_volume_mm3"] == round(27 * 1, 2)
-    assert m["mask_to_bbox_ratio"] == 1.0  # solid cube fills its bbox exactly
+    assert m[COL_CENTROID_X_REL] == 0.3
+    assert m[COL_CENTROID_Y_REL] == 0.3
+    assert m[COL_CENTROID_Z_REL] == 0.3
+    assert m[COL_BBOX_X_REL] == 0.3
+    assert m[COL_BBOX_Y_REL] == 0.3
+    assert m[COL_BBOX_Z_REL] == 0.3
+    assert m[COL_BBOX_VOLUME_MM3] == round(27 * 1, 2)
+    assert m[COL_MASK_TO_BBOX_RATIO] == 1.0  # solid cube fills its bbox exactly
 
 
 def test_shape_metrics_sparse_mask_has_low_bbox_ratio():
@@ -61,7 +70,7 @@ def test_shape_metrics_sparse_mask_has_low_bbox_ratio():
 
     m = shape_metrics(mask, spacing=(1, 1, 1))
 
-    assert m["mask_to_bbox_ratio"] == round(2 / 125, 4)
+    assert m[COL_MASK_TO_BBOX_RATIO] == round(2 / 125, 4)
 
 
 def test_shape_metrics_empty_mask():
@@ -69,9 +78,9 @@ def test_shape_metrics_empty_mask():
 
     m = shape_metrics(mask, spacing=(1, 1, 1))
 
-    assert m["centroid_x_rel"] is None
-    assert m["bbox_volume_mm3"] == 0.0
-    assert m["mask_to_bbox_ratio"] == 0.0
+    assert m[COL_CENTROID_X_REL] is None
+    assert m[COL_BBOX_VOLUME_MM3] == 0.0
+    assert m[COL_MASK_TO_BBOX_RATIO] == 0.0
 
 
 # ---- component_metrics ----
@@ -82,8 +91,8 @@ def test_component_metrics_single_blob():
 
     m = component_metrics(mask)
 
-    assert m["num_components"] == 1
-    assert m["largest_component_fraction"] == 1.0
+    assert m[COL_NUM_COMPONENTS] == 1
+    assert m[COL_LARGEST_COMPONENT_FRACTION] == 1.0
 
 
 def test_component_metrics_two_disconnected_blobs():
@@ -93,8 +102,8 @@ def test_component_metrics_two_disconnected_blobs():
 
     m = component_metrics(mask)
 
-    assert m["num_components"] == 2
-    assert m["largest_component_fraction"] == round(27 / 35, 4)
+    assert m[COL_NUM_COMPONENTS] == 2
+    assert m[COL_LARGEST_COMPONENT_FRACTION] == round(27 / 35, 4)
 
 
 def test_component_metrics_empty_mask():
@@ -102,8 +111,8 @@ def test_component_metrics_empty_mask():
 
     m = component_metrics(mask)
 
-    assert m["num_components"] == 0
-    assert m["largest_component_fraction"] == 0.0
+    assert m[COL_NUM_COMPONENTS] == 0
+    assert m[COL_LARGEST_COMPONENT_FRACTION] == 0.0
 
 
 # ---- boundary_metrics ----
@@ -114,8 +123,8 @@ def test_boundary_metrics_interior_mask_does_not_touch():
 
     m = boundary_metrics(mask)
 
-    assert m["touches_boundary"] == 0
-    assert m["boundary_fraction"] == 0.0
+    assert m[COL_TOUCHES_BOUNDARY] == 0
+    assert m[COL_BOUNDARY_FRACTION] == 0.0
 
 
 def test_boundary_metrics_mask_touching_one_face():
@@ -124,8 +133,8 @@ def test_boundary_metrics_mask_touching_one_face():
 
     m = boundary_metrics(mask)
 
-    assert m["touches_boundary"] == 1
-    assert m["boundary_fraction"] > 0.0
+    assert m[COL_TOUCHES_BOUNDARY] == 1
+    assert m[COL_BOUNDARY_FRACTION] > 0.0
 
 
 def test_boundary_metrics_empty_mask():
@@ -133,8 +142,8 @@ def test_boundary_metrics_empty_mask():
 
     m = boundary_metrics(mask)
 
-    assert m["touches_boundary"] == 0
-    assert m["boundary_fraction"] == 0.0
+    assert m[COL_TOUCHES_BOUNDARY] == 0
+    assert m[COL_BOUNDARY_FRACTION] == 0.0
 
 
 # ---- intensity_metrics ----
@@ -147,11 +156,11 @@ def test_intensity_metrics_computes_hu_stats():
 
     m = intensity_metrics(mask, ct)
 
-    assert m["mean_HU"] == 50.0
-    assert m["median_HU"] == 50.0
-    assert m["std_HU"] == 0.0
-    assert m["p05_HU"] == 50.0
-    assert m["p95_HU"] == 50.0
+    assert m[COL_MEAN_HU] == 50.0
+    assert m[COL_MEDIAN_HU] == 50.0
+    assert m[COL_STD_HU] == 0.0
+    assert m[COL_P05_HU] == 50.0
+    assert m[COL_P95_HU] == 50.0
 
 
 def test_intensity_metrics_empty_mask():
@@ -160,7 +169,7 @@ def test_intensity_metrics_empty_mask():
 
     m = intensity_metrics(mask, ct)
 
-    assert m == {"mean_HU": None, "median_HU": None, "std_HU": None, "p05_HU": None, "p95_HU": None}
+    assert m == {COL_MEAN_HU: None, COL_MEDIAN_HU: None, COL_STD_HU: None, COL_P05_HU: None, COL_P95_HU: None}
 
 
 # ---- calculate_mask_metrics orchestrator ----
@@ -185,10 +194,10 @@ def test_calculate_mask_metrics_directory_mode(tmp_path):
     result = calculate_mask_metrics(mask_dir)
     metrics = result["structures"]
 
-    assert metrics["spleen"]["num_voxels"] == 27
-    assert metrics["spleen"]["is_empty"] == 0
-    assert metrics["kidney_right"]["is_empty"] == 1
-    assert metrics["kidney_right"]["mean_HU"] is None  # no ct_path given
+    assert metrics["spleen"][COL_NUM_VOXELS] == 27
+    assert metrics["spleen"][COL_IS_EMPTY] == 0
+    assert metrics["kidney_right"][COL_IS_EMPTY] == 1
+    assert metrics["kidney_right"][COL_MEAN_HU] is None  # no ct_path given
     assert result["orientation"]["canonical_axcodes"] == ["R", "A", "S"]
 
 
@@ -202,8 +211,8 @@ def test_calculate_mask_metrics_multilabel_mode(tmp_path):
     metrics = calculate_mask_metrics(mask_file, class_map=class_map)["structures"]
 
     assert set(metrics) == {"spleen", "liver"}
-    assert metrics["spleen"]["num_voxels"] == 27
-    assert metrics["liver"]["is_empty"] == 1
+    assert metrics["spleen"][COL_NUM_VOXELS] == 27
+    assert metrics["liver"][COL_IS_EMPTY] == 1
 
 
 def test_calculate_mask_metrics_with_ct_computes_intensity(tmp_path):
@@ -219,7 +228,7 @@ def test_calculate_mask_metrics_with_ct_computes_intensity(tmp_path):
 
     metrics = calculate_mask_metrics(mask_file, ct_path=ct_file, class_map={1: "spleen"})["structures"]
 
-    assert metrics["spleen"]["mean_HU"] == 40.0
+    assert metrics["spleen"][COL_MEAN_HU] == 40.0
 
 
 def test_calculate_mask_metrics_ct_shape_mismatch_raises(tmp_path):
@@ -253,9 +262,9 @@ def test_calculate_mask_metrics_reports_original_orientation(tmp_path):
     assert result["orientation"]["canonical_axcodes"] == ["R", "A", "S"]
     # after reorientation to RAS, the block moves to the opposite corner along x and y
     m = result["structures"]["spleen"]
-    assert m["centroid_x_rel"] < 0.5
-    assert m["centroid_y_rel"] < 0.5
-    assert m["centroid_z_rel"] > 0.5
+    assert m[COL_CENTROID_X_REL] < 0.5
+    assert m[COL_CENTROID_Y_REL] < 0.5
+    assert m[COL_CENTROID_Z_REL] > 0.5
 
 
 # ---- regression check against the repo's real reference fixtures ----
@@ -283,12 +292,12 @@ def test_calculate_mask_metrics_matches_reference_statistics():
         if structure_name not in metrics:
             continue  # statistics.json may include ROIs without a saved mask file
         m = metrics[structure_name]
-        if m["is_empty"]:
+        if m[COL_IS_EMPTY]:
             # get_basic_statistics uses 0.0 as a "no data" sentinel for empty/border-excluded
             # masks; mask_metrics.py deliberately uses None instead, so there's nothing to compare here.
             continue
-        assert m["volume_mm3"] == pytest.approx(ref["volume"], abs=1.0)
-        assert m["mean_HU"] == pytest.approx(ref["intensity"], abs=0.01)
+        assert m[COL_VOLUME_MM3] == pytest.approx(ref["volume"], abs=1.0)
+        assert m[COL_MEAN_HU] == pytest.approx(ref["intensity"], abs=0.01)
         checked += 1
 
     assert checked > 0  # sanity: the fixtures actually overlapped and were compared

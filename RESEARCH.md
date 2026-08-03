@@ -8,6 +8,41 @@ referenced when writing one.
 
 ---
 
+## 0. Pipeline architecture (staged, resumable — `experiments/pipeline/`)
+
+The methodology in sections 3–7 below is unchanged, but as of this session the code that
+implements it was restructured from five monolithic scripts (each with a hardcoded
+Windows `CONFIG` block, doing several jobs inside one `main()`) into six independent,
+CLI-driven, resumable stages under `experiments/pipeline/`, following the standard
+ML-pipeline pattern (ingest → feature engineering → dataset curation → train → evaluate)
+used by tools like TFX/Kubeflow/DVC. Every stage takes explicit `--dataset-dir`/
+`--output-*` flags — nothing is hardcoded — and can be re-run independently, picking up
+from any prior stage's output on disk. A thin orchestrator
+(`experiments/pipeline/run_pipeline.py --run-dir <dir> --dataset-dir <dir> --modality
+{ct,mr}`) runs all six in sequence with a consistent directory layout, skipping any
+stage whose output already exists (pass `--force` to redo it); every stage remains
+independently runnable with fully custom paths too.
+
+| Stage | Script | Absorbed from (now retired) |
+|---|---|---|
+| 1. Inference | `run_inference.py` | `ensure_predictions()` in `combined.py`/`evaluate_ct.py` |
+| 2. Compute metrics | `compute_metrics.py` | `evaluate_ct.py`/`combined.py` (CT+MR merged into one modality-aware script) |
+| 3. Build reference table | `build_reference_table.py` | `experiments/build_reference.py` |
+| 4. Curate dataset | `curate_dataset.py` *(new)* | `train_classifier.py::load()` |
+| 5. Train | `train.py` | `train_classifier.py`, **+ new: persists fitted models to disk** |
+| 6. Test | `test.py` *(new)* | `calibrate.py`'s ECE/MCE/Brier functions (now in `common.py`), applied to a real held-out test set rather than nested CV |
+
+The `EXPECTED_DICE` benchmark table (previously hardcoded in `combined.py`) now lives at
+`resources/expected_dice_mr.json`, loaded via `compute_metrics.py --expected-dice-json`.
+
+References to `combined.py`/`evaluate_ct.py`/`build_reference.py`/`train_classifier.py`/
+`calibrate.py` elsewhere in this document (sections 3–10) describe the methodology as
+originally implemented and are kept as an accurate historical record of what actually
+produced those specific findings — they are not run instructions. For a current run, use
+the `experiments/pipeline/` stage scripts above.
+
+---
+
 ## 1. The overall research question
 
 TotalSegmentator produces segmentations with no ground truth available at deployment
@@ -285,6 +320,11 @@ same thing regardless of which organ it's attached to. Organs need a minimum row
 AUC computed on too few rows is unreliably noisy.
 
 ### Reported outputs
+- **`final_training_dataset.csv`** — written before any model fitting, from the exact
+  in-memory DataFrame (`ID_COLS + raw features + organ-relative z-scores + training
+  label`) that gets handed to cross-validation. Exists purely so a developer can open
+  one clean, fully-labeled CSV and manually review precisely what the classifier is
+  being trained on, rather than reconstructing it from scattered function calls.
 - Ranked table: ROC-AUC, PR-AUC(accept), PR-AUC(reject) per model, with fold std-dev.
   **PR-AUC(reject) is the more important column given the class imbalance** — accept-side
   metrics are inflated by the trivially large majority class.
@@ -298,6 +338,76 @@ AUC computed on too few rows is unreliably noisy.
   cross-validated).
 
 ---
+
+## 6a. Feature & Metric Glossary
+
+Every column that appears anywhere in this pipeline's CSVs, defined once as a constant in
+`totalsegmentator/qc_columns.py` (see that file's docstring for how it's used — it's a
+shared source of truth for the literal column-name strings, not a translation layer).
+
+**This table must be kept up to date.** Whenever a new feature/metric column is added
+anywhere in this pipeline: add its constant to `totalsegmentator/qc_columns.py`, then add
+its row here with the correct role (see `CLAUDE.md` for the standing instruction to do
+this automatically).
+
+**Role** — `feature`: fed to the classifier as an input. `label/leak`: ground-truth-derived,
+used only to build the accept/reject label, excluded from training features (see
+`LEAK_COLS` in `train.py`/`test.py`). `identifier`: bookkeeping, not
+predictive. `diagnostic`: computed for the experiment/paper (L/R audit, reference-table
+build stats, calibration metrics) but never fed to the classifier.
+
+| Constant | Long label (short form) | Origin | Role |
+|---|---|---|---|
+| `COL_SUBJECT` | Subject ID (subject) | all stages | identifier |
+| `COL_ORGAN` | Organ/Structure Name (organ) | all stages | identifier |
+| `COL_ORIG_AXCODES` | Original Image Axis Orientation Codes (orig_axcodes) | `compute_metrics.py` | identifier |
+| `COL_NUM_VOXELS` | Number of Voxels (num_voxels) | `mask_metrics.py` | feature |
+| `COL_VOLUME_MM3` | Volume in Cubic Millimeters (volume_mm3) | `mask_metrics.py` | feature |
+| `COL_IS_EMPTY` | Is Mask Empty (is_empty) | `mask_metrics.py` | feature (also used to drop empty-prediction rows before training) |
+| `COL_CENTROID_X_REL` / `Y_REL` / `Z_REL` | Relative Centroid X/Y/Z Position | `mask_metrics.py` | feature |
+| `COL_BBOX_X_REL` / `Y_REL` / `Z_REL` | Relative Bounding Box Width/Height/Depth | `mask_metrics.py` | feature |
+| `COL_BBOX_VOLUME_MM3` | Bounding Box Volume in Cubic Millimeters (bbox_volume_mm3) | `mask_metrics.py` | feature |
+| `COL_MASK_TO_BBOX_RATIO` | Mask-to-Bounding-Box Fill Ratio (mask_to_bbox_ratio) | `mask_metrics.py` | feature |
+| `COL_NUM_COMPONENTS` | Number of Connected Components (num_components) | `mask_metrics.py` | feature (organ-free, no reference normalization) |
+| `COL_LARGEST_COMPONENT_FRACTION` | Largest Connected Component Fraction (largest_component_fraction) | `mask_metrics.py` | feature (organ-free; called out in code as the single strongest feature) |
+| `COL_TOUCHES_BOUNDARY` | Touches Image Boundary (touches_boundary) | `mask_metrics.py` | feature (organ-free) |
+| `COL_BOUNDARY_FRACTION` | Boundary Voxel Fraction (boundary_fraction) | `mask_metrics.py` | feature (organ-free) |
+| `COL_MEAN_HU` / `MEDIAN_HU` / `STD_HU` / `P05_HU` / `P95_HU` | Mean/Median/Std/5th/95th Percentile Hounsfield Unit Intensity | `mask_metrics.py` | feature |
+| `COL_DICE` | Sorensen-Dice Coefficient (Dice) | `compute_metrics.py` | label/leak |
+| `COL_IOU` | Intersection over Union (IoU) | `compute_metrics.py` | label/leak (thresholded to build `COL_TRAINING_LABEL`) |
+| `COL_TRUE_POSITIVES` / `FALSE_POSITIVES` / `FALSE_NEGATIVES` | True/False Positive/Negative Voxel Count (TP/FP/FN) | `compute_metrics.py` | label/leak |
+| `COL_PREDICTED_VOXEL_COUNT` | Predicted Mask Voxel Count (pred_vox) | `compute_metrics.py` | identifier (not ground-truth-derived, but kept in `ID_COLS` rather than the feature set) |
+| `COL_GROUND_TRUTH_VOXEL_COUNT` | Ground Truth Mask Voxel Count (gt_vox) | `compute_metrics.py` | label/leak |
+| `COL_MATCH_STATUS` | Match Status (status) | `compute_metrics.py` | label/leak |
+| `COL_ACCEPT_LABEL` | Accept/Reject Label (accept) | `compute_metrics.py` | label/leak |
+| `COL_TRAINING_LABEL` | Accept/Reject Training Label (label) | `train.py`/`test.py` | this IS the training target, derived from `COL_IOU` |
+| `COL_FEATURE_NAME` | Feature/Metric Name (feature) | `build_reference_table.py` | diagnostic (reference table only) |
+| `COL_OBSERVATION_COUNT` | Number of Reference Observations (n) | `build_reference_table.py` | diagnostic |
+| `COL_REFERENCE_MEDIAN` / `Q25` / `Q75` / `IQR` | Reference Median/25th/75th Percentile/Interquartile Range | `build_reference_table.py` | diagnostic (used to compute `_z` features, not fed to the model directly) |
+| `COL_LOG_SPACE_FLAG` | Computed in Log Space (log_space) | `build_reference_table.py` | diagnostic |
+| `<feature>_z` (e.g. `COL_VOLUME_MM3 + "_z"`) | organ-relative z-score of the given feature | `build_reference_table.py::add_relative_features` | feature |
+| `COL_MASK_SOURCE` | Mask Source: Prediction or Ground Truth (source) | `compute_metrics.py` L/R audit | diagnostic |
+| `COL_PAIRED_STRUCTURE` | Paired Structure Base Name (structure) | `compute_metrics.py` L/R audit | diagnostic |
+| `COL_LEFT_CENTROID_X_REL` / `COL_RIGHT_CENTROID_X_REL` | Left/Right Structure Relative Centroid X | `compute_metrics.py` L/R audit | diagnostic |
+| `COL_RIGHT_MINUS_LEFT` | Right Minus Left Centroid X Difference | `compute_metrics.py` L/R audit | diagnostic |
+| `COL_LR_VERDICT` | Left/Right Orientation Verdict (verdict) | `compute_metrics.py` L/R audit | diagnostic |
+| `COL_N_PRESENT_BOTH` / `COL_N_SCORED` | count present in both pred+GT / count scored | summary tables | diagnostic (rollup, not per-row feature) |
+| `COL_MEAN_DICE` / `COL_MEAN_IOU` | Mean Dice / Mean IoU | summary tables | diagnostic |
+| `COL_N_OK` / `COL_N_LOW_DICE` / `COL_N_MISS` / `COL_N_FALSE_POSITIVE` | status-breakdown counts | summary tables | diagnostic |
+| `COL_N_ACCEPT` / `COL_ACCEPT_RATE` | accept count / accept rate | summary + accept_analysis + LOO tables | diagnostic |
+| `COL_MEASURED_DICE` / `COL_EXPECTED_DICE` / `COL_DICE_DELTA` / `COL_N_SUBJECTS` | measured vs. published `EXPECTED_DICE` benchmark comparison | `compute_metrics.py` (MR only) | diagnostic |
+| `COL_N_MASKS` | Number of Masks (n) | `accept_analysis.csv`, `test.py` bins | diagnostic |
+| `COL_MEAN_IOU_ACCEPTED` / `COL_MEAN_IOU_REJECTED` | mean IoU within the accepted/rejected group | `accept_analysis.csv` | diagnostic |
+| `COL_MODEL_NAME` / `COL_CALIBRATION_METHOD` | which base model / which calibration method | `test.py` | diagnostic |
+| `COL_AUC` / `COL_ECE` / `COL_MCE` / `COL_BRIER_SCORE` | ranking + calibration-error metrics | `test.py` | diagnostic |
+| `COL_RELIABILITY` / `COL_RESOLUTION` / `COL_UNCERTAINTY` | Brier score decomposition components | `test.py` | diagnostic |
+| `COL_BIN_MEAN_PREDICTED` / `COL_BIN_OBSERVED_RATE` / `COL_CALIBRATION_GAP` | per-bin calibration-curve values | `test.py` | diagnostic |
+
+Not in this table: `EXPECTED_DICE`'s keys in `compute_metrics.py` (organ names, not metric
+short-forms) and every dynamically-named per-model/per-feature-set result column
+(`oof_predictions.csv`, `loo_by_organ.csv`, `calibrated_oof.csv` — named
+`<model family> [<feature set>]` or `<base model> + <calibration method>`, can't be
+static constants since the set of models/feature-sets is configured at runtime).
 
 ## 7. Stage 5 — Calibration (`experiments/calibrate.py`)
 

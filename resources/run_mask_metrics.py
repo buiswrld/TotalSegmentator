@@ -23,12 +23,17 @@ import sys
 from pathlib import Path
 
 from totalsegmentator.mask_metrics import calculate_mask_metrics
+from totalsegmentator.qc_columns import (
+    COL_NUM_VOXELS, COL_VOLUME_MM3, COL_IS_EMPTY, COL_NUM_COMPONENTS,
+    COL_LARGEST_COMPONENT_FRACTION, COL_TOUCHES_BOUNDARY, COL_BOUNDARY_FRACTION,
+    COL_MASK_TO_BBOX_RATIO, COL_MEAN_HU,
+)
 
 # Curated subset shown in the table by default; pass --all for every computed metric.
 DEFAULT_COLUMNS = [
-    "num_voxels", "volume_mm3", "is_empty", "num_components",
-    "largest_component_fraction", "touches_boundary", "boundary_fraction",
-    "mask_to_bbox_ratio", "mean_HU",
+    COL_NUM_VOXELS, COL_VOLUME_MM3, COL_IS_EMPTY, COL_NUM_COMPONENTS,
+    COL_LARGEST_COMPONENT_FRACTION, COL_TOUCHES_BOUNDARY, COL_BOUNDARY_FRACTION,
+    COL_MASK_TO_BBOX_RATIO, COL_MEAN_HU,
 ]
 
 
@@ -83,7 +88,8 @@ def main():
     parser.add_argument("--all", action="store_true",
                         help="Print every computed metric column instead of the curated default subset.")
     parser.add_argument("--sort-by", default=None, metavar="METRIC",
-                        help="Sort rows by this metric, descending (e.g. --sort-by volume_mm3). Default: input order.")
+                        help="Sort rows by this metric's full column name, descending "
+                             "(e.g. --sort-by \"Volume in Cubic Millimeters (volume_mm3)\"). Default: input order.")
     args = parser.parse_args()
 
     if not args.mask_path.exists():
@@ -106,7 +112,7 @@ def main():
     columns = list(next(iter(metrics.values()))) if args.all else DEFAULT_COLUMNS
     print(format_table(metrics, columns))
 
-    n_empty = sum(m["is_empty"] for m in metrics.values())
+    n_empty = sum(m[COL_IS_EMPTY] for m in metrics.values())
     print(f"\n{len(metrics)} structures, {n_empty} empty" + (" (no CT given: HU metrics skipped)" if args.ct_path is None else ""))
     print(f"Orientation: input was {''.join(orientation['original_axcodes'])}, "
           f"reoriented to canonical {''.join(orientation['canonical_axcodes'])} before computing shape metrics.")

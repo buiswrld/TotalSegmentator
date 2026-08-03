@@ -21,28 +21,37 @@ from scipy import ndimage
 
 from totalsegmentator.statistics import touches_border
 from totalsegmentator.alignment import as_closest_canonical
+from totalsegmentator.qc_columns import (
+    COL_NUM_VOXELS, COL_VOLUME_MM3, COL_IS_EMPTY,
+    COL_CENTROID_X_REL, COL_CENTROID_Y_REL, COL_CENTROID_Z_REL,
+    COL_BBOX_X_REL, COL_BBOX_Y_REL, COL_BBOX_Z_REL,
+    COL_BBOX_VOLUME_MM3, COL_MASK_TO_BBOX_RATIO,
+    COL_NUM_COMPONENTS, COL_LARGEST_COMPONENT_FRACTION,
+    COL_TOUCHES_BOUNDARY, COL_BOUNDARY_FRACTION,
+    COL_MEAN_HU, COL_MEDIAN_HU, COL_STD_HU, COL_P05_HU, COL_P95_HU,
+)
 
 CANONICAL_AXCODES = ["R", "A", "S"]
 
 
 def volume_metrics(mask: np.ndarray, spacing: tuple) -> dict:
     """
-    num_voxels, volume_mm3 and is_empty for a binary mask.
+    Number of Voxels, Volume in Cubic Millimeters and Is Mask Empty for a binary mask.
 
     spacing: (x, y, z) voxel spacing in mm, as returned by nib header.get_zooms().
 
-    volume_mm3 is in mm3, matching the units of the "volume" field statistics.py writes to
-    statistics.json (see get_basic_statistics), so the two can be compared/cross-checked
-    directly without a unit conversion.
+    Volume in Cubic Millimeters is in mm3, matching the units of the "volume" field
+    statistics.py writes to statistics.json (see get_basic_statistics), so the two can be
+    compared/cross-checked directly without a unit conversion.
 
-    Returns: {"num_voxels": int, "volume_mm3": float, "is_empty": int}
+    Returns: {COL_NUM_VOXELS: int, COL_VOLUME_MM3: float, COL_IS_EMPTY: int}
     """
-    vox_vol = spacing[0] * spacing[1] * spacing[2]
+    voxel_volume_mm3 = spacing[0] * spacing[1] * spacing[2]
     num_voxels = int(mask.sum())
     return {
-        "num_voxels": num_voxels,
-        "volume_mm3": round(float(num_voxels * vox_vol), 2),
-        "is_empty": int(num_voxels == 0),
+        COL_NUM_VOXELS: num_voxels,
+        COL_VOLUME_MM3: round(float(num_voxels * voxel_volume_mm3), 2),
+        COL_IS_EMPTY: int(num_voxels == 0),
     }
 
 
@@ -65,37 +74,37 @@ def shape_metrics(mask: np.ndarray, spacing: tuple) -> dict:
 
     bbox_volume_mm3 is in mm3, matching statistics.json's "volume" units (see volume_metrics).
 
-    Returns: {"centroid_x_rel", "centroid_y_rel", "centroid_z_rel", "bbox_x_rel",
-        "bbox_y_rel", "bbox_z_rel", "bbox_volume_mm3", "mask_to_bbox_ratio"}
+    Returns: {COL_CENTROID_X_REL, COL_CENTROID_Y_REL, COL_CENTROID_Z_REL, COL_BBOX_X_REL,
+        COL_BBOX_Y_REL, COL_BBOX_Z_REL, COL_BBOX_VOLUME_MM3, COL_MASK_TO_BBOX_RATIO}
     """
     shape = mask.shape
-    idx = np.argwhere(mask)
-    if idx.shape[0] == 0:
+    voxel_indices = np.argwhere(mask)
+    if voxel_indices.shape[0] == 0:
         return {
-            "centroid_x_rel": None, "centroid_y_rel": None, "centroid_z_rel": None,
-            "bbox_x_rel": 0.0, "bbox_y_rel": 0.0, "bbox_z_rel": 0.0,
-            "bbox_volume_mm3": 0.0, "mask_to_bbox_ratio": 0.0,
+            COL_CENTROID_X_REL: None, COL_CENTROID_Y_REL: None, COL_CENTROID_Z_REL: None,
+            COL_BBOX_X_REL: 0.0, COL_BBOX_Y_REL: 0.0, COL_BBOX_Z_REL: 0.0,
+            COL_BBOX_VOLUME_MM3: 0.0, COL_MASK_TO_BBOX_RATIO: 0.0,
         }
 
-    centroid = idx.mean(axis=0)
-    mins = idx.min(axis=0)
-    maxs = idx.max(axis=0)
-    bbox_extent_vox = maxs - mins + 1
+    centroid = voxel_indices.mean(axis=0)
+    bbox_mins = voxel_indices.min(axis=0)
+    bbox_maxs = voxel_indices.max(axis=0)
+    bbox_extent_vox = bbox_maxs - bbox_mins + 1
     bbox_extent_rel = bbox_extent_vox / np.array(shape)
 
-    vox_vol = spacing[0] * spacing[1] * spacing[2]
+    voxel_volume_mm3 = spacing[0] * spacing[1] * spacing[2]
     bbox_voxel_count = int(np.prod(bbox_extent_vox))
-    num_voxels = int(idx.shape[0])
+    num_voxels = int(voxel_indices.shape[0])
 
     return {
-        "centroid_x_rel": round(float(centroid[0] / shape[0]), 4),
-        "centroid_y_rel": round(float(centroid[1] / shape[1]), 4),
-        "centroid_z_rel": round(float(centroid[2] / shape[2]), 4),
-        "bbox_x_rel": round(float(bbox_extent_rel[0]), 4),
-        "bbox_y_rel": round(float(bbox_extent_rel[1]), 4),
-        "bbox_z_rel": round(float(bbox_extent_rel[2]), 4),
-        "bbox_volume_mm3": round(float(bbox_voxel_count * vox_vol), 2),
-        "mask_to_bbox_ratio": round(float(num_voxels / bbox_voxel_count), 4),
+        COL_CENTROID_X_REL: round(float(centroid[0] / shape[0]), 4),
+        COL_CENTROID_Y_REL: round(float(centroid[1] / shape[1]), 4),
+        COL_CENTROID_Z_REL: round(float(centroid[2] / shape[2]), 4),
+        COL_BBOX_X_REL: round(float(bbox_extent_rel[0]), 4),
+        COL_BBOX_Y_REL: round(float(bbox_extent_rel[1]), 4),
+        COL_BBOX_Z_REL: round(float(bbox_extent_rel[2]), 4),
+        COL_BBOX_VOLUME_MM3: round(float(bbox_voxel_count * voxel_volume_mm3), 2),
+        COL_MASK_TO_BBOX_RATIO: round(float(num_voxels / bbox_voxel_count), 4),
     }
 
 
@@ -103,19 +112,19 @@ def component_metrics(mask: np.ndarray) -> dict:
     """
     Connected-component structure of a binary mask, via scipy.ndimage.label.
 
-    Returns: {"num_components": int, "largest_component_fraction": float}
+    Returns: {COL_NUM_COMPONENTS: int, COL_LARGEST_COMPONENT_FRACTION: float}
     """
     num_voxels = int(mask.sum())
     if num_voxels == 0:
-        return {"num_components": 0, "largest_component_fraction": 0.0}
+        return {COL_NUM_COMPONENTS: 0, COL_LARGEST_COMPONENT_FRACTION: 0.0}
 
     labeled, num_components = ndimage.label(mask)
-    counts = np.bincount(labeled.flatten())[1:]  # exclude background (label 0)
-    largest_component_fraction = float(counts.max() / num_voxels)
+    component_voxel_counts = np.bincount(labeled.flatten())[1:]  # exclude background (label 0)
+    largest_component_fraction = float(component_voxel_counts.max() / num_voxels)
 
     return {
-        "num_components": int(num_components),
-        "largest_component_fraction": round(largest_component_fraction, 4),
+        COL_NUM_COMPONENTS: int(num_components),
+        COL_LARGEST_COMPONENT_FRACTION: round(largest_component_fraction, 4),
     }
 
 
@@ -129,26 +138,26 @@ def boundary_metrics(mask: np.ndarray) -> dict:
     layer), which touches_boundary alone cannot distinguish (e.g. one stray voxel vs. an
     entire face).
 
-    Returns: {"touches_boundary": int, "boundary_fraction": float}
+    Returns: {COL_TOUCHES_BOUNDARY: int, COL_BOUNDARY_FRACTION: float}
     """
     num_voxels = int(mask.sum())
     if num_voxels == 0:
-        return {"touches_boundary": 0, "boundary_fraction": 0.0}
+        return {COL_TOUCHES_BOUNDARY: 0, COL_BOUNDARY_FRACTION: 0.0}
 
     touches = int(touches_border(mask))
 
-    boundary = np.zeros_like(mask, dtype=bool)
-    boundary[0, :, :] = True
-    boundary[-1, :, :] = True
-    boundary[:, 0, :] = True
-    boundary[:, -1, :] = True
-    boundary[:, :, 0] = True
-    boundary[:, :, -1] = True
-    boundary_voxels = int(np.count_nonzero(mask & boundary))
+    boundary_shell = np.zeros_like(mask, dtype=bool)
+    boundary_shell[0, :, :] = True
+    boundary_shell[-1, :, :] = True
+    boundary_shell[:, 0, :] = True
+    boundary_shell[:, -1, :] = True
+    boundary_shell[:, :, 0] = True
+    boundary_shell[:, :, -1] = True
+    boundary_voxels = int(np.count_nonzero(mask & boundary_shell))
 
     return {
-        "touches_boundary": touches,
-        "boundary_fraction": round(float(boundary_voxels / num_voxels), 4),
+        COL_TOUCHES_BOUNDARY: touches,
+        COL_BOUNDARY_FRACTION: round(float(boundary_voxels / num_voxels), 4),
     }
 
 
@@ -156,22 +165,22 @@ def intensity_metrics(mask: np.ndarray, ct: np.ndarray) -> dict:
     """
     HU intensity distribution of a CT image restricted to a binary mask.
 
-    Returns: {"mean_HU", "median_HU", "std_HU", "p05_HU", "p95_HU"}
+    Returns: {COL_MEAN_HU, COL_MEDIAN_HU, COL_STD_HU, COL_P05_HU, COL_P95_HU}
     """
     if mask.sum() == 0:
-        return {"mean_HU": None, "median_HU": None, "std_HU": None, "p05_HU": None, "p95_HU": None}
+        return {COL_MEAN_HU: None, COL_MEDIAN_HU: None, COL_STD_HU: None, COL_P05_HU: None, COL_P95_HU: None}
 
-    vals = ct[mask]
+    masked_intensities = ct[mask]
     return {
-        "mean_HU": round(float(np.mean(vals)), 2),
-        "median_HU": round(float(np.median(vals)), 2),
-        "std_HU": round(float(np.std(vals)), 2),
-        "p05_HU": round(float(np.percentile(vals, 5)), 2),
-        "p95_HU": round(float(np.percentile(vals, 95)), 2),
+        COL_MEAN_HU: round(float(np.mean(masked_intensities)), 2),
+        COL_MEDIAN_HU: round(float(np.median(masked_intensities)), 2),
+        COL_STD_HU: round(float(np.std(masked_intensities)), 2),
+        COL_P05_HU: round(float(np.percentile(masked_intensities, 5)), 2),
+        COL_P95_HU: round(float(np.percentile(masked_intensities, 95)), 2),
     }
 
 
-_EMPTY_INTENSITY_METRICS = {"mean_HU": None, "median_HU": None, "std_HU": None, "p05_HU": None, "p95_HU": None}
+_EMPTY_INTENSITY_METRICS = {COL_MEAN_HU: None, COL_MEDIAN_HU: None, COL_STD_HU: None, COL_P05_HU: None, COL_P95_HU: None}
 
 
 def _reorient_to_canonical(img: nib.Nifti1Image):
