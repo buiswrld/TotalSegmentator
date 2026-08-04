@@ -1,0 +1,12 @@
+{
+  "created_at": "2026-08-03T17:10:19.649208+00:00",
+  "git_commit": "9e9f643",
+  "command": "/Users/sohamlokhande/dev/TotalSegmentator/experiments/pipeline/test.py --test-csv experiments/eval_runs/mr_full_run/datasets/classifier_test.csv --models-dir experiments/eval_runs/mr_full_run/models --output-dir experiments/eval_runs/mr_full_run/results/test",
+  "stage": "test",
+  "test_csv": "experiments/eval_runs/mr_full_run/datasets/classifier_test.csv",
+  "models_dir": "experiments/eval_runs/mr_full_run/models",
+  "model_name": null,
+  "n_test_rows": 929,
+  "n_models_scored": 16,
+  "train_csv": "experiments/eval_runs/mr_full_run/datasets/classifier_train.csv"
+}

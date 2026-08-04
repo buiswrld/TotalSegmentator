@@ -19,7 +19,14 @@ unittest_prediction.nii.gz
 unittest_prediction_fast.nii.gz
 unittest_prediction_fast_body_seg.nii.gz
 unittest_prediction_fast_force_split.nii.gz
-experiments/eval_runs/
+# experiments/eval_runs/<run>/ holds pipeline run outputs (see experiments/pipeline/).
+# Only the bulky, regenerable binary artifacts are ignored - predictions (raw .nii.gz
+# masks), trained models (.joblib), and rendered overlay PNGs. Everything else
+# (metrics/reference/datasets/results CSVs and *_manifest.json files) stays trackable
+# so run findings can be committed and shared without the multi-hundred-MB artifacts.
+experiments/eval_runs/**/predictions/
+experiments/eval_runs/**/models/*.joblib
+experiments/eval_runs/**/overlays/
 
 *.tfstate
 *.tfstate.backup

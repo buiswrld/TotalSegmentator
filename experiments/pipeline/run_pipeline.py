@@ -93,15 +93,18 @@ def main():
         combined_csv = os.path.join(metrics_dir(split), "combined_metrics.csv")
 
         if 1 in stages:
-            if args.force or not exists(predictions_dir(split)):
-                cli = ["--dataset-dir", args.dataset_dir, "--predictions-dir", predictions_dir(split),
-                      "--split", split] + modality_args()
-                if args.limit: cli += ["--limit", args.limit]
-                if args.device: cli += ["--device", args.device]
-                if args.force: cli += ["--force"]
-                run("run_inference.py", *cli)
-            else:
-                print(f"\n[skip] stage 1 ({split}) - {predictions_dir(split)} already exists")
+            # Always delegate to run_inference.py rather than gating on whether
+            # predictions_dir already exists: that directory can exist while still
+            # being incomplete (e.g. an interrupted run), and run_inference.py already
+            # has correct per-subject resumability (ensure_predictions skips any
+            # subject that already has prediction files) - a coarse directory-level
+            # skip here would silently leave missing subjects missing forever.
+            cli = ["--dataset-dir", args.dataset_dir, "--predictions-dir", predictions_dir(split),
+                  "--split", split] + modality_args()
+            if args.limit: cli += ["--limit", args.limit]
+            if args.device: cli += ["--device", args.device]
+            if args.force: cli += ["--force"]
+            run("run_inference.py", *cli)
 
         if 2 in stages:
             if args.force or not exists(combined_csv):

@@ -505,6 +505,49 @@ Results:
 
 ---
 
+### MR full pipeline run — `experiments/pipeline/`, 200-subject train / full 55-subject test
+First full-scale run of the staged pipeline (see section 0) end-to-end: reference table
+from the entire 561-subject MR `train` split (ground-truth only, no inference cost),
+classifier trained on 200 `train`-split subjects, evaluated on the full 55-subject
+`test` split (the same predictions as the MR reproduction run above, reused rather than
+re-inferred). All committed result files are under
+`experiments/eval_runs/mr_full_run/` (predictions/ and models/*.joblib are gitignored —
+regenerate via `experiments/pipeline/run_pipeline.py`, see `models/training_manifest.json`
+for the exact command/args/git commit that produced this run).
+
+- **Scale:** reference table 751 rows (561 subjects); `datasets/classifier_train.csv`
+  3,213 rows / 190 subjects (5 empty-prediction rows dropped, 10 of the 200 predicted
+  subjects contributed no scoreable rows); `datasets/classifier_test.csv` 929 rows / 55
+  subjects (11 dropped).
+- **Benchmark comparison held up at scale, identical to the earlier 55-subject
+  reproduction:** 50/50 organs matched, only the same 2 organs flagged (4%) —
+  `portal_vein_and_splenic_vein` (Δ −0.160) and `inferior_vena_cava` (Δ −0.159). Confirms
+  the cached test predictions are being reused correctly, bit-for-bit consistent results.
+- **Cross-validated model search** (`results/train/cv_summary.csv`, 5-fold grouped CV):
+  best model `randomforest [raw+rel]`, ROC-AUC 0.941 ± 0.014, PR-AUC 0.860 ± 0.020.
+  Full ranking, best to worst: randomforest ≈ histgradboost (~0.94 AUC, raw/raw+organ/
+  raw+rel feature sets) > logreg (~0.91–0.92) > organ-rate baseline (0.861) > tree-depth3
+  and `[rel]`-only variants (~0.76–0.89) > always-accept (0.5, floor by construction).
+  **Every real raw-feature model beat the organ-rate baseline** — same "not just
+  memorizing organ identity" conclusion as the smaller CT pilot, now at 200-subject scale.
+- **Held-out test** (`results/test/test_summary.csv`, never touched by reference-building
+  or training/CV): best model `randomforest [raw+organ]`, ROC-AUC 0.928, PR-AUC(reject)
+  0.984. CV and test picked *different* top models (both random-forest variants within
+  ~0.01 AUC of each other) — expected instability between two different evaluation
+  procedures at this scale, not a red flag.
+- **Leave-one-organ-out** (`results/train/loo_by_organ.csv`, 27 organs had ≥25 rows):
+  mean AUC `raw` 0.881 → `rel` 0.856 → `raw+rel` 0.893. **`raw+rel` generalizing best to
+  organs excluded from training is the key evidence that the organ-relative z-score
+  features carry real transferable signal**, not just per-organ memorization — this is
+  the strongest single result so far for that specific paper claim.
+- **Per-row audit trails available for follow-up analysis:** `results/train/oof_predictions.csv`
+  (every training row's honest out-of-fold prediction from every model) and
+  `results/test/test_results.csv` (every test row's prediction from every persisted
+  model) — both committed, useful for calibration plots or per-organ error breakdowns
+  without re-running anything.
+
+---
+
 ## 9. Open questions / ideas to pursue for the paper
 
 - **MR dataset has no `val` split** — need a decision on how to adapt the
