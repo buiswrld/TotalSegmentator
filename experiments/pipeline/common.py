@@ -23,6 +23,11 @@ import nibabel as nib
 import numpy as np
 from sklearn.metrics import brier_score_loss
 
+from totalsegmentator.qc_columns import (
+    COL_N_MASKS, COL_BIN_MEAN_PREDICTED, COL_BIN_OBSERVED_RATE, COL_CALIBRATION_GAP,
+    COL_BRIER_SCORE, COL_RELIABILITY, COL_RESOLUTION, COL_UNCERTAINTY,
+)
+
 # Per-modality defaults for the dataset layout / TotalSegmentator invocation. Override
 # any of these per-run with --image-name / --task / --device on the stage CLIs.
 MODALITY_DEFAULTS = {
@@ -138,7 +143,8 @@ def ece_mce(y, p, n_bins=10, equal_count=True):
         gap = abs(acc - conf)
         ece += len(b) / n * gap
         mce = max(mce, gap)
-        rows.append({"n": len(b), "mean_pred": conf, "observed": acc, "gap": acc - conf})
+        rows.append({COL_N_MASKS: len(b), COL_BIN_MEAN_PREDICTED: conf,
+                     COL_BIN_OBSERVED_RATE: acc, COL_CALIBRATION_GAP: acc - conf})
     return ece, mce, rows
 
 
@@ -160,8 +166,8 @@ def brier_decomposition(y, p, n_bins=10):
         nk, pk, ok = sel.sum(), p[sel].mean(), y[sel].mean()
         rel += nk * (pk - ok) ** 2
         res += nk * (ok - base) ** 2
-    return {"brier": brier_score_loss(y, p), "reliability": rel / n,
-            "resolution": res / n, "uncertainty": base * (1 - base)}
+    return {COL_BRIER_SCORE: brier_score_loss(y, p), COL_RELIABILITY: rel / n,
+            COL_RESOLUTION: res / n, COL_UNCERTAINTY: base * (1 - base)}
 
 
 # ---------------------------------------------------------------- CLI / manifest helpers

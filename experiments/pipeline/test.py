@@ -36,7 +36,11 @@ from sklearn.metrics import roc_auc_score, average_precision_score
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 from experiments.pipeline.common import ece_mce, brier_decomposition, write_manifest
-from totalsegmentator.qc_columns import COL_SUBJECT, COL_ORGAN, COL_IOU, COL_TRAINING_LABEL
+from totalsegmentator.qc_columns import (
+    COL_SUBJECT, COL_ORGAN, COL_IOU, COL_TRAINING_LABEL, COL_MODEL_NAME,
+    COL_N_TEST_ROWS, COL_AUC, COL_PR_AUC_ACCEPT, COL_PR_AUC_REJECT, COL_ECE, COL_MCE,
+    COL_BRIER_SCORE,
+)
 
 
 def main():
@@ -80,18 +84,18 @@ def main():
         pr_auc_reject = average_precision_score(1 - y, 1 - p)
         ece, mce, _ = ece_mce(y, p)
         bd = brier_decomposition(y, p)
-        summary_rows.append({"model": name, "n_test_rows": len(df), "roc_auc": auc,
-                             "pr_auc_accept": pr_auc_accept, "pr_auc_reject": pr_auc_reject,
-                             "ece": ece, "mce": mce, **bd})
+        summary_rows.append({COL_MODEL_NAME: name, COL_N_TEST_ROWS: len(df), COL_AUC: auc,
+                             COL_PR_AUC_ACCEPT: pr_auc_accept, COL_PR_AUC_REJECT: pr_auc_reject,
+                             COL_ECE: ece, COL_MCE: mce, **bd})
         print(f"{name:32s} ROC-AUC {auc:.3f}  PR-AUC(acc) {pr_auc_accept:.3f}  "
-              f"PR-AUC(rej) {pr_auc_reject:.3f}  ECE {ece:.3f}  MCE {mce:.3f}  Brier {bd['brier']:.3f}")
+              f"PR-AUC(rej) {pr_auc_reject:.3f}  ECE {ece:.3f}  MCE {mce:.3f}  Brier {bd[COL_BRIER_SCORE]:.3f}")
 
     if not summary_rows:
         raise SystemExit("No models could be scored - check --test-csv has the expected feature columns.")
 
     os.makedirs(args.output_dir, exist_ok=True)
     results_df.to_csv(os.path.join(args.output_dir, "test_results.csv"), index=False)
-    summary = pd.DataFrame(summary_rows).sort_values("pr_auc_reject", ascending=False)
+    summary = pd.DataFrame(summary_rows).sort_values(COL_PR_AUC_REJECT, ascending=False)
     summary.to_csv(os.path.join(args.output_dir, "test_summary.csv"), index=False)
 
     write_manifest(
@@ -101,7 +105,7 @@ def main():
         train_csv=training_manifest.get("train_csv"),
     )
     print(f"\ntest_results.csv + test_summary.csv -> {args.output_dir}")
-    print(f"best on held-out test (by PR-AUC reject): {summary.iloc[0]['model']}")
+    print(f"best on held-out test (by PR-AUC reject): {summary.iloc[0][COL_MODEL_NAME]}")
 
 
 if __name__ == "__main__":

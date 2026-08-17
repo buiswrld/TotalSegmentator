@@ -46,7 +46,11 @@ from sklearn.metrics import roc_auc_score, average_precision_score
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 from experiments.pipeline.common import write_manifest
-from totalsegmentator.qc_columns import COL_SUBJECT, COL_ORGAN, COL_IOU, COL_TRAINING_LABEL
+from totalsegmentator.qc_columns import (
+    COL_SUBJECT, COL_ORGAN, COL_IOU, COL_TRAINING_LABEL, COL_MODEL_NAME,
+    COL_ROC_AUC_MEAN, COL_ROC_AUC_STD, COL_PR_AUC_MEAN, COL_PR_AUC_STD,
+    COL_N_MASKS, COL_ACCEPT_RATE,
+)
 
 # Raw features that already mean the same thing for every structure, so they need no
 # per-organ reference - largest_component_fraction in particular is the single
@@ -166,8 +170,8 @@ def evaluate(df, models, n_splits, output_dir):
             continue
         print(f"{name:32s} {np.mean(s['auc']):>8.3f} +/-{np.std(s['auc']):<6.3f} "
               f"{np.mean(s['ap']):>8.3f} +/-{np.std(s['ap']):<6.3f}")
-        summary_rows.append({"model": name, "roc_auc_mean": np.mean(s["auc"]), "roc_auc_std": np.std(s["auc"]),
-                             "pr_auc_mean": np.mean(s["ap"]), "pr_auc_std": np.std(s["ap"])})
+        summary_rows.append({COL_MODEL_NAME: name, COL_ROC_AUC_MEAN: np.mean(s["auc"]), COL_ROC_AUC_STD: np.std(s["auc"]),
+                             COL_PR_AUC_MEAN: np.mean(s["ap"]), COL_PR_AUC_STD: np.std(s["ap"])})
 
     os.makedirs(output_dir, exist_ok=True)
     pd.DataFrame(summary_rows).to_csv(os.path.join(output_dir, "cv_summary.csv"), index=False)
@@ -209,7 +213,7 @@ def leave_one_organ_out(df, feature_sets, min_n, min_minority, seed, output_dir)
         per_organ[organ] = (len(test_df), test_df[COL_TRAINING_LABEL].mean(), row)
 
     print(f"{'MEAN':30s} " + " ".join(f"{k}={np.mean(v):.3f}" for k, v in results.items() if v))
-    out = pd.DataFrame([{COL_ORGAN: o, "n": per_organ[o][0], "accept_rate": per_organ[o][1], **per_organ[o][2]}
+    out = pd.DataFrame([{COL_ORGAN: o, COL_N_MASKS: per_organ[o][0], COL_ACCEPT_RATE: per_organ[o][1], **per_organ[o][2]}
                         for o in per_organ])
     out.to_csv(os.path.join(output_dir, "loo_by_organ.csv"), index=False)
     print(f"loo_by_organ.csv -> {output_dir}")
@@ -263,8 +267,8 @@ def main():
     if not args.skip_loo and rel_cols:
         leave_one_organ_out(df, feature_sets, args.loo_min_n, args.loo_min_minority, args.seed, args.output_dir)
 
-    cv_summary = pd.read_csv(os.path.join(args.output_dir, "cv_summary.csv")).set_index("model")
-    cv_scores_by_name = {n: {"roc_auc_mean": float(cv_summary.loc[n, "roc_auc_mean"])}
+    cv_summary = pd.read_csv(os.path.join(args.output_dir, "cv_summary.csv")).set_index(COL_MODEL_NAME)
+    cv_scores_by_name = {n: {"roc_auc_mean": float(cv_summary.loc[n, COL_ROC_AUC_MEAN])}
                          for n, _, _ in models if n in cv_summary.index}
     print(f"\n=== persisting models (refit on full {len(df)}-row training set) ===")
     persist_models(df, models, args.models_dir, cv_scores_by_name, args)

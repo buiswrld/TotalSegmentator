@@ -1,7 +1,8 @@
 """
-Ablation suite for the mask quality classifier.
+Optional analysis stage for the QC pipeline: an ablation suite for the mask-quality
+classifier, run against a curated dataset (stage 4 / curate_dataset.py output).
 
-Four experiments, each independently runnable via the RUN_* flags:
+Four experiments, each independently runnable via --skip-* flags:
 
   1. FEATURE ABLATION      which feature groups carry the signal
   2. THRESHOLD SWEEP       is the IoU 0.90 cutoff load-bearing
@@ -17,11 +18,37 @@ physical standard for small structures. Size may therefore predict the LABEL wit
 predicting mask QUALITY. Experiments 1 and 3 together test that: if size matters only
 via the metric artifact, dropping it should hurt pooled AUC far more than within-organ AUC.
 
-Run:  python ablations.py
+Reads a curated dataset CSV from stage 4 directly (labels, empty-row dropping, and
+organ-relative z-score joining are already done there - this script never re-derives
+them). See totalsegmentator/qc_columns.py for the full column-name glossary.
+
+Writes, all under --output-dir:
+  feature_ablation.csv   Ablation Configuration Label/Kind (config/kind),
+                         Number of Features Used (n_features), AUC,
+                         PR-AUC for Reject Class (pr_auc_reject),
+                         Mean Within-Group AUC (within_organ_auc),
+                         Number of Groups in Within-Group AUC (n_organs_within),
+                         Pooled/Within-Group AUC Change vs Full Model (delta_auc/delta_within)
+  threshold_sweep.csv    IoU Accept Threshold Tested (iou_threshold), Accept Rate,
+                         AUC, pr_auc_reject, within_organ_auc, n_organs_within
+  within_organ_auc.csv   Organ/Structure Name, Number of Masks (n), Accept Rate, AUC,
+                         Anatomical Family Grouping (family)
+  within_family_auc.csv  Anatomical Family Grouping (family), Number of Masks (n),
+                         Accept Rate, AUC
+  family_loo.csv         family, Number of Masks (n), Number of Distinct Organs
+                         (n_organs), Accept Rate, AUC
+  organ_loo.csv          same columns, held out one organ at a time instead of family
+
+Run:  python experiments/pipeline/ablations.py --dataset-csv datasets/classifier_train.csv --output-dir results/ablations
 """
 
 import warnings
 warnings.filterwarnings("ignore", message=".*sklearn.utils.parallel.delayed.*")
+
+import argparse
+import os
+import re
+import sys
 
 import numpy as np
 import pandas as pd
@@ -30,48 +57,31 @@ from sklearn.pipeline import Pipeline
 from sklearn.impute import SimpleImputer
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import roc_auc_score, average_precision_score
-import os, re, sys, csv
 
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-try:
-    from build_reference_table import load_reference, add_relative_features
-    HAVE_REF = True
-except Exception:
-    HAVE_REF = False
-
-# ============================ CONFIG ============================
-CSV           = r"C:\Users\ansar\Algoverse\report_ct_val\combined_metrics.csv"
-REFERENCE_CSV = r"C:\Users\ansar\Algoverse\report_ct\reference_stats.csv"
-OUT_DIR       = r"C:\Users\ansar\Algoverse\report_ct_val\ablations"
-
-IOU_ACCEPT = 0.90
-N_SPLITS   = 5
-N_TREES    = 200          # lower than the 400 used for headline numbers; ablations run
-                          # many fits and the ranking is stable at 200
-USE_REFERENCE = False     # z-scores add little on seen organs; turn on for family transfer
-SEED = 0
-
-RUN_ABLATION   = True
-RUN_THRESHOLD  = True
-RUN_WITHIN     = True
-RUN_FAMILY_LOO = True
-
-THRESHOLDS   = [0.70, 0.75, 0.80, 0.85, 0.90, 0.95]
-WITHIN_MIN_N = 25         # rows needed for a per-organ AUC
-WITHIN_MIN_MINORITY = 5   # rows of the rarer class needed
-FAMILY_MIN_N = 40
-# ================================================================
-
-LEAK_COLS = ["dice", "iou", "tp", "fp", "fn", "gt_vox", "status", "accept"]
-ID_COLS   = ["subject", "organ", "orig_axcodes", "pred_vox", "family", "label"]
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+from experiments.pipeline.train import resolve_feature_columns
+from experiments.pipeline.common import write_manifest
+from totalsegmentator.qc_columns import (
+    COL_SUBJECT, COL_ORGAN, COL_IOU, COL_TRAINING_LABEL,
+    COL_NUM_VOXELS, COL_VOLUME_MM3, COL_BBOX_VOLUME_MM3,
+    COL_CENTROID_X_REL, COL_CENTROID_Y_REL, COL_CENTROID_Z_REL,
+    COL_BBOX_X_REL, COL_BBOX_Y_REL, COL_BBOX_Z_REL, COL_MASK_TO_BBOX_RATIO,
+    COL_NUM_COMPONENTS, COL_LARGEST_COMPONENT_FRACTION,
+    COL_TOUCHES_BOUNDARY, COL_BOUNDARY_FRACTION,
+    COL_MEAN_HU, COL_MEDIAN_HU, COL_STD_HU, COL_P05_HU, COL_P95_HU,
+    COL_ANATOMICAL_FAMILY, COL_N_ORGANS, COL_ABLATION_CONFIG, COL_ABLATION_KIND,
+    COL_N_FEATURES, COL_AUC, COL_PR_AUC_REJECT, COL_WITHIN_ORGAN_AUC,
+    COL_N_GROUPS_WITHIN, COL_DELTA_AUC, COL_DELTA_WITHIN_AUC, COL_IOU_THRESHOLD,
+    COL_N_MASKS, COL_ACCEPT_RATE,
+)
 
 FEATURE_GROUPS = {
-    "size":      ["num_voxels", "volume_mm3", "bbox_volume_mm3"],
-    "position":  ["centroid_x_rel", "centroid_y_rel", "centroid_z_rel"],
-    "extent":    ["bbox_x_rel", "bbox_y_rel", "bbox_z_rel", "mask_to_bbox_ratio"],
-    "component": ["num_components", "largest_component_fraction"],
-    "boundary":  ["touches_boundary", "boundary_fraction"],
-    "intensity": ["mean_HU", "median_HU", "std_HU", "p05_HU", "p95_HU"],
+    "size": [COL_NUM_VOXELS, COL_VOLUME_MM3, COL_BBOX_VOLUME_MM3],
+    "position": [COL_CENTROID_X_REL, COL_CENTROID_Y_REL, COL_CENTROID_Z_REL],
+    "extent": [COL_BBOX_X_REL, COL_BBOX_Y_REL, COL_BBOX_Z_REL, COL_MASK_TO_BBOX_RATIO],
+    "component": [COL_NUM_COMPONENTS, COL_LARGEST_COMPONENT_FRACTION],
+    "boundary": [COL_TOUCHES_BOUNDARY, COL_BOUNDARY_FRACTION],
+    "intensity": [COL_MEAN_HU, COL_MEDIAN_HU, COL_STD_HU, COL_P05_HU, COL_P95_HU],
 }
 
 # Ordered: first match wins, so specific patterns must precede general ones.
@@ -102,42 +112,41 @@ def family_of(organ):
     return "other"
 
 
-def make_model():
+def make_model(n_trees, seed):
     return Pipeline([("imp", SimpleImputer(strategy="median")),
-                     ("clf", RandomForestClassifier(n_estimators=N_TREES,
+                     ("clf", RandomForestClassifier(n_estimators=n_trees,
                              min_samples_leaf=2, class_weight="balanced_subsample",
-                             random_state=SEED, n_jobs=-1))])
+                             random_state=seed, n_jobs=-1))])
 
 
-def oof_predict(df, cols, y, groups):
+def oof_predict(df, cols, y, groups, n_splits, n_trees, seed):
     """Subject-grouped out-of-fold probabilities."""
     p = np.zeros(len(y))
-    cv = GroupKFold(n_splits=min(N_SPLITS, len(np.unique(groups))))
+    cv = GroupKFold(n_splits=min(n_splits, len(np.unique(groups))))
     for tr, te in cv.split(df, y, groups):
-        m = make_model()
+        m = make_model(n_trees, seed)
         m.fit(df.iloc[tr][cols], y[tr])
         p[te] = m.predict_proba(df.iloc[te][cols])[:, 1]
     return p
 
 
-def feature_importance(df, cols, y):
+def feature_importance(df, cols, y, n_trees, seed):
     """(feature, importance) sorted desc, from one RF fit on the whole dataset.
 
     Diagnostic only (not cross-validated) - used to pick which single features are
     worth an individual ablation. Column order is preserved through the median imputer,
     so importances line up with `cols`.
     """
-    m = make_model()
+    m = make_model(n_trees, seed)
     m.fit(df[cols], y)
     imp = m.named_steps["clf"].feature_importances_
     return sorted(zip(cols, imp), key=lambda kv: -kv[1])
 
 
-def within_organ_auc(df, p, y, key="organ", min_n=WITHIN_MIN_N,
-                     min_minority=WITHIN_MIN_MINORITY):
-    """Mean AUC computed SEPARATELY inside each organ.
+def within_organ_auc(df, p, y, key, min_n, min_minority):
+    """Mean AUC computed SEPARATELY inside each group (organ or family).
 
-    Pooled AUC rewards ranking easy structures above hard ones. Within-organ AUC
+    Pooled AUC rewards ranking easy structures above hard ones. Within-group AUC
     strips that out: it only asks whether, among masks of the SAME structure, the
     good ones score higher. A large pooled-minus-within gap means most of the
     apparent performance is organ difficulty, not mask quality.
@@ -146,14 +155,15 @@ def within_organ_auc(df, p, y, key="organ", min_n=WITHIN_MIN_N,
     for name, g in df.assign(_p=p, _y=y).groupby(key):
         n_pos, n_neg = int(g._y.sum()), int((1 - g._y).sum())
         if len(g) >= min_n and min(n_pos, n_neg) >= min_minority:
-            out.append({key: name, "n": len(g), "accept_rate": g._y.mean(),
-                        "auc": roc_auc_score(g._y, g._p)})
+            out.append({key: name, COL_N_MASKS: len(g), COL_ACCEPT_RATE: g._y.mean(),
+                        COL_AUC: roc_auc_score(g._y, g._p)})
     return pd.DataFrame(out)
 
 
 # ---------------------------------------------------------------- experiments
 
-def experiment_ablation(df, all_cols, y, groups):
+def experiment_ablation(df, all_cols, y, groups, n_splits, n_trees, seed,
+                        within_min_n, within_min_minority, output_dir):
     print("\n" + "=" * 74)
     print("1. FEATURE ABLATION")
     print("=" * 74)
@@ -166,16 +176,16 @@ def experiment_ablation(df, all_cols, y, groups):
     def run(label, cols, kind):
         if not cols:
             return
-        p = oof_predict(df, cols, y, groups)
-        w = within_organ_auc(df, p, y)
-        rows.append({"config": label, "kind": kind, "n_features": len(cols),
-                     "auc": roc_auc_score(y, p),
-                     "pr_auc_rej": average_precision_score(1 - y, 1 - p),
-                     "within_organ_auc": w.auc.mean() if len(w) else np.nan,
-                     "n_organs_within": len(w)})
+        p = oof_predict(df, cols, y, groups, n_splits, n_trees, seed)
+        w = within_organ_auc(df, p, y, COL_ORGAN, within_min_n, within_min_minority)
+        rows.append({COL_ABLATION_CONFIG: label, COL_ABLATION_KIND: kind, COL_N_FEATURES: len(cols),
+                     COL_AUC: roc_auc_score(y, p),
+                     COL_PR_AUC_REJECT: average_precision_score(1 - y, 1 - p),
+                     COL_WITHIN_ORGAN_AUC: w[COL_AUC].mean() if len(w) else np.nan,
+                     COL_N_GROUPS_WITHIN: len(w)})
         r = rows[-1]
-        print(f"  {label:28s} feats={r['n_features']:>3d}  AUC={r['auc']:.3f}  "
-              f"rej={r['pr_auc_rej']:.3f}  within-organ={r['within_organ_auc']:.3f}")
+        print(f"  {label:28s} feats={r[COL_N_FEATURES]:>3d}  AUC={r[COL_AUC]:.3f}  "
+              f"rej={r[COL_PR_AUC_REJECT]:.3f}  within-organ={r[COL_WITHIN_ORGAN_AUC]:.3f}")
 
     print("\nfull model:")
     run("ALL", all_cols, "full")
@@ -189,7 +199,7 @@ def experiment_ablation(df, all_cols, y, groups):
         run(f"only {g}", cs, "only_group")
 
     # ---- single-feature ablation for the top features by importance ----
-    ranked_imp = feature_importance(df, all_cols, y)
+    ranked_imp = feature_importance(df, all_cols, y, n_trees, seed)
     top_feats = [f for f, _ in ranked_imp[:6]]
     print("\ntop 6 features by RF importance (whole-dataset fit, diagnostic):")
     for f, v in ranked_imp[:6]:
@@ -204,35 +214,35 @@ def experiment_ablation(df, all_cols, y, groups):
         run(f"only {f}", [f], "only_feature")
 
     res = pd.DataFrame(rows)
-    full = res[res.kind == "full"].iloc[0]
-    res["delta_auc"] = res.auc - full.auc
-    res["delta_within"] = res.within_organ_auc - full.within_organ_auc
-    res.to_csv(os.path.join(OUT_DIR, "feature_ablation.csv"), index=False)
+    full = res[res[COL_ABLATION_KIND] == "full"].iloc[0]
+    res[COL_DELTA_AUC] = res[COL_AUC] - full[COL_AUC]
+    res[COL_DELTA_WITHIN_AUC] = res[COL_WITHIN_ORGAN_AUC] - full[COL_WITHIN_ORGAN_AUC]
+    res.to_csv(os.path.join(output_dir, "feature_ablation.csv"), index=False)
 
     # ---- unified table: every ablation, pooled + within-organ AUC and both deltas,
     #      sorted by pooled delta (most harmful first) ----
     print("\n  --- all ablations, sorted by pooled delta vs full model ---")
     print(f"  {'config':26s} {'pooledAUC':>9s} {'withinAUC':>9s} {'d_pooled':>9s} {'d_within':>9s}")
     print("  " + "-" * 66)
-    ordered = res[res.kind != "full"].sort_values("delta_auc")
-    for r in ordered.itertuples(index=False):
-        print(f"  {r.config:26s} {r.auc:>9.3f} {r.within_organ_auc:>9.3f} "
-              f"{r.delta_auc:>+9.3f} {r.delta_within:>+9.3f}")
+    ordered = res[res[COL_ABLATION_KIND] != "full"].sort_values(COL_DELTA_AUC)
+    for _, r in ordered.iterrows():
+        print(f"  {r[COL_ABLATION_CONFIG]:26s} {r[COL_AUC]:>9.3f} {r[COL_WITHIN_ORGAN_AUC]:>9.3f} "
+              f"{r[COL_DELTA_AUC]:>+9.3f} {r[COL_DELTA_WITHIN_AUC]:>+9.3f}")
 
     # ---- interpretation: which groups separate easy/hard structures rather than
     #      judging mask quality (hurt pooled much more than within-organ when dropped) ----
     print("\n  --- interpretation (dropped groups) ---")
-    drops = res[res.kind == "drop_group"].sort_values("delta_auc")
+    drops = res[res[COL_ABLATION_KIND] == "drop_group"].sort_values(COL_DELTA_AUC)
     flagged = []
-    for r in drops.itertuples(index=False):
-        g = r.config.replace("without ", "")
+    for _, r in drops.iterrows():
+        g = r[COL_ABLATION_CONFIG].replace("without ", "")
         # more-negative delta_auc than delta_within => removing it costs pooled ranking
         # more than within-organ quality => the group was mostly an easy/hard separator.
-        easy_hard_gap = r.delta_within - r.delta_auc
+        easy_hard_gap = r[COL_DELTA_WITHIN_AUC] - r[COL_DELTA_AUC]
         tag = "  <- separates easy/hard, not good/bad" if easy_hard_gap > 0.02 else ""
         if easy_hard_gap > 0.02:
             flagged.append(g)
-        print(f"  dropping {g:12s} pooled {r.delta_auc:+.3f}   within-organ {r.delta_within:+.3f}{tag}")
+        print(f"  dropping {g:12s} pooled {r[COL_DELTA_AUC]:+.3f}   within-organ {r[COL_DELTA_WITHIN_AUC]:+.3f}{tag}")
     print("\n  A group that hurts POOLED far more than WITHIN-ORGAN is mostly")
     print("  separating easy structures from hard ones, not good masks from bad.")
     if flagged:
@@ -243,70 +253,70 @@ def experiment_ablation(df, all_cols, y, groups):
     return res
 
 
-def experiment_threshold(df, all_cols, groups):
+def experiment_threshold(df, all_cols, groups, thresholds, n_splits, n_trees, seed,
+                         within_min_n, within_min_minority, output_dir):
     print("\n" + "=" * 74)
     print("2. THRESHOLD SWEEP")
     print("=" * 74)
     rows = []
     print(f"\n{'IoU cut':>8s} {'accept%':>9s} {'AUC':>7s} {'rej PR':>8s} "
           f"{'within-organ':>13s} {'n organs':>9s}")
-    for t in THRESHOLDS:
-        y = (df["iou"] >= t).astype(int).to_numpy()
+    for t in thresholds:
+        y = (df[COL_IOU] >= t).astype(int).to_numpy()
         if y.mean() in (0.0, 1.0):
             continue
-        p = oof_predict(df, all_cols, y, groups)
-        w = within_organ_auc(df, p, y)
-        rows.append({"iou_threshold": t, "accept_rate": y.mean(),
-                     "auc": roc_auc_score(y, p),
-                     "pr_auc_rej": average_precision_score(1 - y, 1 - p),
-                     "within_organ_auc": w.auc.mean() if len(w) else np.nan,
-                     "n_organs_within": len(w)})
+        p = oof_predict(df, all_cols, y, groups, n_splits, n_trees, seed)
+        w = within_organ_auc(df, p, y, COL_ORGAN, within_min_n, within_min_minority)
+        rows.append({COL_IOU_THRESHOLD: t, COL_ACCEPT_RATE: y.mean(),
+                     COL_AUC: roc_auc_score(y, p),
+                     COL_PR_AUC_REJECT: average_precision_score(1 - y, 1 - p),
+                     COL_WITHIN_ORGAN_AUC: w[COL_AUC].mean() if len(w) else np.nan,
+                     COL_N_GROUPS_WITHIN: len(w)})
         r = rows[-1]
-        print(f"{t:>8.2f} {100*r['accept_rate']:>8.1f}% {r['auc']:>7.3f} "
-              f"{r['pr_auc_rej']:>8.3f} {r['within_organ_auc']:>13.3f} "
-              f"{r['n_organs_within']:>9d}")
+        print(f"{t:>8.2f} {100*r[COL_ACCEPT_RATE]:>8.1f}% {r[COL_AUC]:>7.3f} "
+              f"{r[COL_PR_AUC_REJECT]:>8.3f} {r[COL_WITHIN_ORGAN_AUC]:>13.3f} "
+              f"{r[COL_N_GROUPS_WITHIN]:>9d}")
     res = pd.DataFrame(rows)
-    res.to_csv(os.path.join(OUT_DIR, "threshold_sweep.csv"), index=False)
+    res.to_csv(os.path.join(output_dir, "threshold_sweep.csv"), index=False)
     print("\n  Stable AUC across thresholds means 0.90 is not load-bearing.")
     print("  Note accept% shifts a lot, so PR-AUC moves with the class balance;")
     print("  compare AUC (no prevalence floor) across rows, not PR-AUC.")
     return res
 
 
-def experiment_within(df, all_cols, y, groups):
+def experiment_within(df, all_cols, y, groups, n_splits, n_trees, seed,
+                      within_min_n, within_min_minority, family_min_n, output_dir):
     print("\n" + "=" * 74)
     print("3. WITHIN-ORGAN AND WITHIN-FAMILY AUC")
     print("=" * 74)
-    p = oof_predict(df, all_cols, y, groups)
+    p = oof_predict(df, all_cols, y, groups, n_splits, n_trees, seed)
     pooled = roc_auc_score(y, p)
 
-    w_org = within_organ_auc(df, p, y, key="organ")
-    w_fam = within_organ_auc(df, p, y, key="family", min_n=FAMILY_MIN_N)
+    w_org = within_organ_auc(df, p, y, COL_ORGAN, within_min_n, within_min_minority)
+    w_fam = within_organ_auc(df, p, y, COL_ANATOMICAL_FAMILY, family_min_n, within_min_minority)
 
     print(f"\n  pooled AUC              {pooled:.3f}")
-    print(f"  mean within-ORGAN AUC   {w_org.auc.mean():.3f}   ({len(w_org)} organs)")
-    print(f"  mean within-FAMILY AUC  {w_fam.auc.mean():.3f}   ({len(w_fam)} families)")
-    print(f"  pooled - within-organ   {pooled - w_org.auc.mean():+.3f}")
+    print(f"  mean within-ORGAN AUC   {w_org[COL_AUC].mean():.3f}   ({len(w_org)} organs)")
+    print(f"  mean within-FAMILY AUC  {w_fam[COL_AUC].mean():.3f}   ({len(w_fam)} families)")
+    print(f"  pooled - within-organ   {pooled - w_org[COL_AUC].mean():+.3f}")
     print("\n  The gap is the share of pooled AUC that comes from ranking structures")
     print("  against each other rather than judging masks of the same structure.")
 
-    w_org = w_org.assign(family=[family_of(o) for o in w_org.organ])
-    w_org.sort_values("auc").to_csv(os.path.join(OUT_DIR, "within_organ_auc.csv"),
-                                    index=False)
-    w_fam.to_csv(os.path.join(OUT_DIR, "within_family_auc.csv"), index=False)
+    w_org = w_org.assign(**{COL_ANATOMICAL_FAMILY: [family_of(o) for o in w_org[COL_ORGAN]]})
+    w_org.sort_values(COL_AUC).to_csv(os.path.join(output_dir, "within_organ_auc.csv"), index=False)
+    w_fam.to_csv(os.path.join(output_dir, "within_family_auc.csv"), index=False)
 
+    display_cols = [COL_ORGAN, COL_N_MASKS, COL_ACCEPT_RATE, COL_AUC]
     print("\n  weakest organs (model barely discriminates within them):")
-    print(w_org.nsmallest(6, "auc")[["organ", "n", "accept_rate", "auc"]]
-          .to_string(index=False))
+    print(w_org.nsmallest(6, COL_AUC)[display_cols].to_string(index=False))
     print("\n  strongest:")
-    print(w_org.nlargest(6, "auc")[["organ", "n", "accept_rate", "auc"]]
-          .to_string(index=False))
+    print(w_org.nlargest(6, COL_AUC)[display_cols].to_string(index=False))
     print("\n  by family:")
-    print(w_fam.sort_values("auc").to_string(index=False))
+    print(w_fam.sort_values(COL_AUC).to_string(index=False))
     return w_org, w_fam
 
 
-def leave_one_key_out(df, all_cols, key, min_n, min_minority):
+def leave_one_key_out(df, all_cols, key, min_n, min_minority, n_trees, seed):
     """Train on every level of `key` except one, test on the held-out level.
 
     Same model/feature set regardless of key, so organ-vs-family results are directly
@@ -314,51 +324,52 @@ def leave_one_key_out(df, all_cols, key, min_n, min_minority):
     Returns a DataFrame with one row per held-out level.
     """
     groups_ = [(k, g) for k, g in df.groupby(key)
-               if len(g) >= min_n and g["label"].nunique() == 2
-               and min(g["label"].sum(), (1 - g["label"]).sum()) >= min_minority]
+               if len(g) >= min_n and g[COL_TRAINING_LABEL].nunique() == 2
+               and min(g[COL_TRAINING_LABEL].sum(), (1 - g[COL_TRAINING_LABEL]).sum()) >= min_minority]
     rows = []
     for k, test in groups_:
         train = df[df[key] != k]
-        m = make_model()
-        m.fit(train[all_cols], train["label"])
+        m = make_model(n_trees, seed)
+        m.fit(train[all_cols], train[COL_TRAINING_LABEL])
         p = m.predict_proba(test[all_cols])[:, 1]
-        rows.append({key: k, "n": len(test), "n_organs": test.organ.nunique(),
-                     "accept_rate": test["label"].mean(),
-                     "auc": roc_auc_score(test["label"], p)})
+        rows.append({key: k, COL_N_MASKS: len(test), COL_N_ORGANS: test[COL_ORGAN].nunique(),
+                     COL_ACCEPT_RATE: test[COL_TRAINING_LABEL].mean(),
+                     COL_AUC: roc_auc_score(test[COL_TRAINING_LABEL], p)})
     return pd.DataFrame(rows)
 
 
-def experiment_family_loo(df, all_cols, y, groups):
+def experiment_family_loo(df, all_cols, y, groups, family_min_n, within_min_n,
+                          within_min_minority, n_trees, seed, output_dir):
     print("\n" + "=" * 74)
     print("4. LEAVE-ONE-FAMILY-OUT")
     print("=" * 74)
     print("\n  Holding out ONE rib leaves 23 near-identical ribs in training, so")
     print("  per-organ LOO overstates transfer. This holds out the whole family.")
 
-    res = leave_one_key_out(df, all_cols, "family", FAMILY_MIN_N, WITHIN_MIN_MINORITY)
+    res = leave_one_key_out(df, all_cols, COL_ANATOMICAL_FAMILY, family_min_n, within_min_minority, n_trees, seed)
     if res.empty:
         print("  no families with enough data")
         return None
 
-    res = res.sort_values("auc")
+    res = res.sort_values(COL_AUC)
     print(f"\n{'family':20s} {'n':>6s} {'organs':>7s} {'accept%':>8s} {'AUC':>7s}")
     print("-" * 52)
-    for r in res.itertuples(index=False):
-        print(f"{r.family:20s} {r.n:>6d} {r.n_organs:>7d} "
-              f"{100*r.accept_rate:>7.1f}% {r.auc:>7.3f}")
+    for _, r in res.iterrows():
+        print(f"{r[COL_ANATOMICAL_FAMILY]:20s} {r[COL_N_MASKS]:>6d} {r[COL_N_ORGANS]:>7d} "
+              f"{100*r[COL_ACCEPT_RATE]:>7.1f}% {r[COL_AUC]:>7.3f}")
     print("-" * 52)
-    print(f"{'MEAN':20s} {'':>6s} {'':>7s} {'':>8s} {res.auc.mean():>7.3f}")
-    print(f"{'MEDIAN':20s} {'':>6s} {'':>7s} {'':>8s} {res.auc.median():>7.3f}")
-    print(f"\n  families above chance: {(res.auc > 0.5).sum()}/{len(res)}")
-    res.to_csv(os.path.join(OUT_DIR, "family_loo.csv"), index=False)
+    print(f"{'MEAN':20s} {'':>6s} {'':>7s} {'':>8s} {res[COL_AUC].mean():>7.3f}")
+    print(f"{'MEDIAN':20s} {'':>6s} {'':>7s} {'':>8s} {res[COL_AUC].median():>7.3f}")
+    print(f"\n  families above chance: {(res[COL_AUC] > 0.5).sum()}/{len(res)}")
+    res.to_csv(os.path.join(output_dir, "family_loo.csv"), index=False)
 
     # ---- leave-one-ORGAN-out under the identical model/features, for a fair contrast ----
-    org = leave_one_key_out(df, all_cols, "organ", WITHIN_MIN_N, WITHIN_MIN_MINORITY)
-    org.to_csv(os.path.join(OUT_DIR, "organ_loo.csv"), index=False)
+    org = leave_one_key_out(df, all_cols, COL_ORGAN, within_min_n, within_min_minority, n_trees, seed)
+    org.to_csv(os.path.join(output_dir, "organ_loo.csv"), index=False)
     print("\n  --- organ-LOO vs family-LOO (same model & features) ---")
-    print(f"  leave-one-ORGAN-out    mean {org.auc.mean():.3f}   median {org.auc.median():.3f}   ({len(org)} organs)")
-    print(f"  leave-one-FAMILY-out   mean {res.auc.mean():.3f}   median {res.auc.median():.3f}   ({len(res)} families)")
-    print(f"  drop (organ - family)  mean {org.auc.mean() - res.auc.mean():+.3f}")
+    print(f"  leave-one-ORGAN-out    mean {org[COL_AUC].mean():.3f}   median {org[COL_AUC].median():.3f}   ({len(org)} organs)")
+    print(f"  leave-one-FAMILY-out   mean {res[COL_AUC].mean():.3f}   median {res[COL_AUC].median():.3f}   ({len(res)} families)")
+    print(f"  drop (organ - family)  mean {org[COL_AUC].mean() - res[COL_AUC].mean():+.3f}")
     print("\n  Organ-LOO is optimistic: holding out one rib leaves ~23 near-identical")
     print("  ribs in training (22 of the usable organs are ribs), so the model still")
     print("  sees the structure type. Family-LOO removes the whole type at once - the")
@@ -369,49 +380,77 @@ def experiment_family_loo(df, all_cols, y, groups):
 # ---------------------------------------------------------------- main
 
 def main():
-    os.makedirs(OUT_DIR, exist_ok=True)
-    df = pd.read_csv(CSV)
-    if "is_empty" in df:
-        df = df[df["is_empty"] == 0].copy()
-    df["label"] = (df["iou"] >= IOU_ACCEPT).astype(int)
-    df["family"] = [family_of(o) for o in df["organ"]]
-    df = df.reset_index(drop=True)
+    parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    parser.add_argument("--dataset-csv", required=True,
+                        help="Curated dataset CSV from stage 4 (curate_dataset.py), e.g. classifier_train.csv.")
+    parser.add_argument("--output-dir", required=True)
+    parser.add_argument("--n-splits", type=int, default=5)
+    parser.add_argument("--n-trees", type=int, default=200,
+                        help="Lower than the 400 used for headline train.py numbers; ablations run "
+                             "many fits and the ranking is stable at 200 (default: 200).")
+    parser.add_argument("--seed", type=int, default=0)
+    parser.add_argument("--use-relative-features", action="store_true",
+                        help="Include the organ-relative _z features already joined by curate_dataset.py "
+                             "(default: off - z-scores add little on organs seen during training; "
+                             "turn on to test family-transfer specifically).")
+    parser.add_argument("--thresholds", type=float, nargs="+", default=[0.70, 0.75, 0.80, 0.85, 0.90, 0.95],
+                        help="IoU accept thresholds to sweep in experiment 2.")
+    parser.add_argument("--within-min-n", type=int, default=25, help="Rows needed for a per-organ AUC.")
+    parser.add_argument("--within-min-minority", type=int, default=5, help="Rows of the rarer class needed.")
+    parser.add_argument("--family-min-n", type=int, default=40, help="Rows needed for a per-family AUC.")
+    parser.add_argument("--skip-feature-ablation", action="store_true")
+    parser.add_argument("--skip-threshold-sweep", action="store_true")
+    parser.add_argument("--skip-within-group", action="store_true")
+    parser.add_argument("--skip-family-loo", action="store_true")
+    args = parser.parse_args()
 
-    if USE_REFERENCE and HAVE_REF and os.path.exists(REFERENCE_CSV):
-        df = add_relative_features(df, load_reference(REFERENCE_CSV))
+    os.makedirs(args.output_dir, exist_ok=True)
+    df = pd.read_csv(args.dataset_csv)
+    df[COL_ANATOMICAL_FAMILY] = [family_of(o) for o in df[COL_ORGAN]]
 
-    all_cols = [c for c in df.columns if c not in LEAK_COLS + ID_COLS]
-    # is_empty is constant once empty rows are dropped; drop any zero-variance column
+    raw_cols, rel_cols = resolve_feature_columns(args.dataset_csv)
+    all_cols = raw_cols + (rel_cols if args.use_relative_features else [])
+    # zero-variance columns (e.g. is_empty, constant once empty rows are already
+    # dropped by stage 4) carry no signal and just slow the fits down - drop them.
     all_cols = [c for c in all_cols if df[c].nunique(dropna=False) > 1]
-    # never let a ground-truth-derived column reach the feature matrix
-    assert not (set(all_cols) & set(LEAK_COLS)), f"leak: {set(all_cols) & set(LEAK_COLS)}"
 
-    y = df["label"].to_numpy()
-    groups = df["subject"].to_numpy()
+    y = df[COL_TRAINING_LABEL].to_numpy()
+    groups = df[COL_SUBJECT].to_numpy()
 
-    print(f"{len(df)} masks | {df.subject.nunique()} subjects | "
-          f"{df.organ.nunique()} organs | {df.family.nunique()} families | "
+    print(f"{len(df)} masks | {df[COL_SUBJECT].nunique()} subjects | "
+          f"{df[COL_ORGAN].nunique()} organs | {df[COL_ANATOMICAL_FAMILY].nunique()} families | "
           f"{100*y.mean():.1f}% accept")
-    print(f"{len(all_cols)} features\n")
-    fam_counts = df.family.value_counts()
+    print(f"{len(all_cols)} features ({'raw+relative' if args.use_relative_features else 'raw only'})\n")
+    fam_counts = df[COL_ANATOMICAL_FAMILY].value_counts()
     print("family sizes:")
     for f, n in fam_counts.items():
-        print(f"  {f:20s} {n:>5d}  ({df[df.family==f].organ.nunique()} organs)")
+        print(f"  {f:20s} {n:>5d}  ({df[df[COL_ANATOMICAL_FAMILY]==f][COL_ORGAN].nunique()} organs)")
     if "other" in fam_counts:
-        unmapped = sorted(df[df.family == "other"].organ.unique())[:15]
+        unmapped = sorted(df[df[COL_ANATOMICAL_FAMILY] == "other"][COL_ORGAN].unique())[:15]
         print(f"\n  unmapped -> 'other': {unmapped}")
         print("  (extend FAMILY_PATTERNS if any of these should be grouped)")
 
-    if RUN_ABLATION:
-        experiment_ablation(df, all_cols, y, groups)
-    if RUN_THRESHOLD:
-        experiment_threshold(df, all_cols, groups)
-    if RUN_WITHIN:
-        experiment_within(df, all_cols, y, groups)
-    if RUN_FAMILY_LOO:
-        experiment_family_loo(df, all_cols, y, groups)
+    if not args.skip_feature_ablation:
+        experiment_ablation(df, all_cols, y, groups, args.n_splits, args.n_trees, args.seed,
+                            args.within_min_n, args.within_min_minority, args.output_dir)
+    if not args.skip_threshold_sweep:
+        experiment_threshold(df, all_cols, groups, args.thresholds, args.n_splits, args.n_trees, args.seed,
+                             args.within_min_n, args.within_min_minority, args.output_dir)
+    if not args.skip_within_group:
+        experiment_within(df, all_cols, y, groups, args.n_splits, args.n_trees, args.seed,
+                          args.within_min_n, args.within_min_minority, args.family_min_n, args.output_dir)
+    if not args.skip_family_loo:
+        experiment_family_loo(df, all_cols, y, groups, args.family_min_n, args.within_min_n,
+                              args.within_min_minority, args.n_trees, args.seed, args.output_dir)
 
-    print(f"\nall CSVs written to {OUT_DIR}")
+    write_manifest(
+        os.path.join(args.output_dir, "ablations_manifest.json"),
+        stage="ablations", dataset_csv=args.dataset_csv, n_splits=args.n_splits,
+        n_trees=args.n_trees, seed=args.seed, use_relative_features=args.use_relative_features,
+        thresholds=args.thresholds, n_rows=len(df), n_subjects=int(df[COL_SUBJECT].nunique()),
+        n_features=len(all_cols),
+    )
+    print(f"\nall CSVs written to {args.output_dir}")
 
 
 if __name__ == "__main__":

@@ -1,0 +1,22 @@
+{
+  "created_at": "2026-08-17T23:14:18.179610+00:00",
+  "git_commit": "432e670",
+  "command": "experiments/pipeline/ablations.py --dataset-csv experiments/eval_runs/mr_full_run/datasets/classifier_train.csv --output-dir experiments/eval_runs/mr_full_run/results/ablations",
+  "stage": "ablations",
+  "dataset_csv": "experiments/eval_runs/mr_full_run/datasets/classifier_train.csv",
+  "n_splits": 5,
+  "n_trees": 200,
+  "seed": 0,
+  "use_relative_features": false,
+  "thresholds": [
+    0.7,
+    0.75,
+    0.8,
+    0.85,
+    0.9,
+    0.95
+  ],
+  "n_rows": 3213,
+  "n_subjects": 190,
+  "n_features": 19
+}

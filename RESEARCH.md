@@ -31,6 +31,14 @@ independently runnable with fully custom paths too.
 | 4. Curate dataset | `curate_dataset.py` *(new)* | `train_classifier.py::load()` |
 | 5. Train | `train.py` | `train_classifier.py`, **+ new: persists fitted models to disk** |
 | 6. Test | `test.py` *(new)* | `calibrate.py`'s ECE/MCE/Brier functions (now in `common.py`), applied to a real held-out test set rather than nested CV |
+| 7. Ablations *(optional)* | `ablations.py` | — new, not part of the original five scripts |
+
+Stage 7 is an optional analysis script, not part of the linear 1→6 flow the orchestrator
+runs — it takes a curated dataset CSV from stage 4 directly (`--dataset-csv`) and runs
+four deeper diagnostic experiments (feature ablation, IoU-threshold sweep, within-organ
+AUC, leave-one-family-out) to pressure-test whether the classifier is learning genuine
+mask-quality signal or just exploiting IoU's size bias (see section 6b). It's meant to be
+run by hand against `datasets/classifier_train.csv` once a normal 1→6 run has produced one.
 
 The `EXPECTED_DICE` benchmark table (previously hardcoded in `combined.py`) now lives at
 `resources/expected_dice_mr.json`, loaded via `compute_metrics.py --expected-dice-json`.
@@ -402,12 +410,63 @@ build stats, calibration metrics) but never fed to the classifier.
 | `COL_AUC` / `COL_ECE` / `COL_MCE` / `COL_BRIER_SCORE` | ranking + calibration-error metrics | `test.py` | diagnostic |
 | `COL_RELIABILITY` / `COL_RESOLUTION` / `COL_UNCERTAINTY` | Brier score decomposition components | `test.py` | diagnostic |
 | `COL_BIN_MEAN_PREDICTED` / `COL_BIN_OBSERVED_RATE` / `COL_CALIBRATION_GAP` | per-bin calibration-curve values | `test.py` | diagnostic |
+| `COL_ROC_AUC_MEAN` / `COL_ROC_AUC_STD` / `COL_PR_AUC_MEAN` / `COL_PR_AUC_STD` | mean/std of ROC-AUC/PR-AUC across CV folds | `train.py` (`cv_summary.csv`) | diagnostic |
+| `COL_PR_AUC_ACCEPT` / `COL_PR_AUC_REJECT` | PR-AUC for the accept/reject class specifically | `test.py`, `ablations.py` | diagnostic |
+| `COL_N_TEST_ROWS` | row count scored | `test.py` | diagnostic |
+| `COL_ANATOMICAL_FAMILY` | coarse anatomical grouping (e.g. all ribs → `rib`) derived from `FAMILY_PATTERNS` | `ablations.py` | diagnostic |
+| `COL_N_ORGANS` | distinct-organ count within a group | `ablations.py` (`*_loo.csv`) | diagnostic |
+| `COL_ABLATION_CONFIG` / `COL_ABLATION_KIND` | which feature-set variant was tested / its category (`full`/`drop_group`/`only_group`/`drop_feature`/`only_feature`) | `ablations.py` (`feature_ablation.csv`) | diagnostic |
+| `COL_N_FEATURES` | feature count for that ablation config | `ablations.py` | diagnostic |
+| `COL_WITHIN_ORGAN_AUC` / `COL_N_GROUPS_WITHIN` | mean AUC computed separately inside each organ (strips out easy/hard ranking), and how many organs/families had enough data to include | `ablations.py` | diagnostic |
+| `COL_DELTA_AUC` / `COL_DELTA_WITHIN_AUC` | pooled/within-group AUC change vs. the full-feature model | `ablations.py` | diagnostic |
+| `COL_IOU_THRESHOLD` | IoU accept-threshold tested in the threshold sweep | `ablations.py` (`threshold_sweep.csv`) | diagnostic |
 
 Not in this table: `EXPECTED_DICE`'s keys in `compute_metrics.py` (organ names, not metric
 short-forms) and every dynamically-named per-model/per-feature-set result column
 (`oof_predictions.csv`, `loo_by_organ.csv`, `calibrated_oof.csv` — named
 `<model family> [<feature set>]` or `<base model> + <calibration method>`, can't be
 static constants since the set of models/feature-sets is configured at runtime).
+
+## 6b. Stage 7 (optional) — Ablations (`experiments/pipeline/ablations.py`)
+
+Motivation: several feature-importance results (section 6, and the CT pilot run in
+section 8) rank size-related features highest. But IoU is size-biased by construction —
+for a sphere of radius `r` with boundary error `d`, `IoU ≈ 1 - 3d/r` — so a fixed IoU
+threshold is a much tighter physical standard for small structures than large ones.
+That raises a real methodological concern: a "size" feature could predict the
+accept/reject *label* purely because it predicts organ difficulty, without reflecting
+mask *quality* at all. This stage exists to pressure-test that concern with four
+experiments, run against a stage-4 curated dataset directly (`--dataset-csv`):
+
+1. **Feature ablation** — drop/isolate each feature group (size, position, extent,
+   component, boundary, intensity) and the top individual features by RF importance,
+   measuring pooled AND within-organ AUC for each. A group is flagged
+   "separates easy/hard, not good/bad" when dropping it costs pooled AUC far more than
+   within-organ AUC.
+2. **Threshold sweep** — recomputes the label at IoU thresholds 0.70–0.95 (the raw
+   `Intersection over Union (IoU)` column is kept in every curated dataset specifically
+   for this) and checks whether AUC stays stable — if so, the 0.90 cutoff isn't
+   load-bearing to the conclusions.
+3. **Within-organ/within-family AUC** — the key diagnostic: pooled AUC rewards ranking
+   easy structures above hard ones; within-group AUC strips that out by scoring only
+   whether, among masks of the *same* structure, the good ones rank higher. The gap
+   between pooled and within-organ AUC is the share of apparent performance that's
+   really just "this organ is generally easier," not real mask-quality discrimination.
+4. **Leave-one-family-out** — a stricter version of section 6's leave-one-organ-out.
+   Holding out one rib while ~23 other ribs stay in training overstates transfer, since
+   the model still sees the structure type. `FAMILY_PATTERNS` (a curated
+   organ-name → anatomical-family regex mapping, e.g. all `rib_*` → `rib`,
+   `aorta`/`vena_cava`/... → `great_vessel`) groups organs so an entire structure type
+   can be excluded at once — a much stronger test of whether the model generalizes to
+   genuinely novel anatomy.
+
+Reuses `train.py::resolve_feature_columns()` to recover the raw/organ-relative feature
+split from stage 4's manifest (organ-relative z-scores are included only with
+`--use-relative-features`, off by default — they add little on organs already seen
+during training and are meant for the family-transfer question specifically). All
+model fits use a plain `RandomForestClassifier` (not the full 4-family/4-feature-set
+sweep from `train.py`) at a lower `--n-trees` (200 vs. 400) since this stage runs many
+more fits than `train.py` does and the ranking is stable at that count.
 
 ## 7. Stage 5 — Calibration (`experiments/calibrate.py`)
 
@@ -545,6 +604,115 @@ for the exact command/args/git commit that produced this run).
   `results/test/test_results.csv` (every test row's prediction from every persisted
   model) — both committed, useful for calibration plots or per-organ error breakdowns
   without re-running anything.
+
+---
+
+### Ablation suite comparison — MR (ours) vs. CT (Aahil's), `experiments/pipeline/ablations.py`
+
+Ran the stage-7 ablation suite (see §6b for full methodology) against the committed
+200-subject MR training set (`experiments/eval_runs/mr_full_run/datasets/classifier_train.csv`
+→ `experiments/eval_runs/mr_full_run/results/ablations/`), and compared against a run
+Aahil did independently on the CT dataset. Same four experiments, same underlying logic
+in both — this section records where the two runs agree, where they diverge, and why.
+
+**Methodology recap** (see §6b for full detail): four experiments, all built around one
+central worry — IoU is size-biased by construction (`IoU ≈ 1 - 3d/r` for a sphere of
+radius `r` with boundary error `d`), so a "size" feature could predict the accept/reject
+label purely via organ difficulty rather than real mask quality.
+1. **Feature ablation** — drop/isolate feature groups, measure pooled AUC (all organs
+   mixed) *and* within-organ AUC (only compares masks of the same organ, stripping out
+   "which organ is this" as a shortcut). A group that costs pooled AUC far more than
+   within-organ AUC is flagged as an easy/hard-organ separator rather than real signal.
+2. **Threshold sweep** — relabel at IoU cutoffs 0.70–0.95, check whether AUC stays
+   stable (if so, the 0.90 default isn't load-bearing to the conclusions).
+3. **Within-organ / within-family AUC** — the diagnostic experiment 1 and 4 both lean
+   on; the gap between pooled and within-organ AUC is the share of the pooled score
+   that's just organ-difficulty ranking rather than genuine per-mask discrimination.
+4. **Leave-one-organ-out vs. leave-one-family-out** — organ-LOO retrains with one organ
+   entirely excluded and tests purely on it; family-LOO does the same for a whole
+   anatomical family at once (via `FAMILY_PATTERNS`). Family-LOO is the stricter test,
+   since organ-LOO can be optimistic when many near-duplicate organs (e.g. individual
+   ribs) remain in training.
+
+#### Our MR results (200-subject train set, 3,213 masks / 190 subjects / 50 organs / 13 families, 26.5% accept)
+
+- **Feature ablation:** `size` is the costliest group to drop (pooled 0.937→0.921,
+  Δ−0.015; within-organ 0.862→0.814, Δ−0.047). `component` is nearly irrelevant
+  (Δ−0.003 pooled, Δ−0.002 within). **Zero groups flagged** as pure easy/hard
+  separators — every group that mattered hurt within-organ AUC as much or more than
+  pooled, i.e. real quality signal, not organ-memorization. Top individual features by
+  RF importance: Volume (0.192), Number of Voxels (0.144), Mask-to-BBox Fill Ratio
+  (0.118).
+- **Threshold sweep:** AUC 0.920 → 0.937 → 0.967 across IoU 0.70 → 0.90 → 0.95 (accept
+  rate swings 86.2% → 26.5% → 4.0% over the same range). Stable relative to the size of
+  the accept-rate swing — **0.90 is not load-bearing.**
+- **Within-organ/family AUC:** pooled 0.937 vs. mean within-organ 0.862 (27 organs
+  qualified) — gap of 0.075. Weakest: `iliopsoas_right` (0.709), `gallbladder` (0.739),
+  `vertebrae` (0.764). Strongest: `autochthon_left` (0.977), `gluteus_medius_right`
+  (0.977). By family, weakest `vertebrae` (0.764) and `heart` (0.803), strongest
+  `shoulder_bone` (0.980).
+- **Organ-LOO vs. family-LOO:** organ-LOO mean 0.876 / median 0.883 (27 organs);
+  family-LOO mean 0.896 / median 0.909 (11 families) — family-LOO slightly *higher*
+  than organ-LOO here, the reverse of the textbook-expected direction (see comparison
+  below for why).
+
+#### Aahil's CT results (reported informally, reproduced here for the record)
+
+- **Feature ablation:** `component` is the costliest group to drop (pooled 0.870→0.816,
+  Δ−0.054; within-organ Δ−0.128) — hurts within-organ more than pooled, so it's judging
+  real per-structure quality, not just easy/hard ranking. `size` barely matters
+  (Δ−0.010, pooled 0.870→0.860) — "our feature-importance table was misleading here;
+  impurity importance is biased toward continuous features, so size ranked high without
+  mattering. Ablation is the honest measure" (his note, worth applying generally: don't
+  trust raw RF importance rankings over ablation deltas).
+- **Threshold sweep:** AUC 0.877, 0.877, 0.872, 0.867, 0.870, 0.875 across IoU
+  0.70→0.95 (range ~0.010) while accept rate swings 92.7%→46.0%. Same conclusion:
+  **0.90 is not load-bearing.** Per-family breakdown not yet run — flagged as the next
+  step, since pooled stability could mask families moving in opposite directions.
+- **Organ-LOO vs. family-LOO:** organ-LOO mean 0.821, family-LOO mean 0.779 — the
+  textbook-expected direction (organ-LOO inflated). Explanation: 22 of 66 usable organs
+  were individual ribs, so holding out one rib left ~23 near-identical ribs in training.
+  Most families lost almost nothing when held out entirely (`lung` 0.951→0.930,
+  `urinary` 0.833→0.832).
+- **`costal_cartilage` (initially read as a contradiction, then corrected):**
+  `within_family_auc` = 0.601 (model *did* train on some costal cartilage, via normal
+  CV) vs. `family_loo` = 0.399, *below chance* (model never saw it at all). Not a
+  contradiction — different questions ("performance with some exposure" vs. "with
+  zero exposure"). The below-chance number is the real finding: likely
+  `largest_component_fraction` (a top feature) inverts for costal cartilage, which is
+  naturally fragmented, so the model's usual "more fragmented = worse" heuristic
+  backfires there. Caveat noted: n=49, 16% accept — noisy.
+
+#### Comparison: agreements and differences
+
+**Agreed:**
+- 0.90 threshold not load-bearing, in both datasets, by a wide margin (accept-rate
+  swing of 40-60+ points vs. AUC range of ~0.01-0.05).
+- In both runs, whichever feature group actually mattered hurt within-organ AUC as
+  much or more than pooled AUC — the interpretive rule ("real signal if it hurts
+  within-group discrimination too") held in both datasets, even though it identified a
+  *different* feature group as the important one.
+
+**Diverged, with explanation (not a contradiction in either case):**
+- **Which feature group carries the signal** — `size` for MR, `component` for CT.
+  Plausible cause: CT's organ set includes thin, easily-fragmented structures (ribs,
+  costal cartilage, sternum) where connectivity is the obvious tell of a broken mask;
+  MR's organ set here skews toward solid abdominal organs and large muscles, where
+  size/shape deviation is more informative. Feature importance appears to be
+  organ-set/modality dependent rather than universal — worth stating as such in the
+  paper rather than picking one "winner" feature.
+- **Organ-LOO vs. family-LOO direction** — CT showed the expected organ-LOO-optimistic
+  pattern (driven by ~22 near-duplicate ribs staying in training); MR showed the
+  reverse. MR's family sizes have no rib-like family of many near-duplicate organs (the
+  largest family, `muscle`, has 10 genuinely distinct structures, not near-copies), so
+  the specific redundancy mechanism that inflates organ-LOO in CT has no MR analogue.
+  The small MR reversal (0.896 vs. 0.876, on only 11 families / 27 organs) is more
+  plausibly sampling noise than a real effect.
+
+**Open item carried over, not yet done on either dataset:** per-family threshold sweep
+(does AUC stability hold *per family*, or does pooled stability mask families moving in
+opposite directions as the threshold changes). Flagged by Aahil as the next CT step;
+not yet run on MR either.
 
 ---
 
