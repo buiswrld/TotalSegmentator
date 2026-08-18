@@ -420,6 +420,10 @@ build stats, calibration metrics) but never fed to the classifier.
 | `COL_WITHIN_ORGAN_AUC` / `COL_N_GROUPS_WITHIN` | mean AUC computed separately inside each organ (strips out easy/hard ranking), and how many organs/families had enough data to include | `ablations.py` | diagnostic |
 | `COL_DELTA_AUC` / `COL_DELTA_WITHIN_AUC` | pooled/within-group AUC change vs. the full-feature model | `ablations.py` | diagnostic |
 | `COL_IOU_THRESHOLD` | IoU accept-threshold tested in the threshold sweep | `ablations.py` (`threshold_sweep.csv`) | diagnostic |
+| `COL_SUFFICIENT_DATA_FLAG` | whether a family met the min-rows/min-minority-class bar to compute an AUC AT THAT SPECIFIC THRESHOLD (can hold at a loose threshold and fail at a strict one) | `ablations.py` (`threshold_sweep_by_family.csv`) | diagnostic |
+| `COL_AUC_MIN` / `COL_AUC_MAX` / `COL_AUC_RANGE` | a family's AUC spread across the threshold sweep (only over thresholds where it had sufficient data) - the direct answer to "is this family threshold-sensitive" | `ablations.py` (`threshold_sweep_family_volatility.csv`) | diagnostic |
+| `COL_ACCEPT_RATE_MIN` / `COL_ACCEPT_RATE_MAX` / `COL_ACCEPT_RATE_RANGE` | a family's accept-rate spread across the sweep (always computable, no eligibility gate) | `ablations.py` (`threshold_sweep_family_volatility.csv`) | diagnostic |
+| `COL_N_THRESHOLDS_EVALUATED` | how many of the swept thresholds a family had enough data to be scored at | `ablations.py` (`threshold_sweep_family_volatility.csv`) | diagnostic |
 
 Not in this table: `EXPECTED_DICE`'s keys in `compute_metrics.py` (organ names, not metric
 short-forms) and every dynamically-named per-model/per-feature-set result column
@@ -446,7 +450,15 @@ experiments, run against a stage-4 curated dataset directly (`--dataset-csv`):
 2. **Threshold sweep** — recomputes the label at IoU thresholds 0.70–0.95 (the raw
    `Intersection over Union (IoU)` column is kept in every curated dataset specifically
    for this) and checks whether AUC stays stable — if so, the 0.90 cutoff isn't
-   load-bearing to the conclusions.
+   load-bearing to the conclusions. Also breaks this down **per anatomical family** at
+   every threshold (`threshold_sweep_by_family.csv` + a `threshold_sweep_family_
+   volatility.csv` summary of each family's AUC range across the sweep) — a stable
+   *pooled* AUC can hide individual families swinging in opposite directions and
+   canceling out in the average, which is exactly the failure mode this catches. A
+   family's eligibility to even get an AUC is re-checked at each threshold (min rows +
+   min minority-class count), since it can hold at a loose threshold and fail at a
+   strict one as the accept rate collapses — tracked explicitly via
+   `has_sufficient_data` rather than the family silently vanishing from the output.
 3. **Within-organ/within-family AUC** — the key diagnostic: pooled AUC rewards ranking
    easy structures above hard ones; within-group AUC strips that out by scoring only
    whether, among masks of the *same* structure, the good ones rank higher. The gap
@@ -709,10 +721,36 @@ label purely via organ difficulty rather than real mask quality.
   The small MR reversal (0.896 vs. 0.876, on only 11 families / 27 organs) is more
   plausibly sampling noise than a real effect.
 
-**Open item carried over, not yet done on either dataset:** per-family threshold sweep
-(does AUC stability hold *per family*, or does pooled stability mask families moving in
-opposite directions as the threshold changes). Flagged by Aahil as the next CT step;
-not yet run on MR either.
+**Follow-up (resolved on MR):** per-family threshold sweep — does AUC stability hold
+*per family*, or does pooled stability mask families moving in opposite directions as
+the threshold changes. `ablations.py` now computes this directly
+(`threshold_sweep_by_family.csv` + `threshold_sweep_family_volatility.csv`, committed
+under `experiments/eval_runs/mr_full_run/results/ablations/`). **The theory was
+correct — pooled stability was hiding real per-family volatility.** Pooled AUC ranged
+only 0.047 across the sweep (0.920→0.967), but individual families swung far more:
+
+| family | AUC range | AUC min→max |
+|---|---|---|
+| `vertebrae` | **0.189** | 0.764 → 0.953 |
+| `heart` | 0.169 | 0.740 → 0.909 |
+| `lung` | 0.160 | 0.805 → 0.965 |
+| `neuro` | 0.139 | 0.860 → 0.999 |
+| `great_vessel` | 0.118 | 0.801 → 0.919 |
+| `muscle` (least volatile) | 0.029 | 0.918 → 0.947 |
+
+`vertebrae` alone swings **~4x** the pooled range. Self-consistency verified: every
+family's AUC at threshold=0.90 in the new per-family breakdown matches the
+already-committed `within_family_auc.csv` exactly (max diff 0.0), confirming the new
+code computes the same thing the old code did, just sliced across every threshold
+instead of only the default one. `reproductive` (9 masks) never had enough of both
+classes simultaneously to score an AUC at any threshold (`n_thresholds_evaluated=0`)
+despite its accept rate itself swinging 0%→100% across the sweep — too small a family
+to draw any conclusion from, flagged as such via `has_sufficient_data=False` rather
+than silently omitted. **Practical implication for the paper:** reporting a single
+pooled "AUC is threshold-stable" claim would understate real threshold sensitivity for
+specific anatomy (vertebrae, heart, lung, neuro) — any claim about threshold robustness
+should be qualified per anatomical family, not stated as a blanket result. Not yet run
+against the CT dataset — worth Aahil reproducing the same way once he pulls this branch.
 
 ---
 

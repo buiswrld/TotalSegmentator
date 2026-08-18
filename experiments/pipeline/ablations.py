@@ -31,6 +31,18 @@ Writes, all under --output-dir:
                          Pooled/Within-Group AUC Change vs Full Model (delta_auc/delta_within)
   threshold_sweep.csv    IoU Accept Threshold Tested (iou_threshold), Accept Rate,
                          AUC, pr_auc_reject, within_organ_auc, n_organs_within
+  threshold_sweep_by_family.csv   one row per (threshold, family): iou_threshold,
+                         Anatomical Family Grouping (family), Number of Masks (n),
+                         Accept Rate, AUC (NaN if that family lacked enough data AT
+                         THAT THRESHOLD), Sufficient Data for AUC (has_sufficient_data)
+  threshold_sweep_family_volatility.csv   one row per family, summarizing the sweep
+                         above: Number of Thresholds with Sufficient Data
+                         (n_thresholds_evaluated), AUC min/max/range across those
+                         thresholds, Accept Rate min/max/range across ALL thresholds
+                         (no eligibility gate) - sorted by AUC range descending, so the
+                         top rows directly answer "which families are most
+                         threshold-sensitive" rather than requiring you to eyeball
+                         threshold_sweep_by_family.csv yourself
   within_organ_auc.csv   Organ/Structure Name, Number of Masks (n), Accept Rate, AUC,
                          Anatomical Family Grouping (family)
   within_family_auc.csv  Anatomical Family Grouping (family), Number of Masks (n),
@@ -73,6 +85,9 @@ from totalsegmentator.qc_columns import (
     COL_N_FEATURES, COL_AUC, COL_PR_AUC_REJECT, COL_WITHIN_ORGAN_AUC,
     COL_N_GROUPS_WITHIN, COL_DELTA_AUC, COL_DELTA_WITHIN_AUC, COL_IOU_THRESHOLD,
     COL_N_MASKS, COL_ACCEPT_RATE,
+    COL_SUFFICIENT_DATA_FLAG, COL_AUC_MIN, COL_AUC_MAX, COL_AUC_RANGE,
+    COL_ACCEPT_RATE_MIN, COL_ACCEPT_RATE_MAX, COL_ACCEPT_RATE_RANGE,
+    COL_N_THRESHOLDS_EVALUATED,
 )
 
 FEATURE_GROUPS = {
@@ -158,6 +173,27 @@ def within_organ_auc(df, p, y, key, min_n, min_minority):
             out.append({key: name, COL_N_MASKS: len(g), COL_ACCEPT_RATE: g._y.mean(),
                         COL_AUC: roc_auc_score(g._y, g._p)})
     return pd.DataFrame(out)
+
+
+def family_breakdown_at_threshold(df, p, y, min_n, min_minority):
+    """Per-family (n, accept rate, AUC) for one threshold's predictions.
+
+    Unlike within_organ_auc(), never silently drops a family: mask count and accept
+    rate are always reported, and AUC is NaN with has_sufficient_data=False when the
+    family doesn't meet min_n/min_minority AT THIS THRESHOLD specifically (eligibility
+    can hold at a loose threshold and fail at a strict one as the accept rate
+    collapses) - so a family becoming impossible to evaluate at a strict cutoff is
+    visible in the output instead of quietly vanishing.
+    """
+    rows = []
+    for name, g in df.assign(_p=p, _y=y).groupby(COL_ANATOMICAL_FAMILY):
+        n_pos, n_neg = int(g._y.sum()), int((1 - g._y).sum())
+        sufficient = len(g) >= min_n and min(n_pos, n_neg) >= min_minority
+        rows.append({COL_ANATOMICAL_FAMILY: name, COL_N_MASKS: len(g),
+                     COL_ACCEPT_RATE: g._y.mean(),
+                     COL_AUC: roc_auc_score(g._y, g._p) if sufficient else np.nan,
+                     COL_SUFFICIENT_DATA_FLAG: sufficient})
+    return pd.DataFrame(rows)
 
 
 # ---------------------------------------------------------------- experiments
@@ -254,17 +290,21 @@ def experiment_ablation(df, all_cols, y, groups, n_splits, n_trees, seed,
 
 
 def experiment_threshold(df, all_cols, groups, thresholds, n_splits, n_trees, seed,
-                         within_min_n, within_min_minority, output_dir):
+                         within_min_n, within_min_minority, family_min_n, output_dir):
     print("\n" + "=" * 74)
     print("2. THRESHOLD SWEEP")
     print("=" * 74)
     rows = []
+    family_rows = []
     print(f"\n{'IoU cut':>8s} {'accept%':>9s} {'AUC':>7s} {'rej PR':>8s} "
           f"{'within-organ':>13s} {'n organs':>9s}")
     for t in thresholds:
         y = (df[COL_IOU] >= t).astype(int).to_numpy()
         if y.mean() in (0.0, 1.0):
             continue
+        # One oof_predict() per threshold, reused for both the pooled/within-organ row
+        # below and the per-family breakdown - avoids re-fitting models a second time
+        # for the same threshold.
         p = oof_predict(df, all_cols, y, groups, n_splits, n_trees, seed)
         w = within_organ_auc(df, p, y, COL_ORGAN, within_min_n, within_min_minority)
         rows.append({COL_IOU_THRESHOLD: t, COL_ACCEPT_RATE: y.mean(),
@@ -276,11 +316,56 @@ def experiment_threshold(df, all_cols, groups, thresholds, n_splits, n_trees, se
         print(f"{t:>8.2f} {100*r[COL_ACCEPT_RATE]:>8.1f}% {r[COL_AUC]:>7.3f} "
               f"{r[COL_PR_AUC_REJECT]:>8.3f} {r[COL_WITHIN_ORGAN_AUC]:>13.3f} "
               f"{r[COL_N_GROUPS_WITHIN]:>9d}")
+
+        fam = family_breakdown_at_threshold(df, p, y, family_min_n, within_min_minority)
+        fam.insert(0, COL_IOU_THRESHOLD, t)
+        family_rows.append(fam)
+
     res = pd.DataFrame(rows)
     res.to_csv(os.path.join(output_dir, "threshold_sweep.csv"), index=False)
     print("\n  Stable AUC across thresholds means 0.90 is not load-bearing.")
     print("  Note accept% shifts a lot, so PR-AUC moves with the class balance;")
     print("  compare AUC (no prevalence floor) across rows, not PR-AUC.")
+
+    # ---- per-family breakdown: does the pooled/within-organ stability above hold
+    #      for every family individually, or is it hiding families moving in opposite
+    #      directions as the threshold changes? ----
+    fam_df = pd.concat(family_rows, ignore_index=True)
+    fam_df.to_csv(os.path.join(output_dir, "threshold_sweep_by_family.csv"), index=False)
+
+    volatility = []
+    for name, g in fam_df.groupby(COL_ANATOMICAL_FAMILY):
+        evaluable = g[g[COL_SUFFICIENT_DATA_FLAG]]
+        volatility.append({
+            COL_ANATOMICAL_FAMILY: name,
+            COL_N_THRESHOLDS_EVALUATED: len(evaluable),
+            COL_AUC_MIN: evaluable[COL_AUC].min() if len(evaluable) else np.nan,
+            COL_AUC_MAX: evaluable[COL_AUC].max() if len(evaluable) else np.nan,
+            COL_AUC_RANGE: (evaluable[COL_AUC].max() - evaluable[COL_AUC].min()) if len(evaluable) else np.nan,
+            COL_ACCEPT_RATE_MIN: g[COL_ACCEPT_RATE].min(),
+            COL_ACCEPT_RATE_MAX: g[COL_ACCEPT_RATE].max(),
+            COL_ACCEPT_RATE_RANGE: g[COL_ACCEPT_RATE].max() - g[COL_ACCEPT_RATE].min(),
+        })
+    vol_df = pd.DataFrame(volatility).sort_values(COL_AUC_RANGE, ascending=False)
+    vol_df.to_csv(os.path.join(output_dir, "threshold_sweep_family_volatility.csv"), index=False)
+
+    print("\n  --- per-family AUC volatility across the threshold sweep ---")
+    print("  (large AUC range despite pooled stability = this family IS threshold-sensitive)")
+    print(f"  {'family':20s} {'n_thr':>6s} {'AUC min':>8s} {'AUC max':>8s} {'AUC rng':>8s} "
+          f"{'acc% rng':>9s}")
+    for _, r in vol_df.iterrows():
+        auc_range = f"{r[COL_AUC_RANGE]:.3f}" if pd.notna(r[COL_AUC_RANGE]) else "n/a"
+        auc_min = f"{r[COL_AUC_MIN]:.3f}" if pd.notna(r[COL_AUC_MIN]) else "n/a"
+        auc_max = f"{r[COL_AUC_MAX]:.3f}" if pd.notna(r[COL_AUC_MAX]) else "n/a"
+        print(f"  {r[COL_ANATOMICAL_FAMILY]:20s} {int(r[COL_N_THRESHOLDS_EVALUATED]):>6d} "
+              f"{auc_min:>8s} {auc_max:>8s} {auc_range:>8s} "
+              f"{100*r[COL_ACCEPT_RATE_RANGE]:>8.1f}%")
+    insufficient = fam_df[~fam_df[COL_SUFFICIENT_DATA_FLAG]]
+    if len(insufficient):
+        print(f"\n  {insufficient[COL_ANATOMICAL_FAMILY].nunique()} family/families had at least one "
+              f"threshold with insufficient data to compute an AUC (see has_sufficient_data=False "
+              f"rows in threshold_sweep_by_family.csv) - typically at the strictest cutoffs, where "
+              f"too few accepts remain.")
     return res
 
 
@@ -435,7 +520,7 @@ def main():
                             args.within_min_n, args.within_min_minority, args.output_dir)
     if not args.skip_threshold_sweep:
         experiment_threshold(df, all_cols, groups, args.thresholds, args.n_splits, args.n_trees, args.seed,
-                             args.within_min_n, args.within_min_minority, args.output_dir)
+                             args.within_min_n, args.within_min_minority, args.family_min_n, args.output_dir)
     if not args.skip_within_group:
         experiment_within(df, all_cols, y, groups, args.n_splits, args.n_trees, args.seed,
                           args.within_min_n, args.within_min_minority, args.family_min_n, args.output_dir)
