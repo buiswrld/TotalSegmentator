@@ -99,10 +99,53 @@ per ground-truth organ.
   (Section 4), `val` split trains/evaluates the classifier, `test` split is reserved
   untouched for a final evaluation.
 
-**Open question for the paper:** the MR dataset has no `val` split, so the CT pipeline's
-clean 3-way separation (train → reference table, val → classifier, test → final eval)
-can't be replicated as-is on MR data. Will need to either carve a held-out subset out of
-MR `train`, or restructure how MR fits into the same methodology.
+**Open question for the paper (resolved, see 2a below):** the MR dataset has no `val`
+split, so the CT pipeline's clean 3-way separation (train → reference table, val →
+classifier, test → final eval) couldn't be replicated as-is on MR data — MR's classifier
+ran on cross-validation only, with `--train-split == --test-split` (both "test", 55
+subjects) and no subject the model had never seen at all.
+
+---
+
+## 2a. QC-pipeline-specific train/test partitioning (pooled, split-label-independent)
+
+The QC classifier is a separate model downstream of a *frozen* TotalSegmentator — it
+never trains or fine-tunes the segmentation model itself, so there's no reason it needs
+to respect TotalSegmentator's own train/val/test boundaries (those exist to evaluate
+*TotalSegmentator's own* accuracy, e.g. the MR paper's 55-subject held-out Dice numbers
+in section 2 above). Both datasets' classifier pools are therefore built by **pooling
+every subject regardless of its original split label**, deterministically shuffling
+(`common.py::POOLED_SHUFFLE_SEED = 0`, so results are reproducible), and splitting
+80:20 into classifier-train:classifier-test — mechanically, `--split all` on any stage-1/
+2/3 CLI script bypasses the meta.csv split-column filter, then `--offset`/`--limit` carve
+out a window of the resulting pooled, shuffled list (`get_subjects()` in `common.py`).
+
+**Reference table:** built from **every** subject in each dataset (`--split all`, no
+`--limit`) — it's ground-truth-only, costs no GPU time, and there's no reason to
+withhold any subject from it.
+
+**Classifier pool:** also **every** subject, split 80:20. A subject can therefore appear
+in both the reference table's population *and* as a classifier training/test example —
+a deliberate choice, not an oversight (see the caveat on the pre-fix `mr_full_run` numbers
+in section 8, which had exactly this overlap by accident rather than by design). The
+trade-off: a subject's own "relative" (organ z-score) features are computed against a
+population that includes its own ground truth — negligible for common organs (one point
+among hundreds) and proportionally larger for organs with few ground-truth instances
+across the dataset (e.g. `prostate`, sex-specific; several organs in the reference table
+sit below the 10-observation noise threshold even before this run — see the reference
+table's own printed warning). Accepted in exchange for not wasting any subject's data —
+maximizing classifier training/test pool size was judged more valuable than the small
+bias this introduces.
+
+| | total subjects | reference (offset:limit) | classifier-train, 80% (offset:limit) | classifier-test, held out, 20% (offset:limit) |
+|---|---|---|---|---|
+| MR | 616 | 0:616 (all) | 0:493 | 493:123 |
+| CT | 1228 | 0:1228 (all) | 0:982 | 982:246 |
+
+This finally gives MR a genuine held-out test set (it previously had none at all), and
+grows both datasets' classifier pools far beyond their previous CV-only sizes (MR: 55 →
+493+123 = 616 total; CT: 57 (val) → 982+246 = 1228 total, no longer wasting the ~1,082/
+1,139-subject native "train" splits that fed only the reference table before).
 
 ---
 
@@ -616,6 +659,17 @@ for the exact command/args/git commit that produced this run).
   `results/test/test_results.csv` (every test row's prediction from every persisted
   model) — both committed, useful for calibration plots or per-organ error breakdowns
   without re-running anything.
+
+**Caveat (found later, see section 2a):** this run's reference table (all 561 `train`-split
+subjects) and its classifier training data (200 `train`-split subjects) were drawn from
+the same ordered prefix of MR's `train` split, so all 190 classifier-training subjects
+are a subset of the 561 reference-table subjects. Since `curate_dataset.py`'s reference
+join is purely by organ name with no subject-level check, those subjects' organ-relative
+z-score features were partly computed against a population that includes themselves —
+a mild self-referential bias, likely small for common organs and larger for rare ones.
+Left as-is rather than re-run (section 2a's pooled partitioning is the fix going forward,
+used for the expanded classifier-pool run); the held-out `test`-split numbers above are
+unaffected (test subjects never contributed to the reference table in this run).
 
 ---
 

@@ -194,9 +194,16 @@ def main():
     if args.split == "test":
         parser.error("Refusing to build the reference table from the test split - it must "
                      "stay held out. Use --split train (default) or another non-test split.")
+    # --split all deliberately bypasses this check: it pools every subject regardless of
+    # its original meta.csv split label (see get_subjects() in common.py), so there is no
+    # "test split" concept to protect. By design the reference table is built from EVERY
+    # subject (no --limit), including ones that also become classifier train/test
+    # examples elsewhere in the pipeline - see RESEARCH.md for why this deliberate
+    # overlap (and the small self-referential z-score bias it introduces, worst for
+    # rare organs) was accepted in exchange for not wasting any subject's data.
 
     image_name, _ = resolve_modality(args)
-    subjects = get_subjects(args.dataset_dir, args.split, args.limit)
+    subjects = get_subjects(args.dataset_dir, args.split, args.limit, args.offset)
     print(f"Building reference from {len(subjects)} subject(s), split={args.split}")
     print("(ground-truth masks only, no segmentation, no GPU)\n")
 

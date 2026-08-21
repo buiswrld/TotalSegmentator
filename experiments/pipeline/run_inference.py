@@ -55,7 +55,7 @@ def main():
         raise SystemExit(f"--shard-index must be in [0, {args.num_shards}) but got {args.shard_index}")
 
     image_name, task = resolve_modality(args)
-    subjects = get_subjects(args.dataset_dir, args.split, args.limit)
+    subjects = get_subjects(args.dataset_dir, args.split, args.limit, args.offset)
     if args.num_shards > 1:
         subjects = subjects[args.shard_index::args.num_shards]
     shard_tag = f" | shard {args.shard_index}/{args.num_shards}" if args.num_shards > 1 else ""

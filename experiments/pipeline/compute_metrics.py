@@ -366,7 +366,7 @@ def main():
     if args.overlays_dir:
         os.makedirs(args.overlays_dir, exist_ok=True)
 
-    subjects = get_subjects(args.dataset_dir, args.split, args.limit)
+    subjects = get_subjects(args.dataset_dir, args.split, args.limit, args.offset)
     print(f"Computing metrics for {len(subjects)} subject(s) | modality={args.modality} split={args.split}\n")
 
     rows, lr_all = [], []

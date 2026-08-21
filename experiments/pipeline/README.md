@@ -47,6 +47,15 @@ TotalSegmentator — safe to kill and re-run. Stages 2–6 each write their outp
 atomically at the very end of a full run, so the orchestrator's "skip if output exists"
 check is always either fully-done-skip-it or not-done-run-it, never a partial state.
 
+## Pooled, split-label-independent subject selection
+
+`--split all` (any stage 1/2/3 script) bypasses meta.csv's split column entirely and
+pools every subject in the dataset, deterministically shuffled (`common.py`'s
+`POOLED_SHUFFLE_SEED`). Combine with `--offset`/`--limit` to carve out a window of that
+pooled list — e.g. a QC-classifier-specific train/test split independent of whatever
+train/val/test boundaries TotalSegmentator's own training used. See RESEARCH.md section
+2a for why and the exact windows used.
+
 ## Shared code
 
 `common.py` holds subject discovery (`get_subjects`/`find_columns`), canonical-RAS

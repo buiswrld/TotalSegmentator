@@ -15,6 +15,7 @@ import csv
 import glob
 import json
 import os
+import random
 import subprocess
 import sys
 from datetime import datetime, timezone
@@ -56,25 +57,44 @@ def find_columns(header):
     return id_col, split_col
 
 
-def get_subjects(dataset_dir, split, limit):
-    """Subject ids from dataset_dir/meta.csv filtered by split; falls back to all sXXXX folders."""
+# Fixed seed for the "all" pooled mode's deterministic shuffle (see get_subjects) - keeps
+# repeated invocations reproducible and matches this codebase's existing --seed 0 default
+# used elsewhere (train.py, ablations.py).
+POOLED_SHUFFLE_SEED = 0
+
+
+def get_subjects(dataset_dir, split, limit, offset=0):
+    """Subject ids from dataset_dir/meta.csv filtered by split; falls back to all sXXXX folders.
+
+    split="all" bypasses the split-column filter entirely and pools every subject in
+    meta.csv regardless of its original train/val/test label, in a deterministic
+    shuffled order (fixed seed, see POOLED_SHUFFLE_SEED) - used to build a QC-pipeline-
+    specific train/test partition independent of the split TotalSegmentator itself was
+    trained/evaluated on. offset lets a caller carve out a disjoint window of this
+    pooled, shuffled list (e.g. classifier-train = subjects[0:493], classifier-test =
+    subjects[493:493+123]).
+    """
     meta = os.path.join(dataset_dir, "meta.csv")
     subjects = []
+    pooled = split == "all"
     if split and os.path.exists(meta):
         with open(meta, newline="", encoding="utf-8-sig") as fh:
             sample = fh.read(4096); fh.seek(0)
             delim = ";" if sample.count(";") > sample.count(",") else ","
             reader = csv.DictReader(fh, delimiter=delim)
             id_col, split_col = find_columns(reader.fieldnames or [])
-            if id_col and split_col:
+            if id_col and (pooled or split_col):
                 subjects = [row[id_col].strip() for row in reader
-                            if row.get(split_col, "").strip().lower() == split.lower()]
+                            if pooled or row.get(split_col, "").strip().lower() == split.lower()]
             else:
                 print("  meta.csv columns not recognized; using all subject folders")
     if not subjects:
         subjects = sorted(os.path.basename(p) for p in glob.glob(os.path.join(dataset_dir, "s0*"))
                           if os.path.isdir(p))
-    return subjects[:limit] if limit else subjects
+    if pooled:
+        subjects = sorted(subjects)
+        random.Random(POOLED_SHUFFLE_SEED).shuffle(subjects)
+    return subjects[offset:offset + limit] if limit else subjects[offset:]
 
 
 # ---------------------------------------------------------------- image loading
@@ -182,9 +202,14 @@ def add_dataset_args(parser: argparse.ArgumentParser, require_dataset_dir=True):
     parser.add_argument("--task", default=None,
                         help="Override the per-modality default TotalSegmentator task (e.g. total).")
     parser.add_argument("--split", default="test",
-                        help="meta.csv split to use; omit/empty to use every subject folder.")
+                        help="meta.csv split to use; omit/empty to use every subject folder. "
+                             "'all' pools every subject regardless of split label, deterministically "
+                             "shuffled (see get_subjects/POOLED_SHUFFLE_SEED in common.py).")
     parser.add_argument("--limit", type=int, default=None,
                         help="Cap the number of subjects processed. Default: no cap.")
+    parser.add_argument("--offset", type=int, default=0,
+                        help="Skip this many subjects before applying --limit (e.g. to carve a "
+                             "disjoint window out of --split all's pooled, shuffled subject list).")
 
 
 def git_commit() -> str:
