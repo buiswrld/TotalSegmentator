@@ -114,28 +114,35 @@ def process_subject(zf, prefix, subj, args, meta_by_id, header, delim, combined_
     dataset_dir = os.path.join(staging, "dataset")
     predictions_dir = os.path.join(staging, "predictions")
     os.makedirs(dataset_dir, exist_ok=True)
+    timings = {}
     try:
+        t0 = time.time()
         if not stream_subject(zf, prefix, subj, dataset_dir):
-            return False, "not found in zip"
+            return False, "not found in zip", timings
         write_stub_meta(dataset_dir, header, meta_by_id[subj], delim)
+        timings["stream_s"] = round(time.time() - t0, 1)
 
         extra = [f"--extra-arg={e}" for e in args.extra_args]
+        t0 = time.time()
         run([sys.executable, os.path.join(THIS_DIR, "run_inference.py"),
              "--dataset-dir", dataset_dir, "--predictions-dir", predictions_dir,
              "--modality", args.modality, "--split", args.split]
             + (["--device", args.device] if args.device else [])
             + extra)
+        timings["inference_subprocess_s"] = round(time.time() - t0, 1)
 
         subj_metrics_csv = os.path.join(staging, "combined_metrics.csv")
+        t0 = time.time()
         run([sys.executable, os.path.join(THIS_DIR, "compute_metrics.py"),
              "--dataset-dir", dataset_dir, "--predictions-dir", predictions_dir,
              "--modality", args.modality, "--split", args.split,
              "--output-csv", subj_metrics_csv, "--iou-accept", str(args.iou_accept)])
+        timings["metrics_subprocess_s"] = round(time.time() - t0, 1)
 
         append_rows(subj_metrics_csv, combined_csv)
-        return True, None
+        return True, None, timings
     except subprocess.CalledProcessError as e:
-        return False, str(e)
+        return False, str(e), timings
     finally:
         if not keep_staging:
             shutil.rmtree(staging, ignore_errors=True)
@@ -216,15 +223,16 @@ def main():
         done, failed = [], []
         for i, subj in enumerate(subjects, 1):
             t0 = time.time()
-            ok, err = process_subject(zf, prefix, subj, args, meta_by_id, header, delim,
-                                      combined_csv, keep_staging=args.keep_staging)
+            ok, err, timings = process_subject(zf, prefix, subj, args, meta_by_id, header, delim,
+                                               combined_csv, keep_staging=args.keep_staging)
             elapsed = time.time() - t0
+            breakdown = " | ".join(f"{k}={v}s" for k, v in timings.items())
             if ok:
                 done.append(subj)
-                print(f"[{i}/{len(subjects)}] {subj}: done in {elapsed:.0f}s")
+                print(f"[{i}/{len(subjects)}] {subj}: done in {elapsed:.1f}s  ({breakdown})")
             else:
                 failed.append(subj)
-                print(f"[{i}/{len(subjects)}] {subj}: FAILED ({err})")
+                print(f"[{i}/{len(subjects)}] {subj}: FAILED ({err})  ({breakdown})")
 
     manifest_name = (f"stream_manifest_shard{args.shard_index}.json"
                      if args.num_shards > 1 else "stream_manifest.json")
