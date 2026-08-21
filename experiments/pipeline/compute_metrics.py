@@ -48,6 +48,7 @@ import json
 import os
 import sys
 from collections import defaultdict
+from concurrent.futures import ProcessPoolExecutor, as_completed
 
 import matplotlib
 matplotlib.use("Agg")
@@ -143,6 +144,54 @@ def features(mask, spacing, image):
     f.update(boundary_metrics(mask))
     f.update(intensity_metrics(mask, image) if image is not None else _EMPTY_INTENSITY_METRICS)
     return f
+
+
+# ---------------------------------------------------------------- per-subject worker
+# Module-level and picklable so it works with ProcessPoolExecutor (same pattern as
+# build_reference_table.py::measure_subject). Bundles everything one subject needs to
+# be scored independently of every other subject, so --workers > 1 can run subjects
+# across separate processes/cores instead of this stage's single-threaded default.
+
+def score_subject(call_args):
+    (dataset_dir, predictions_dir, subj, image_name, min_voxels, dice_flag, iou_accept,
+     want_lr_audit, want_overlay, overlays_dir, hu_window) = call_args
+
+    gt_dir = os.path.join(dataset_dir, subj, "segmentations")
+    image_path = os.path.join(dataset_dir, subj, image_name)
+    pred_dir = os.path.join(predictions_dir, subj)
+    if not (os.path.isdir(gt_dir) and os.path.exists(image_path)):
+        return subj, [], [], f"missing {image_name} or segmentations, skipping"
+    if not glob.glob(os.path.join(pred_dir, "*.nii.gz")):
+        return subj, [], [], f"no predictions in {pred_dir}, skipping (run stage 1 first)"
+
+    image_img, orig_ax = load_canonical(image_path)
+    image_data = image_img.get_fdata()
+    spacing = image_img.header.get_zooms()[:3]
+
+    pred = load_mask_dir(pred_dir, image_img.shape, min_voxels)
+    gt = load_mask_dir(gt_dir, image_img.shape, min_voxels)
+
+    subj_rows = []
+    for organ in sorted(set(pred) | set(gt)):
+        pred_mask, gt_mask = pred.get(organ), gt.get(organ)
+        s = score(pred_mask, gt_mask, dice_flag)
+        if s[COL_PREDICTED_VOXEL_COUNT] == 0 and s[COL_GROUND_TRUTH_VOXEL_COUNT] == 0:
+            continue
+        f = features(pred_mask if pred_mask is not None else np.zeros(image_img.shape, bool), spacing, image_data)
+        subj_rows.append({COL_SUBJECT: subj, COL_ORGAN: organ,
+                          COL_ACCEPT_LABEL: int(s[COL_IOU] >= iou_accept),
+                          **s, **f, COL_ORIG_AXCODES: "".join(orig_ax)})
+
+    subj_lr_rows = []
+    if want_lr_audit:
+        subj_lr_rows += lr_rows(subj, "pred", pred)
+        subj_lr_rows += lr_rows(subj, "gt", gt)
+
+    if want_overlay:
+        make_overlay(image_data, spacing, pred, gt, subj,
+                     os.path.join(overlays_dir, f"{subj}.png"), hu_window=hu_window)
+
+    return subj, subj_rows, subj_lr_rows, None
 
 
 # ---------------------------------------------------------------- overlay
@@ -357,6 +406,10 @@ def main():
                         help="If given (e.g. resources/expected_dice_mr.json), compare measured Dice against it.")
     parser.add_argument("--expected-vs-measured-csv", default=None,
                         help="Path for the expected-vs-measured comparison. Default: expected_vs_measured.csv next to --output-csv.")
+    parser.add_argument("--workers", type=int, default=1,
+                        help="Parallel subjects via ProcessPoolExecutor; 1 (default) disables multiprocessing. "
+                             "Note: with --workers > 1, --overlay-limit selects the first N subjects to FINISH, "
+                             "not the first N in --split order (subjects complete out of order across processes).")
     args = parser.parse_args()
 
     image_name, task = resolve_modality(args)
@@ -373,53 +426,43 @@ def main():
     per_organ = defaultdict(lambda: {"dice": [], "iou": [], "ok": 0, "low_dice": 0,
                                      "miss": 0, "false_positive": 0, "accept": 0})
 
-    for i, subj in enumerate(subjects, 1):
-        gt_dir = os.path.join(args.dataset_dir, subj, "segmentations")
-        image_path = os.path.join(args.dataset_dir, subj, image_name)
-        pred_dir = os.path.join(args.predictions_dir, subj)
-        if not (os.path.isdir(gt_dir) and os.path.exists(image_path)):
-            print(f"[{i}/{len(subjects)}] {subj}: missing {image_name} or segmentations, skipping")
-            continue
-        if not glob.glob(os.path.join(pred_dir, "*.nii.gz")):
-            print(f"[{i}/{len(subjects)}] {subj}: no predictions in {pred_dir}, skipping (run stage 1 first)")
-            continue
-
-        image_img, orig_ax = load_canonical(image_path)
-        image_data = image_img.get_fdata()
-        spacing = image_img.header.get_zooms()[:3]
-
-        pred = load_mask_dir(pred_dir, image_img.shape, args.min_voxels)
-        gt = load_mask_dir(gt_dir, image_img.shape, args.min_voxels)
-
-        for organ in sorted(set(pred) | set(gt)):
-            pred_mask, gt_mask = pred.get(organ), gt.get(organ)
-            s = score(pred_mask, gt_mask, args.dice_flag)
-            if s[COL_PREDICTED_VOXEL_COUNT] == 0 and s[COL_GROUND_TRUTH_VOXEL_COUNT] == 0:
-                continue
-            f = features(pred_mask if pred_mask is not None else np.zeros(image_img.shape, bool), spacing, image_data)
-            rows.append({COL_SUBJECT: subj, COL_ORGAN: organ,
-                         COL_ACCEPT_LABEL: int(s[COL_IOU] >= args.iou_accept),
-                         **s, **f, COL_ORIG_AXCODES: "".join(orig_ax)})
-            a = per_organ[organ]
-            a[s[COL_MATCH_STATUS]] += 1
-            if s[COL_MATCH_STATUS] in ("ok", "low_dice"):
-                a["dice"].append(s[COL_DICE]); a["iou"].append(s[COL_IOU])
-            if s[COL_IOU] >= args.iou_accept:
+    def absorb(subj, subj_rows, subj_lr_rows, err, i):
+        if err:
+            print(f"[{i}/{len(subjects)}] {subj}: {err}")
+            return
+        rows.extend(subj_rows)
+        for r in subj_rows:
+            a = per_organ[r[COL_ORGAN]]
+            a[r[COL_MATCH_STATUS]] += 1
+            if r[COL_MATCH_STATUS] in ("ok", "low_dice"):
+                a["dice"].append(r[COL_DICE]); a["iou"].append(r[COL_IOU])
+            if r[COL_ACCEPT_LABEL]:
                 a["accept"] += 1
-
         if args.lr_audit_csv:
-            lr_all += lr_rows(subj, "pred", pred)
-            lr_all += lr_rows(subj, "gt", gt)
-
-        if args.overlays_dir and i <= args.overlay_limit:
-            make_overlay(image_data, spacing, pred, gt, subj,
-                         os.path.join(args.overlays_dir, f"{subj}.png"), hu_window=args.hu_window)
-
-        present = [r for r in rows if r[COL_SUBJECT] == subj and r[COL_MATCH_STATUS] in ("ok", "low_dice")]
+            lr_all.extend(subj_lr_rows)
+        present = [r for r in subj_rows if r[COL_MATCH_STATUS] in ("ok", "low_dice")]
         mean_dice = np.mean([r[COL_DICE] for r in present]) if present else float("nan")
-        n_accepted = sum(1 for r in rows if r[COL_SUBJECT] == subj and r[COL_ACCEPT_LABEL])
+        n_accepted = sum(1 for r in subj_rows if r[COL_ACCEPT_LABEL])
+        orient = subj_rows[0][COL_ORIG_AXCODES] if subj_rows else "?"
         print(f"[{i}/{len(subjects)}] {subj}: {len(present)} scored | mean Dice {mean_dice:.3f} | "
-              f"{n_accepted} accepted (IoU>={args.iou_accept}) | orient {''.join(orig_ax)}")
+              f"{n_accepted} accepted (IoU>={args.iou_accept}) | orient {orient}")
+
+    call_args = [(args.dataset_dir, args.predictions_dir, s, image_name, args.min_voxels,
+                  args.dice_flag, args.iou_accept, bool(args.lr_audit_csv),
+                  bool(args.overlays_dir) and idx <= args.overlay_limit,
+                  args.overlays_dir, args.hu_window)
+                 for idx, s in enumerate(subjects, 1)]
+
+    if args.workers > 1:
+        with ProcessPoolExecutor(max_workers=args.workers) as ex:
+            futures = {ex.submit(score_subject, a): a[2] for a in call_args}
+            for i, fut in enumerate(as_completed(futures), 1):
+                subj, subj_rows, subj_lr_rows, err = fut.result()
+                absorb(subj, subj_rows, subj_lr_rows, err, i)
+    else:
+        for i, a in enumerate(call_args, 1):
+            subj, subj_rows, subj_lr_rows, err = score_subject(a)
+            absorb(subj, subj_rows, subj_lr_rows, err, i)
 
     if not rows:
         raise SystemExit("No rows produced - check --dataset-dir/--predictions-dir.")
