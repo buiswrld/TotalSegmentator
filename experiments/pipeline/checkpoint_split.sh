@@ -17,6 +17,10 @@
 # --split all is deterministic-but-identical across different --offset/--limit windows,
 # so the split name alone isn't distinctive enough to use as a directory/commit label.
 #
+# METRICS_WORKERS env var (default 1) is passed as --workers to the stage-2
+# compute_metrics.py call ONLY, not to stage 1's run_inference.py (which has no such
+# flag and would error on it) - kept separate from EXTRA_ARGS, which goes to both.
+#
 # Usage:
 #   checkpoint_split.sh <dataset-dir> <modality> <split> <role-name> <scratch-run-dir> <repo-run-name> [num-shards] [device] [-- extra args for run_inference.py/compute_metrics.py]
 #
@@ -25,6 +29,9 @@
 #
 # Example (pooled, offset-sliced):
 #   experiments/pipeline/checkpoint_split.sh /opt/dlami/nvme/datasets/mri mr all classifier_train /opt/dlami/nvme/runs/mri_full mri_full_remote 8 gpu:0 -- --offset 0 --limit 493
+#
+# Example (with parallel stage-2 metrics computation):
+#   METRICS_WORKERS=16 experiments/pipeline/checkpoint_split.sh /opt/dlami/nvme/datasets/ct ct all classifier_train /opt/dlami/nvme/runs/ct_full ct_full_remote 4 gpu:0 -- --offset 0 --limit 982
 
 set -e
 DATASET_DIR=$1
@@ -53,11 +60,12 @@ echo "=== stage 1: sharded inference for $MODALITY/$ROLE_NAME (--split $SPLIT ${
   "$SCRATCH_RUN_DIR/predictions/$ROLE_NAME" "$NUM_SHARDS" "$DEVICE" "${EXTRA_ARGS[@]}"
 
 echo ""
-echo "=== stage 2: compute_metrics for $MODALITY/$ROLE_NAME ==="
+echo "=== stage 2: compute_metrics for $MODALITY/$ROLE_NAME (--workers ${METRICS_WORKERS:-1}) ==="
 mkdir -p "$SCRATCH_RUN_DIR/metrics/$ROLE_NAME"
 python "$THIS_DIR/compute_metrics.py" \
   --dataset-dir "$DATASET_DIR" --predictions-dir "$SCRATCH_RUN_DIR/predictions/$ROLE_NAME" \
   --modality "$MODALITY" --split "$SPLIT" "${EXTRA_ARGS[@]}" \
+  --workers "${METRICS_WORKERS:-1}" \
   --output-csv "$SCRATCH_RUN_DIR/metrics/$ROLE_NAME/combined_metrics.csv"
 
 echo ""
