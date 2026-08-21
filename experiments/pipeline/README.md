@@ -10,6 +10,11 @@ consistent directory layout.
 See `RESEARCH.md` (repo root, section 0 onward) for the full methodology write-up and
 reasoning behind each design choice. This file is the quick developer reference.
 
+Running stage 1 on a shared/time-boxed remote GPU box (multi-tenant, `Ctrl-C`/idle-culler
+gotchas, GPU-memory-driven concurrency limits, checkpointing strategy)? See
+`REMOTE_GPU_RUNBOOK.md` in this directory first — it documents real failures hit and
+fixed during the first full run, so they don't need rediscovering.
+
 ## Stages
 
 | # | Script | Reads | Writes | What it does |
