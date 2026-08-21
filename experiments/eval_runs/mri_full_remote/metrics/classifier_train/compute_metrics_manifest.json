@@ -1,0 +1,18 @@
+{
+  "created_at": "2026-08-21T19:20:42.283709+00:00",
+  "git_commit": "1d8aafd",
+  "command": "/home/jupyter-ssat-42fd/TotalSegmentator/experiments/pipeline/compute_metrics.py --dataset-dir /opt/dlami/nvme/datasets/mri --predictions-dir /opt/dlami/nvme/runs/mri_full/predictions/classifier_train --modality mr --split all --offset 0 --limit 493 --output-csv /opt/dlami/nvme/runs/mri_full/metrics/classifier_train/combined_metrics.csv",
+  "stage": "compute_metrics",
+  "dataset_dir": "/opt/dlami/nvme/datasets/mri",
+  "predictions_dir": "/opt/dlami/nvme/runs/mri_full/predictions/classifier_train",
+  "modality": "mr",
+  "image_name": "mri.nii.gz",
+  "split": "all",
+  "limit": 493,
+  "min_voxels": 20,
+  "dice_flag": 0.5,
+  "iou_accept": 0.9,
+  "n_subjects": 493,
+  "n_rows": 7453,
+  "systemic_shortfall": false
+}
