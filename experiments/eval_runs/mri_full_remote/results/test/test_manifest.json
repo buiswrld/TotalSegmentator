@@ -1,0 +1,12 @@
+{
+  "created_at": "2026-08-22T22:51:32.486398+00:00",
+  "git_commit": "db8fb64",
+  "command": "experiments/pipeline/test.py --test-csv experiments/eval_runs/mri_full_remote/datasets/classifier_test.csv --models-dir experiments/eval_runs/mri_full_remote/models --output-dir experiments/eval_runs/mri_full_remote/results/test",
+  "stage": "test",
+  "test_csv": "experiments/eval_runs/mri_full_remote/datasets/classifier_test.csv",
+  "models_dir": "experiments/eval_runs/mri_full_remote/models",
+  "model_name": null,
+  "n_test_rows": 2198,
+  "n_models_scored": 16,
+  "train_csv": "experiments/eval_runs/mri_full_remote/datasets/classifier_train.csv"
+}

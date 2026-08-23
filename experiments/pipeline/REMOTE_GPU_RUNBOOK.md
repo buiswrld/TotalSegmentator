@@ -8,6 +8,46 @@ rediscover the same things. This is separate from RESEARCH.md (methodology/findi
 and README.md (day-to-day pipeline usage); this file is specifically about the mechanics
 of running on this kind of environment.
 
+## "Why is this taking so long?" — the short answer for teammates
+
+Two independent things make this slower than "just point an A100 at it," neither of
+which is fixed by a beefier machine of either kind:
+
+**1. nnU-Net inference is inherently CPU/GPU ping-pong, not a single big GPU job.** A
+full CT/MR volume is too large to run through the network in one pass, so nnU-Net does
+*sliding-window* inference: cut the volume into overlapping 3D patches (CPU), run each
+patch through the network (GPU, fast), then stitch results back together with
+Gaussian-weighted averaging, resample to original spacing, and save (all CPU). Each GPU
+forward pass finishes quickly, then the GPU sits idle waiting on the next CPU-prepared
+patch. This is exactly why `nvidia-smi` shows spiky, not-pegged utilization (measured:
+0-36% for a single job, ~30-45% average even with 4 concurrent shards) - **the GPU isn't
+struggling, it's finishing its part fast and waiting.** Running several subjects
+concurrently (same-GPU sharding, see below) helps overlap one subject's CPU phase with
+another's GPU phase, but doesn't make it a continuously-saturated GPU job the way
+training would be.
+
+**2. The GPU is shared with other tenants we can't see or control, and that's the actual
+bottleneck.** This box gives each session what looks like one A100, but the memory on
+that card is a real shared physical resource. Confirmed directly (not speculation) from
+a `CUDA OutOfMemoryError` traceback during this run: the error listed several PIDs
+(e.g. one using 11.86 GiB, another 18.70 GiB) that matched none of our own processes and
+were far larger than anything a single TotalSegmentator subject allocates (0.6-4.6 GiB,
+measured). `nvidia-smi`'s own Processes table never shows these other tenants' rows
+(container/namespace isolation hides *who*), but the CUDA driver still enforces and
+reports the true shared memory total, so our own allocations still fail when the card is
+genuinely full (isolation hides *visibility*, not the actual contention). This is what
+caused the OOM crashes and silent hangs during this run, and it's also why GPU
+concurrency can't be pushed arbitrarily high - it's capped by however much VRAM
+neighbors happen to be using *right now*, which is unpredictable and outside our
+control.
+
+**Conclusion - what would actually help:** neither more raw GPU compute nor a more
+powerful CPU would meaningfully speed this up - GPU compute already finishes fast per
+patch, and CPU isn't saturated at current concurrency (96 cores available, only using a
+handful). What would actually help is **exclusive/dedicated GPU memory** (no contention
+from unknown neighbors), which would let concurrency be pushed safely higher than the
+current 4-way. This is an allocation/policy lever, not a hardware-class one.
+
 ## The environment
 
 - JupyterHub-provisioned box, `nvidia-smi` shows 8x A100-SXM4-40GB, but a normal session
@@ -88,6 +128,33 @@ memory varies a lot by subject (roughly 0.6GB-4.6GB seen in practice) - there is
 concurrency level, and be willing to drop it (we went 8 -> 2 -> 4) if you see OOM.**
 `PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True` (suggested by the OOM error itself)
 was added as a mitigation but doesn't remove the fundamental memory ceiling.
+
+### Why our GPU utilization looks low (~40% avg) next to other tenants' ~99-100%
+
+Watching `nvidia-smi`/`watch -n 1 nvidia-smi` live during a run: our GPU sat around
+36-40% utilization with occasional spikes to 100%, while other tenants' GPUs on the same
+box sat pinned at 99-100% continuously. This is not a bug or a sign our sharding isn't
+working - it's the expected shape for this specific workload:
+
+- nnU-Net's sliding-window inference is inherently *spiky*, not steady-state compute.
+  Per patch: a short GPU forward pass, then CPU-bound work (resampling, Gaussian-weighted
+  patch aggregation, TTA flip-and-average, I/O) before the next patch's GPU call. This
+  matches the earlier single-job `nvidia-smi dmon` finding above (0-36%, spiky).
+- Running N concurrent shards helps fill those idle gaps (that's the entire point of
+  same-GPU sharding), but doesn't guarantee perfect overlap - if several shards happen to
+  hit their CPU-bound phase at the same moment, the GPU briefly idles even with 3-4
+  processes alive.
+- The other tenants' steady 99-100% is much more consistent with a fundamentally
+  different compute pattern - continuous large matmuls (e.g. training), which has no
+  per-patch CPU-bound gaps to create idle time in the first place. It's not that their
+  job is "using the GPU better" in a way ours could match by tuning; it's a different
+  kind of workload.
+- Don't chase this number by blindly adding more shards - we're memory-limited (see
+  above), and `nvidia-smi`'s reported `memory.used`/`utilization.gpu` are for the whole
+  physical card, shared across tenants, so a chunk of that "used" memory (and some
+  utilization) may not even be attributable to processes visible in our own `nvidia-smi
+  Processes` table (container/namespace isolation hides other tenants' process rows, but
+  not their resource totals).
 
 ## The silent-hang failure mode (important - looks like "stuck", is actually "crashed")
 
@@ -188,12 +255,30 @@ means the worst case from any of the failures above is losing whatever single pi
 mid-flight - everything already checkpointed is permanently safe regardless of what
 happens to the box afterward.
 
-## Known stale/leftover data
+## Known stale/leftover data (removed)
 
 `experiments/eval_runs/mri_full_remote/metrics/train/` (note: `train`, not
-`classifier_train`) is leftover from an early, architecturally-superseded attempt that
+`classifier_train`) was leftover from an early, architecturally-superseded attempt that
 used named splits instead of the pooled scheme, and happened to finish + checkpoint
-itself before being killed. It's harmless but unused - don't confuse it with
-`metrics/classifier_train/`, the correct pooled-scheme output. Left in place rather than
-cleaned up (consistent with how `mr_full_run`'s pre-fix leakage issue was handled -
-caveat and move on, not retroactive cleanup).
+itself before being killed. It was harmless but unused, and has since been removed from
+the repo (post-run cleanup) - don't recreate it; `metrics/classifier_train/` is the
+correct pooled-scheme output.
+
+## Final state of the first full pooled run (box wiped 2026-08-22)
+
+The temporary GPU grant expired before a final retry pass could complete and
+checkpoint. Final state, as pushed:
+
+- MR: reference table (616 subjects) + `classifier_train`/`classifier_test` metrics
+  fully checkpointed. Actual scored-row subject counts came in below the requested
+  window size (456/493 for `classifier_train`, 112/123 for `classifier_test`) -
+  `compute_metrics.py` silently skips subjects missing predictions or ground-truth
+  segmentations, and this wasn't caught live during the run. Not investigated
+  further (box no longer available) - treat as an open caveat, not a confirmed cause.
+- CT: reference table (1228 subjects) + `classifier_train` (939/982) +
+  `classifier_test` (244/246) checkpointed. The 45 combined missing subjects were
+  mid-retry (single sequential worker, to cope with a different tenant's job using
+  36+GB of the shared card) when the grant expired - that retry work was never
+  checkpointed and is lost with the box.
+- Decision: proceed with stages 4-6 on the data as checkpointed, accepting these
+  gaps rather than waiting for another GPU grant to backfill them.
