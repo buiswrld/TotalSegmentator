@@ -75,12 +75,46 @@ RUN_CONFORMAL  = True
 # conformal calibration (Task 2b)
 CONF_ALPHAS      = [0.2, 0.1]   # nominal miscoverage: 80% and 90% intervals
 CONF_CAL_FRAC    = 0.30         # fraction of each outer-train's SUBJECTS held for calibration
-MONDRIAN_MIN_CAL = 50           # min per-family calibration masks to trust a family-specific Q
+MONDRIAN_MIN_CAL = 50           # min per-family calibration masks (used when MONDRIAN_FLOOR_MODE=="fixed")
+# "fixed" -> require >= MONDRIAN_MIN_CAL calibration masks per family; "feasibility" ->
+# require only the minimum n at which the conformal quantile is defined for this alpha
+# (ceil((1-alpha)/alpha): n>=4 for 80%, n>=9 for 90%), families below it fall back to
+# the global Q deterministically. The modality driver (regression_modality.py) sets
+# "feasibility"; standalone CT runs keep "fixed" so earlier outputs are unchanged.
+MONDRIAN_FLOOR_MODE = "fixed"
 # ================================================================
 
 LEAK_COLS = ["dice", "iou", "tp", "fp", "fn", "gt_vox", "status", "accept"]
 ID_COLS   = ["subject", "organ", "orig_axcodes", "pred_vox", "family",
              "label", "vol_err", "vol_bad", "iou_reject"]   # never features
+
+
+def normalize_columns(df):
+    """Modality-aware schema shim: map the staged pipeline's long descriptive labels
+    (e.g. 'Intersection over Union (IoU)') to the short CT names this module reads
+    ('iou'), leaving already-short CT columns untouched. Only the ground-truth columns
+    differ in case between the two schemas (IoU/Dice/TP/FP/FN vs iou/dice/tp/fp/fn);
+    everything else (mean_HU, centroid_x_rel, ...) is identical once the parenthetical is
+    extracted, so we preserve case except for those five. Idempotent on CT input.
+    """
+    import re
+    def norm(c):
+        m = re.search(r"\(([^)]+)\)\s*$", c)
+        s = m.group(1) if m else c
+        return s.lower() if s.lower() in {"iou", "dice", "tp", "fp", "fn"} else s
+    return df.rename(columns={c: norm(c) for c in df.columns})
+
+
+def mondrian_floor(alpha):
+    """Minimum per-family calibration count to trust a family-specific conformal Q.
+
+    'feasibility' mode uses the smallest n at which conformal_Q is even defined for this
+    alpha: ceil((n+1)(1-alpha)) <= n  <=>  n >= ceil((1-alpha)/alpha)  (4 for 80%, 9 for
+    90%). 'fixed' mode uses MONDRIAN_MIN_CAL regardless of alpha.
+    """
+    if MONDRIAN_FLOOR_MODE == "feasibility":
+        return int(np.ceil((1 - alpha) / alpha))
+    return MONDRIAN_MIN_CAL
 
 
 def feature_columns(df):
@@ -346,13 +380,14 @@ def cqr_cross_conformal(df, cols, groups, alpha, cal_frac, seed, mondrian=False)
             lo[te_idx] = te_lo - Q; hi[te_idx] = te_hi + Q
         else:
             Q_global = conformal_Q(E, alpha)
+            floor = mondrian_floor(alpha)
             cal_fam = np.array([family_of(o) for o in cal_df["organ"]])
             te_fam = fam_all[te_idx]
             for fam in np.unique(te_fam):
                 m_cal = cal_fam == fam
                 n_cal = int(m_cal.sum())
                 cal_sizes[fam].append(n_cal)
-                Qf = conformal_Q(E[m_cal], alpha) if n_cal >= MONDRIAN_MIN_CAL else Q_global
+                Qf = conformal_Q(E[m_cal], alpha) if n_cal >= floor else Q_global
                 sel = te_idx[te_fam == fam]
                 lo[sel] = te_lo[te_fam == fam] - Qf
                 hi[sel] = te_hi[te_fam == fam] + Qf
@@ -413,11 +448,12 @@ def task2b_conformal(df, cols, groups):
             "Mondrian (per-family)":        (mlo, mhi, cal_sizes),
             "Mondrian (clipped [0,1])":     (np.clip(mlo, 0, 1), np.clip(mhi, 0, 1), cal_sizes),
         }
+        floor = mondrian_floor(alpha)
         fam_tables = {}
         for name, (lo_, hi_, cs) in variants.items():
             cov, mw, mdw, sp, _, ftab = interval_report(
                 y, lo_, hi_, fam, abs_err, alpha, name,
-                min_cal=MONDRIAN_MIN_CAL, cal_sizes=cs)
+                min_cal=floor, cal_sizes=cs)
             fam_tables[name] = ftab
             summary.append({"alpha": alpha, "nominal": 1 - alpha, "variant": name,
                             "coverage": cov, "mean_width": mw, "median_width": mdw,
@@ -430,7 +466,7 @@ def task2b_conformal(df, cols, groups):
         print(f"  {'family':16s} {'n':>5s} {'avg_cal':>8s} {'globalCov':>10s} {'MondrCov':>9s} {'MondrW':>7s} {'ok?':>4s}")
         for famname in g.index:
             avg_cal = m.loc[famname, "avg_cal_n"]
-            ok = "yes" if avg_cal >= MONDRIAN_MIN_CAL else "SMALL"
+            ok = "yes" if avg_cal >= floor else "SMALL"
             print(f"  {famname:16s} {int(g.loc[famname,'n']):>5d} {avg_cal:>8.1f} "
                   f"{100*g.loc[famname,'coverage']:>9.1f}% {100*m.loc[famname,'coverage']:>8.1f}% "
                   f"{m.loc[famname,'mean_width']:>7.3f} {ok:>4s}")
@@ -632,7 +668,7 @@ def _volume_only_miss(d):
 
 def main():
     os.makedirs(OUT_DIR, exist_ok=True)
-    df_all = pd.read_csv(CSV)
+    df_all = normalize_columns(pd.read_csv(CSV))
     df_all["family"] = [family_of(o) for o in df_all["organ"]]
 
     n_empty = int((df_all.is_empty == 1).sum())
