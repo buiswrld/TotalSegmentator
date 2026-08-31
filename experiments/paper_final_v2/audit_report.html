@@ -197,6 +197,9 @@
   .delta-table .metric { color: var(--ink-muted); font-family: 'Source Sans 3', sans-serif; }
   .arrow { color: var(--ink-faint); padding: 0 0.3rem; }
 
+  .item ul { margin: 0.4rem 0 0; padding-left: 1.2rem; font-size: 0.93rem; }
+  .item li { margin-bottom: 0.45rem; }
+  .item li:last-child { margin-bottom: 0; }
   .why { font-size: 0.93rem; color: var(--ink); margin: 0.5rem 0 0; }
   .why b { color: var(--accent); font-weight: 600; }
   .note {
@@ -270,6 +273,7 @@
       <a href="#must-update">Must update →</a>
       <a href="#marginal">Marginal differences →</a>
       <a href="#new">New observations →</a>
+      <a href="#audit">Code audit →</a>
       <a href="#repro">Reproducibility →</a>
     </nav>
   </header>
@@ -618,6 +622,37 @@
         <tr><td class="metric">vertebrae_T9</td><td>0.950</td><td>0.790</td><td>−0.160</td></tr>
       </table>
       <p>Several structures that looked <em>below chance</em> in the paper's subset (duodenum at 0.247 is worse than a coin flip) turn out to be genuinely, if weakly, predictive once there's more data — that's small-sample noise, not a real model failure the paper should have flagged. The reverse also happens: structures with suspiciously perfect subset AUCs (rib_right_7 at 0.997) regress toward more realistic values with more data. <b>Practical implication for the revision:</b> any per-organ AUC number computed on well under ~25–30 masks should be treated as a rough estimate, not a precise one — worth stating as an explicit caveat next to Table 1/3, since the paper doesn't currently flag this instability itself.</p>
+    </article>
+  </section>
+
+  <section class="group" id="audit">
+    <div class="group-head"><h2>Code audit</h2></div>
+    <p class="group-desc">Prompted directly by finding the volume-label bug (item mu-16) mid-analysis — every script in this pipeline was reread end to end, not just spot-checked, and every generated CSV was run through a set of automated consistency checks.</p>
+
+    <article class="item confirmed">
+      <h3>Files reviewed line by line</h3>
+      <p><code class="inline">regression.py</code>, <code class="inline">regression_modality.py</code>, <code class="inline">ablations.py</code>, <code class="inline">paper_consolidate.py</code>, <code class="inline">common.py</code>, <code class="inline">build_reference_table.py</code>, <code class="inline">curate_dataset.py</code>, <code class="inline">split_by_official.py</code>.</p>
+    </article>
+
+    <article class="item marginal">
+      <h3>Two more issues found — both confirmed inert in this run, fixed anyway</h3>
+      <ul>
+        <li><b>Stale hardcoded constant:</b> <code class="inline">regression.py</code>'s <code class="inline">DIRECT_CLASSIFIER_AUC</code> was a leftover 0.870 from an old CT-only run, never recomputed in <code class="inline">main()</code>. Harmless here — only <code class="inline">regression_modality.py</code> was ever actually run, and it already overrides this fresh per modality — but running <code class="inline">regression.py</code> standalone (as the docstring's own "Run:" line invites) would have silently compared against the wrong dataset's number. Now recomputed fresh in <code class="inline">main()</code> too.</li>
+        <li><b>Dead config field:</b> <code class="inline">CLINICAL_CUTOFFS</code>' <code class="inline">"direction"</code> key was defined but never read — every comparison hardcoded <code class="inline">&gt;</code> regardless. A no-op today (the only entry, spleen, is genuinely "greater"), but a future cutoff needing "less than" (e.g. a hypoplasia threshold) would have silently used the wrong direction. Now wired in.</li>
+      </ul>
+    </article>
+
+    <article class="item confirmed">
+      <h3>Data-consistency checks — all passed</h3>
+      <ul>
+        <li>No unexpected NaNs in any AUC/coverage column, across every CSV in <code class="inline">paper_final_v2/</code></li>
+        <li>Every true AUC/coverage/accept-rate value falls within [0, 1] (checked programmatically, not by eye)</li>
+        <li>Every model's PR-AUC beats its trivial base-rate floor (a broken score column would sometimes fail this)</li>
+        <li><code class="inline">feature_ablation.csv</code>'s "full model" row has exactly zero delta against itself</li>
+        <li><b>Official train/test subject sets are fully disjoint</b> for both CT (1,043 vs. 140) and MR (519 vs. 49) — no leakage</li>
+        <li>Reference tables confirmed built from <code class="inline">split=train</code> only, via their own manifests</li>
+        <li>Subject counts cross-check consistently across <code class="inline">oof_predictions.csv</code>, the curated datasets, and stage-2 metrics</li>
+      </ul>
     </article>
   </section>
 
