@@ -626,8 +626,12 @@ def task4_clinical_flips(df, pred_iou):
             print(f"\n  {organ}: no rows in data, skipping")
             continue
         cut = spec["cutoff_ml"]
-        o["gt_disease"] = o.gt_ml > cut
-        o["pred_disease"] = o.pred_ml > cut
+        # "direction" was defined but never read - every CLINICAL_CUTOFFS entry happened
+        # to be "greater" so this never bit, but a future "less" entry (e.g. a hypoplasia
+        # cutoff) would have silently used the wrong comparison direction.
+        above_is_disease = spec.get("direction", "greater") == "greater"
+        o["gt_disease"] = (o.gt_ml > cut) if above_is_disease else (o.gt_ml < cut)
+        o["pred_disease"] = (o.pred_ml > cut) if above_is_disease else (o.pred_ml < cut)
         o["flip"] = o.gt_disease != o.pred_disease
         n, nflip = len(o), int(o.flip.sum())
         print(f"\n  --- {organ} ({spec['condition']}, cutoff {cut} mL; {spec['cite']}) ---")
@@ -690,6 +694,17 @@ def main():
     cols = feature_columns(df)
     print(f"{len(cols)} ground-truth-free features (leak guard passed)\n")
     groups = df["subject"].to_numpy()
+
+    # DIRECT_CLASSIFIER_AUC above is a stale constant from an earlier CT-only run - task1
+    # compares the regressor against whatever this is set to, so recompute it fresh for
+    # whatever CSV is actually loaded rather than silently comparing against the wrong
+    # dataset's number when this script is run standalone (regression_modality.py already
+    # does this itself and overrides the constant before calling task1).
+    global DIRECT_CLASSIFIER_AUC
+    y_direct = (df["iou"].to_numpy() >= IOU_ACCEPT).astype(int)
+    p_direct = oof_proba(df.assign(_direct_label=y_direct), cols, "_direct_label", groups)
+    DIRECT_CLASSIFIER_AUC = roc_auc_score(y_direct, p_direct)
+    print(f"direct classifier AUC (fresh, this CSV): {DIRECT_CLASSIFIER_AUC:.3f}\n")
 
     pred_iou = None
     if RUN_IOU_REG:

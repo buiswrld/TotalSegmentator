@@ -275,7 +275,7 @@ def main():
                    "pr_auc_reject": r["regress_pr"]["pr_auc_reject"],
                    "minority_class": r["regress_pr"]["minority_class"]} for r in results]
                  ).to_csv(os.path.join(OUT_ROOT, "modality_comparison.csv"), index=False)
-    print(f"\nwrote modality_comparison.csv + per-run CSVs under {CT_OUT} and report_mri_dev/")
+    print(f"\nwrote modality_comparison.csv + per-run CSVs under {CT_OUT}, {MRI_OUT_INT}, and {MRI_OUT_NOINT}")
 
 
 if __name__ == "__main__":
