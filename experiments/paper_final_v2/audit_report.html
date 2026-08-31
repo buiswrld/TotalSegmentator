@@ -262,20 +262,20 @@
     <h1>Paper vs. full-dataset audit</h1>
     <p class="lede">Every quantitative claim in the draft was checked against the same GRAM methodology rerun on TotalSegmentator's own official train/val/test split, using the full inferenced dataset (CT 140 held-out subjects, MR 49 genuinely held-out subjects) instead of the paper's 57/38-subject subsets. This page groups the results by what needs to change.</p>
     <div class="stat-row">
-      <div class="stat-pill critical"><b>15</b><span class="label">must update</span></div>
+      <div class="stat-pill critical"><b>16</b><span class="label">must update</span></div>
       <div class="stat-pill marginal"><b>8</b><span class="label">marginal difference</span></div>
-      <div class="stat-pill confirmed"><b>3</b><span class="label">new, not in paper</span></div>
+      <div class="stat-pill confirmed"><b>6</b><span class="label">new research observation</span></div>
     </div>
     <nav class="jump">
       <a href="#must-update">Must update →</a>
       <a href="#marginal">Marginal differences →</a>
-      <a href="#new">New findings →</a>
+      <a href="#new">New observations →</a>
       <a href="#repro">Reproducibility →</a>
     </nav>
   </header>
 
   <section class="group" id="must-update">
-    <div class="group-head"><h2>Must update</h2><span class="count">15 items</span></div>
+    <div class="group-head"><h2>Must update</h2><span class="count">16 items</span></div>
     <p class="group-desc">Claims where the full-data number is far enough from the paper's cited value that the sentence itself should change — not just a footnote. Ordered by where they appear in the manuscript.</p>
 
     <article class="item critical" id="mu-1">
@@ -507,6 +507,23 @@
       </table>
       <p class="why">The "threshold isn't load-bearing" claim survives (band widened but is still &lt;2 points), and the CT regressor got a real correlation boost. MRI's regressor fit is nearly identical despite no longer being in-sample — a second confirmation (alongside item 2) that MRI's signal is real, not memorization.</p>
     </article>
+
+    <article class="item critical" id="mu-16">
+      <div class="item-head">
+        <span class="item-tag">Headline claim · code bug found during this audit</span>
+        <span class="item-loc">Contributions bullet, p.2 L88–91 · §4.3, p.7 L349–350</span>
+      </div>
+      <h3>MRI's "size becomes load-bearing" claim is directionally right but ~2.5× overstated</h3>
+      <blockquote>"under a volume-error label on MRI, size becomes load-bearing (−0.050) and fragmentation collapses (−0.006)"</blockquote>
+      <table class="delta-table">
+        <tr><th>Metric</th><th>Paper</th><th></th><th>Full data (fixed)</th></tr>
+        <tr><td class="metric">MRI size Δ, with intensity</td><td>−0.050</td><td class="arrow">→</td><td><b>−0.019</b></td></tr>
+        <tr><td class="metric">MRI size Δ, without intensity</td><td>−0.043</td><td class="arrow">→</td><td><b>−0.022</b></td></tr>
+        <tr><td class="metric">MRI component Δ</td><td>−0.006</td><td class="arrow">→</td><td>−0.009</td></tr>
+        <tr><td class="metric">CT component Δ (for reference)</td><td>−0.079</td><td class="arrow">→</td><td>−0.068</td></tr>
+      </table>
+      <p class="why">Rerunning this produced an <em>empty</em> output file at first — a genuine bug, not just a data difference: <code class="inline">_volume_feature_ablation()</code> in <code class="inline">regression.py</code> compared <code class="inline">FEATURE_GROUPS</code>'s long descriptive column names against a dataframe already renamed to short names by <code class="inline">normalize_columns()</code>, so every group lookup silently matched zero columns. Fixed in commit <code class="inline">0f6449c</code> (normalize both sides before comparing). With the fix, the direction of the paper's claim holds (size costs more than connectivity under the volume-error label, the reverse of the IoU-label story) — but the effect is roughly 2.5× smaller with more, genuinely held-out data. This is exactly the kind of number that should be re-verified from the underlying CSV before quoting in a revision, not copied from the original in-sample run.</p>
+    </article>
   </section>
 
   <section class="group" id="marginal">
@@ -548,8 +565,8 @@
   </section>
 
   <section class="group" id="new">
-    <div class="group-head"><h2>New findings, not in the paper</h2><span class="count">3 items</span></div>
-    <p class="group-desc">Things the full dataset surfaces that the 57/38-subject subsets simply didn't have enough data to show at all — additions, not corrections.</p>
+    <div class="group-head"><h2>New research observations</h2><span class="count">6 items</span></div>
+    <p class="group-desc">Findings the full dataset surfaces that the 57/38-subject subsets couldn't show — either because there wasn't enough data, or because the underlying analysis exists in the pipeline's code but was never run/kept for the paper's numbers. These are additions worth discussing, not corrections to existing text.</p>
 
     <article class="item confirmed">
       <h3>Prostate: a new near-total CT failure mode</h3>
@@ -562,6 +579,45 @@
     <article class="item confirmed">
       <h3>Every CT structure now has "sufficient support"</h3>
       <p>108/117 structures met the ≥25-masks/≥5-minority-examples bar in the paper; all 117/117 do now. The within-organ AUC analysis (§4.3) and leave-one-organ-out transfer (§4.5) both gained real additional structures (66→93 organs with sufficient data) rather than just tighter confidence intervals on the same ones.</p>
+    </article>
+
+    <article class="item confirmed">
+      <h3>The threshold-uniformity claim is a pooled average — it doesn't hold family-by-family</h3>
+      <p>The paper checks threshold-invariance only in aggregate (§4.4: AUC flat within 0.010–0.017 across the whole dataset). <code class="inline">ablations.py</code> has always been able to break this down per anatomical family, but that output — <code class="inline">threshold_sweep_by_family.csv</code> and its volatility summary — was never generated for the paper's subset at all. At full scale it reveals real heterogeneity the pooled number hides:</p>
+      <table class="delta-table">
+        <tr><th>Family</th><th>AUC range across thresholds</th><th>Accept-rate swing</th></tr>
+        <tr><td class="metric">reproductive</td><td><b>0.262</b> (0.43–0.69)</td><td><b>0–70%</b></td></tr>
+        <tr><td class="metric">neuro</td><td>0.231</td><td>35–94%</td></tr>
+        <tr><td class="metric">heart</td><td>0.172</td><td>5–99%</td></tr>
+        <tr><td class="metric">vertebrae (most stable)</td><td>0.035</td><td>71–96%</td></tr>
+      </table>
+      <p>The <code class="inline">reproductive</code> family (spleen, prostate, uterus — organs with the fewest examples) is nearly 8× more threshold-sensitive than <code class="inline">vertebrae</code>. A reader who takes §4.4's flat pooled curve at face value could reasonably conclude the cutoff choice doesn't matter for <em>any</em> anatomy — it matters a great deal for some. Worth a paragraph and a supplementary table; this doesn't contradict the paper's claim, it scopes it correctly.</p>
+    </article>
+
+    <article class="item confirmed">
+      <h3>Conformal interval width by family independently corroborates the same story</h3>
+      <p>Also never generated for the paper's subset. Mean conformal interval width by family, full CT data:</p>
+      <table class="delta-table">
+        <tr><th>Family</th><th>Mean interval width</th></tr>
+        <tr><td class="metric">reproductive</td><td><b>0.294</b></td></tr>
+        <tr><td class="metric">urinary</td><td>0.149</td></tr>
+        <tr><td class="metric">pelvic_bone (narrowest)</td><td>0.033</td></tr>
+      </table>
+      <p><code class="inline">reproductive</code> is again the outlier — ~9× wider intervals than <code class="inline">pelvic_bone</code>, independently agreeing with the threshold-volatility finding above via a completely different mechanism (quantile regression's own uncertainty, not a post-hoc sweep). This is a genuinely nice result: two unrelated analyses converge on the same family being the hardest, which is exactly the kind of cross-validation that makes "the conformal interval is a real uncertainty signal, not just noise" (§4.6's per-mask Spearman correlation) a stronger claim when shown at the family level too.</p>
+    </article>
+
+    <article class="item confirmed">
+      <h3>Small-sample within-organ AUC is unreliable in <em>both</em> directions</h3>
+      <p>Comparing all 66 structures common to both the paper's within-organ AUC table and the full rerun:</p>
+      <table class="delta-table">
+        <tr><th>Structure</th><th>Subset AUC (n≈57)</th><th>Full AUC (n=140)</th><th>Δ</th></tr>
+        <tr><td class="metric">duodenum</td><td>0.247 <em>(below chance)</em></td><td>0.520</td><td>+0.273</td></tr>
+        <tr><td class="metric">common_carotid_artery_left</td><td>0.422</td><td>0.677</td><td>+0.256</td></tr>
+        <tr><td class="metric">gallbladder</td><td>0.389</td><td>0.624</td><td>+0.235</td></tr>
+        <tr><td class="metric">rib_right_7</td><td>0.997 <em>(near-perfect)</em></td><td>0.914</td><td>−0.082</td></tr>
+        <tr><td class="metric">vertebrae_T9</td><td>0.950</td><td>0.790</td><td>−0.160</td></tr>
+      </table>
+      <p>Several structures that looked <em>below chance</em> in the paper's subset (duodenum at 0.247 is worse than a coin flip) turn out to be genuinely, if weakly, predictive once there's more data — that's small-sample noise, not a real model failure the paper should have flagged. The reverse also happens: structures with suspiciously perfect subset AUCs (rib_right_7 at 0.997) regress toward more realistic values with more data. <b>Practical implication for the revision:</b> any per-organ AUC number computed on well under ~25–30 masks should be treated as a rough estimate, not a precise one — worth stating as an explicit caveat next to Table 1/3, since the paper doesn't currently flag this instability itself.</p>
     </article>
   </section>
 
