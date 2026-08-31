@@ -857,3 +857,78 @@ against the CT dataset — worth Aahil reproducing the same way once he pulls th
   `qc-mask-metrics`.
 - `origin/add-gitignore` — small unmerged remote branch, `.gitignore` additions for
   NIfTI/predictions/outputs.
+
+---
+
+## 11. Full-dataset run on TotalSegmentator's own official split (`experiments/paper_final_v2/`)
+
+A parallel line of work (`final` branch, merged into this one) built the GRAM paper's
+methodology — IoU regression, conformal prediction intervals, feature-group ablations,
+leave-one-family/organ-out transfer, clinical decision-flip analysis — on small subsets:
+TotalSegmentator's own official 57-subject CT `val` split, and a 38-subject in-sample
+MRI dev subset carved from MRI's `train` split (MRI has no `val` split, so no clean
+held-out set existed for it at the time).
+
+This section reruns that same methodology on the much larger, already-inferenced
+datasets from section 2/2a above (CT 1,228 subjects, MR 616 subjects), but partitioned
+by TotalSegmentator's **own** official train/val/test split rather than the pooled 80:20
+scheme section 2a describes — i.e. official `train` subjects feed the QC classifier's
+training data and the reference table, official `test` (CT: `val`+`test` folded
+together) feeds evaluation, matching the paper's own framing exactly rather than this
+project's independent pooled partition.
+
+**Coverage isn't literally 100%.** The remote GPU box (section 8/9) was decommissioned
+before every subject's predictions made it into a checkpointed `combined_metrics.csv`,
+and there is no GPU access to backfill the gap:
+
+| | official train | official val (CT only) | official test | total available |
+|---|---|---|---|---|
+| MR | 519 / 561 | — | 49 / 55 | 568 / 616 (92.2%) |
+| CT | 1,043 / 1,082 | 53 / 57 | 87 / 89 | 1,183 / 1,228 (96.3%) |
+
+Still a large improvement over the paper's 57/38-subject subsets. `meta.csv` for both
+datasets was reconnected from `/Volumes/Datasets/` (external drive) to get the real,
+authoritative split assignment — see `experiments/pipeline/split_by_official.py`, which
+regroups the already-computed pooled-run metrics by official split with no re-inference.
+
+**Reference table is train-only** here (unlike section 2a's all-subjects choice) —
+matches the paper's methodology and removes the self-referential bias section 2a
+explicitly accepted as a tradeoff.
+
+**Substantive methodological upgrade over the paper for MRI**: the paper's MRI results
+were in-sample (dev subset carved from TotalSegmentator's own training data). Here, MRI
+evaluates against its real official `test` split instead — genuinely held out, not an
+in-sample proxy. `regression_modality.py` was changed accordingly (no more dev-carving).
+
+### Headline results vs. the paper
+
+| | Paper (small subset) | This run (official split, full data) |
+|---|---|---|
+| CT direct-classifier AUC | 0.871 (4,017 masks / 57 subj, val only) | **0.900-0.903** (9,652 masks / 140 subj, val+test) |
+| MR direct-classifier AUC | 0.919 (548 masks / 38 subj, **in-sample**) | **0.912-0.922** (929 masks / 49 subj, **genuinely held-out**) |
+| MR accept rate @ IoU 0.90 | 23.0% (in-sample, optimistic) | **17.1%** — closely matches the paper's own cited frozen-test rate (16.9%), a strong sanity check this is the same official partition |
+| CT leave-one-family-out | mean 0.779, 13/14 families above chance (costal_cartilage 0.399, below chance) | mean 0.795, **14/14** families above chance (costal_cartilage 0.660) |
+| CT conformal coverage @80% nominal | 52.0% uncalibrated → 80.7% CQR | 80.6% CQR — tracks the paper closely |
+| MR silent-failure conditional rate | 69.5% (in-sample) | **46.6%** (held-out) — the in-sample estimate looks substantially inflated |
+
+The QC classifier itself (stages 1-6, not the GRAM regression/conformal suite) shows the
+same pattern: best model AUC 0.918 (CT) / 0.947 (MR, genuinely held out) on this split,
+both higher than the equivalent pooled-80:20-split numbers from section 2a.
+
+### Output locations
+
+- `experiments/eval_runs/{mri,ct}_official_split/` — stages 1-6 (predictions already
+  existed; reference table, curated datasets, 16 persisted models, CV/test results are
+  new), mirroring `{mri,ct}_full_remote/`'s layout.
+- `experiments/paper_final_v2/` — GRAM regression/conformal/ablation/clinical-flip suite,
+  mirroring `experiments/paper_final/`'s layout (the original, paper-cited, small-subset
+  results, left untouched for comparison).
+- `experiments/pipeline/split_by_official.py` — the new regroup-by-official-split script.
+
+`regression.py`, `regression_modality.py`, `paper_consolidate.py` were repointed in
+place at these new files (previously hardcoded to a teammate's local Windows paths and
+the small subsets); `paper_consolidate.py` also had a latent `KeyError` fixed
+(`brier_decomposition()`'s dict keys are qc_columns.py's long descriptive labels, not
+the short names that script's original codebase assumed — a pre-existing mismatch
+between the two branches' eras of `common.py`, unrelated to this run's data itself).
+`ablations.py` needed no changes (already CLI-driven, no hardcoded paths).
