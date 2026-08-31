@@ -7,11 +7,12 @@ on the CT/MRI differences the standalone script doesn't handle.
 What it adds over regression.py:
   - reads BOTH schemas via regression.normalize_columns (long descriptive MRI labels ->
     short CT names); the leak-guard assert still runs on the normalized names.
-  - MRI dev subset: MRI has no val split, so we carve a SUBJECT-GROUPED 20% dev subset out
-    of MRI *train* and run all MRI work on it; MRI *test* is never touched. CT stays on val.
-    CAVEAT (state in any paper note): MRI train is TotalSegmentator's own training data, so
-    even this dev subset is IN-SAMPLE for the segmenter - a secondary in-sample
-    generalization check, NOT a clean held-out replication like CT val.
+  - MRI eval set: now TotalSegmentator's own official `test` split (49/55 subjects
+    covered - see experiments/pipeline/split_by_official.py), genuinely held out and
+    never touched by training/CV, exactly like CT's val/test. This replaces an earlier
+    version of this script that carved an in-sample 20% dev subset out of MRI *train*
+    (kept only as a historical note: that approach was used because no full-dataset
+    MRI test predictions existed yet at the time).
   - class balance is per modality: MRI accept is the MINORITY (~17-27%) vs CT's 74%. The
     direct-classifier baseline AUC is recomputed FRESH per modality (the CT 0.870 constant
     is never used for MRI); we report BOTH classes' PR-AUC and mark the minority; and for
@@ -32,7 +33,7 @@ import sys
 
 import numpy as np
 import pandas as pd
-from sklearn.model_selection import GroupKFold, GroupShuffleSplit
+from sklearn.model_selection import GroupKFold
 from sklearn.pipeline import Pipeline
 from sklearn.impute import SimpleImputer
 from sklearn.ensemble import RandomForestClassifier
@@ -43,14 +44,16 @@ import regression as R
 from ablations import FAMILY_PATTERNS
 
 # ---------------------------------------------------------------- paths / config
-CT_CSV   = r"C:\Users\ansar\Algoverse\report_ct_val\combined_metrics.csv"
-MRI_CSV  = r"experiments/eval_runs/mr_full_run/metrics/train/combined_metrics.csv"  # MRI train (carve dev)
-OUT_ROOT = r"C:\Users\ansar\Algoverse"
-CT_OUT   = os.path.join(OUT_ROOT, "report_ct_val", "regression_phase2")
-MRI_OUT_INT   = os.path.join(OUT_ROOT, "report_mri_dev", "regression_intensity")
-MRI_OUT_NOINT = os.path.join(OUT_ROOT, "report_mri_dev", "regression_no_intensity")
+# Repointed at the full-dataset, official-TotalSegmentator-split run (see
+# experiments/pipeline/split_by_official.py and RESEARCH.md) - both CT and MRI now use
+# their real held-out test set directly, no more MRI dev-carving.
+CT_CSV   = "experiments/eval_runs/ct_official_split/metrics/official_test_combined_metrics.csv"
+MRI_CSV  = "experiments/eval_runs/mri_official_split/metrics/official_test_combined_metrics.csv"  # real held-out
+OUT_ROOT = "experiments/paper_final_v2"
+CT_OUT   = os.path.join(OUT_ROOT, "ct", "regression")
+MRI_OUT_INT   = os.path.join(OUT_ROOT, "mri", "regression_intensity")
+MRI_OUT_NOINT = os.path.join(OUT_ROOT, "mri", "regression_no_intensity")
 
-MRI_DEV_FRAC = 0.20
 SEED = 0
 # intensity descriptors (short CT names post-normalization); uncalibrated on MRI
 INTENSITY_COLS = ["mean_HU", "median_HU", "std_HU", "p05_HU", "p95_HU"]
@@ -199,15 +202,11 @@ def main():
     print("\n" + "=" * 78)
     print("MRI family table is reported under the MRI section; CT uses the 117-structure map.")
     st_ct = size_tolerance_table(ct_all[ct_all.is_empty == 0], os.path.join(CT_OUT, "size_tolerance.csv"))
-    results.append(run_modality("CT  (val, genuinely held out)", ct_all, CT_OUT,
+    results.append(run_modality("CT  (official val+test, genuinely held out)", ct_all, CT_OUT,
                                 R.family_of, drop_intensity=False))
 
-    # ---------------- MRI (carve dev subset from train; test frozen) ----------------
-    mri_train = R.normalize_columns(pd.read_csv(MRI_CSV))
-    subs = mri_train["subject"].to_numpy()
-    gss = GroupShuffleSplit(n_splits=1, test_size=MRI_DEV_FRAC, random_state=SEED)
-    _, dev_idx = next(gss.split(mri_train, mri_train["iou"], subs))
-    mri_dev = mri_train.iloc[dev_idx].copy().reset_index(drop=True)
+    # ---------------- MRI (official test split, genuinely held out) ----------------
+    mri_dev = R.normalize_columns(pd.read_csv(MRI_CSV))
 
     # MRI family table (state what maps where and what would fall in "other")
     fam = pd.Series([family_of_mri(o) for o in sorted(mri_dev["organ"].unique())],
@@ -224,9 +223,9 @@ def main():
     st_mri = size_tolerance_table(mri_dev[mri_dev.is_empty == 0],
                                   os.path.join(MRI_OUT_INT, "size_tolerance.csv"))
 
-    results.append(run_modality("MRI (dev subset, WITH intensity) - IN-SAMPLE for TS",
+    results.append(run_modality("MRI (official test, WITH intensity) - genuinely held out",
                                 mri_dev, MRI_OUT_INT, family_of_mri, drop_intensity=False))
-    results.append(run_modality("MRI (dev subset, NO intensity) - intensity uncalibrated on MRI",
+    results.append(run_modality("MRI (official test, NO intensity) - intensity uncalibrated on MRI",
                                 mri_dev, MRI_OUT_NOINT, family_of_mri, drop_intensity=True))
 
     # ---------------- side-by-side ----------------
@@ -275,7 +274,7 @@ def main():
                    "pr_auc_accept": r["regress_pr"]["pr_auc_accept"],
                    "pr_auc_reject": r["regress_pr"]["pr_auc_reject"],
                    "minority_class": r["regress_pr"]["minority_class"]} for r in results]
-                 ).to_csv(os.path.join(OUT_ROOT, "report_mri_dev", "modality_comparison.csv"), index=False)
+                 ).to_csv(os.path.join(OUT_ROOT, "modality_comparison.csv"), index=False)
     print(f"\nwrote modality_comparison.csv + per-run CSVs under {CT_OUT} and report_mri_dev/")
 
 

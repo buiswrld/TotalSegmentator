@@ -54,8 +54,8 @@ from ablations import family_of, FEATURE_GROUPS
 from common import ece_mce
 
 # ============================ CONFIG ============================
-CSV        = r"C:\Users\ansar\Algoverse\report_ct_val\combined_metrics.csv"
-OUT_DIR    = r"C:\Users\ansar\Algoverse\report_ct_val\regression"
+CSV        = "experiments/eval_runs/ct_official_split/metrics/official_test_combined_metrics.csv"
+OUT_DIR    = "experiments/paper_final_v2/ct/regression_standalone"
 
 IOU_ACCEPT = 0.90
 N_SPLITS   = 5

@@ -1,0 +1,22 @@
+{
+  "created_at": "2026-08-31T16:46:09.441012+00:00",
+  "git_commit": "5a43cee",
+  "command": "experiments/pipeline/ablations.py --dataset-csv experiments/eval_runs/ct_official_split/datasets/official_test.csv --output-dir experiments/paper_final_v2/ct",
+  "stage": "ablations",
+  "dataset_csv": "experiments/eval_runs/ct_official_split/datasets/official_test.csv",
+  "n_splits": 5,
+  "n_trees": 200,
+  "seed": 0,
+  "use_relative_features": false,
+  "thresholds": [
+    0.7,
+    0.75,
+    0.8,
+    0.85,
+    0.9,
+    0.95
+  ],
+  "n_rows": 9652,
+  "n_subjects": 140,
+  "n_features": 19
+}

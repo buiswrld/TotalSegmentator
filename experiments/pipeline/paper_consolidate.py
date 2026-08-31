@@ -1,14 +1,24 @@
 """
 Derive the small paper-final summaries that were missing as CSVs (audit gaps G7, G1, G6)
 plus the like-for-like silent-failure rates. READ-ONLY on experiments: no model is
-retrained for G7 (bootstraps saved OOF predictions); G1 subsets an existing table; G6
-fits a classifier only on the CT val / MRI dev subset (never test) to produce calibration
-curves. All outputs land in paper_final/.
+retrained for G7 (bootstraps stage-5's saved oof_predictions.csv / regression_modality's
+iou_regression_oof.csv); G1 loads the MRI official test set directly; G6 fits a
+classifier only on the CT/MRI eval set (never touching anything used for training/CV)
+to produce calibration curves. All outputs land in paper_final_v2/ (this repointed
+version - the original paper_final/, from the small paper-cited subsets, is untouched).
+
+Repointed for the full-dataset, official-TotalSegmentator-split run (see
+split_by_official.py / RESEARCH.md): MRI no longer uses an in-sample dev subset carved
+from train - both CT and MRI now evaluate against their real held-out official test set,
+so G1's "MRI dev" naming below is kept only where it still describes what the function
+literally does (load + summarize one modality's eval set), not an in-sample caveat.
 
   G7  primary_model_summary.csv (ct + mri): OOF AUC with 95% SUBJECT-bootstrap CI
       (resample subjects with replacement, grouped) + PR-AUC per class + minority mark.
-  G1  mri/dataset_combined_metrics.csv + mri/dataset_summary_by_organ.csv: the MRI dev
-      subset (carved exactly as regression_modality.py did) and its per-structure stats.
+      CT reads stage-5's oof_predictions.csv directly (no manual copy step); MRI reads
+      regression_modality.py's iou_regression_oof.csv.
+  G1  mri/dataset_combined_metrics.csv + mri/dataset_summary_by_organ.csv: the MRI
+      official test set and its per-structure stats.
   G6  mri/calibration_metrics.csv (+ _no_intensity): ECE/MCE/Brier decomposition,
       uncalibrated vs isotonic, nested subject-grouped, both intensity variants.
   silent_failure_summary.csv: raw rate (vol_err<0.10 & IoU<0.90) AND conditional rate
@@ -33,10 +43,15 @@ from sklearn.metrics import roc_auc_score, average_precision_score
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import regression as R
 from common import ece_mce, brier_decomposition
+from totalsegmentator.qc_columns import (
+    COL_BRIER_SCORE, COL_RELIABILITY, COL_RESOLUTION, COL_UNCERTAINTY,
+)
 
-A = r"C:\Users\ansar\Algoverse"
-FINAL = os.path.join(A, "paper_final"); CT = os.path.join(FINAL, "ct"); MRI = os.path.join(FINAL, "mri")
-MRI_TRAIN_CSV = os.path.abspath("experiments/eval_runs/mr_full_run/metrics/train/combined_metrics.csv")
+FINAL = "experiments/paper_final_v2"; CT = os.path.join(FINAL, "ct"); MRI = os.path.join(FINAL, "mri")
+CT_OOF_CSV = "experiments/eval_runs/ct_official_split/results/train/oof_predictions.csv"
+MRI_TEST_CSV = "experiments/eval_runs/mri_official_split/metrics/official_test_combined_metrics.csv"  # real held-out, raw stage-2 (has gt_vox/dice/status for summary_by_organ)
+MRI_REGRESSION_OUT = os.path.join(MRI, "regression_intensity")  # regression_modality.py's MRI_OUT_INT
+CT_REGRESSION_OUT = os.path.join(CT, "regression")               # regression_modality.py's CT_OUT
 INTENSITY_COLS = ["mean_HU", "median_HU", "std_HU", "p05_HU", "p95_HU"]
 N_BOOT = 1000
 SEED = 0
@@ -105,16 +120,12 @@ def primary_summary(df, model_cols, out_csv, note):
     return out
 
 
-# ---------------------------------------------------------------- G1: MRI dev stats
+# ---------------------------------------------------------------- G1: MRI eval-set stats
 
-def carve_mri_dev():
-    """Reproduce regression_modality.py's dev carve EXACTLY: normalize, then a single
-    subject-grouped 20% split at seed 0. Returns the dev-subset dataframe (short schema)."""
-    mri = R.normalize_columns(pd.read_csv(MRI_TRAIN_CSV))
-    subs = mri["subject"].to_numpy()
-    gss = GroupShuffleSplit(n_splits=1, test_size=0.20, random_state=0)
-    _, dev_idx = next(gss.split(mri, mri["iou"], subs))
-    return mri.iloc[dev_idx].copy().reset_index(drop=True)
+def load_mri_official_test():
+    """MRI's real held-out official test set (short schema, via normalize_columns) -
+    no carving, matches exactly what regression_modality.py evaluates on."""
+    return R.normalize_columns(pd.read_csv(MRI_TEST_CSV))
 
 
 def summary_by_organ(df):
@@ -177,10 +188,10 @@ def calibration_metrics(df, cols, out_csv, note):
         bd = brier_decomposition(y.astype(float), p)
         rows.append({"model": "RF (class_weight=balanced)", "calibration": calib,
                      "auc": round(roc_auc_score(y, p), 4), "ece": round(ece, 4),
-                     "mce": round(mce, 4), "brier": round(bd["brier"], 4),
-                     "reliability": round(bd["reliability"], 6),
-                     "resolution": round(bd["resolution"], 6),
-                     "uncertainty": round(bd["uncertainty"], 6)})
+                     "mce": round(mce, 4), "brier": round(bd[COL_BRIER_SCORE], 4),
+                     "reliability": round(bd[COL_RELIABILITY], 6),
+                     "resolution": round(bd[COL_RESOLUTION], 6),
+                     "uncertainty": round(bd[COL_UNCERTAINTY], 6)})
     pd.DataFrame(rows).to_csv(out_csv, index=False)
     print(f"  [{note}] wrote {os.path.basename(out_csv)}: "
           + "  ".join(f"{r['calibration']} ECE {r['ece']}" for r in rows))
@@ -203,34 +214,37 @@ def silent_failure_row(modality, oof_csv, in_sample):
 
 def main():
     print("G7: primary-model AUC + 95% subject-bootstrap CI (no retraining)")
-    ct_oof = pd.read_csv(os.path.join(CT, "primary_model_oof.csv"))
+    ct_oof = R.normalize_columns(pd.read_csv(CT_OOF_CSV))
     ct_models = [c for c in ct_oof.columns if c not in ("subject", "organ", "iou", "label")]
+    os.makedirs(CT, exist_ok=True); os.makedirs(MRI, exist_ok=True)
     primary_summary(ct_oof, ct_models, os.path.join(CT, "primary_model_summary.csv"), "CT")
 
-    mri_oof = pd.read_csv(os.path.join(MRI, "iou_regression_oof.csv"))
+    mri_oof = pd.read_csv(os.path.join(MRI_REGRESSION_OUT, "iou_regression_oof.csv"))
     mri_oof["organ-rate_baseline"] = organ_rate_oof(mri_oof)   # G2: the 'beats organ identity' anchor
     primary_summary(mri_oof, ["pred_iou_RandomForest", "pred_iou_HistGB", "organ-rate_baseline"],
-                    os.path.join(MRI, "primary_model_summary.csv"), "MRI-dev")
+                    os.path.join(MRI, "primary_model_summary.csv"), "MRI-test")
 
-    print("\nG1: MRI dev dataset stats (subset carve, no inference)")
-    dev = carve_mri_dev()
-    dev.to_csv(os.path.join(MRI, "dataset_combined_metrics.csv"), index=False)
-    sbo = summary_by_organ(dev)
+    print("\nG1: MRI official test dataset stats (real held-out, no inference)")
+    test_df = load_mri_official_test()
+    test_df.to_csv(os.path.join(MRI, "dataset_combined_metrics.csv"), index=False)
+    sbo = summary_by_organ(test_df)
     sbo.to_csv(os.path.join(MRI, "dataset_summary_by_organ.csv"), index=False)
-    ne = dev[dev.is_empty == 0]
-    print(f"  MRI dev: {len(dev)} masks, {int((dev.is_empty==1).sum())} empty, {len(ne)} modelled, "
-          f"{dev.subject.nunique()} subjects, {dev.organ.nunique()} structures; "
-          f"accept@0.90 all={ (dev.iou>=0.90).mean():.4f} nonempty={(ne.iou>=0.90).mean():.4f}")
+    ne = test_df[test_df.is_empty == 0]
+    print(f"  MRI official test: {len(test_df)} masks, {int((test_df.is_empty==1).sum())} empty, {len(ne)} modelled, "
+          f"{test_df.subject.nunique()} subjects, {test_df.organ.nunique()} structures; "
+          f"accept@0.90 all={ (test_df.iou>=0.90).mean():.4f} nonempty={(ne.iou>=0.90).mean():.4f}")
 
-    print("\nG6: MRI dev calibration (nested grouped, none vs isotonic)")
+    print("\nG6: MRI test calibration (nested grouped, none vs isotonic)")
     cols_all = R.feature_columns(ne)
     calibration_metrics(ne, cols_all, os.path.join(MRI, "calibration_metrics.csv"), "MRI +intensity")
     cols_noint = [c for c in cols_all if c not in INTENSITY_COLS]
     calibration_metrics(ne, cols_noint, os.path.join(MRI, "calibration_metrics_no_intensity.csv"), "MRI -intensity")
 
     print("\nSilent-failure rates (raw + conditional), like-for-like")
-    rows = [silent_failure_row("CT (val, held out)", os.path.join(CT, "volume_label_oof.csv"), False),
-            silent_failure_row("MRI (dev, IN-SAMPLE)", os.path.join(MRI, "volume_label_oof.csv"), True)]
+    rows = [silent_failure_row("CT (official val+test, held out)",
+                               os.path.join(CT_REGRESSION_OUT, "volume_label_oof.csv"), False),
+            silent_failure_row("MRI (official test, held out)",
+                               os.path.join(MRI_REGRESSION_OUT, "volume_label_oof.csv"), False)]
     sf = pd.DataFrame(rows)
     sf.to_csv(os.path.join(FINAL, "silent_failure_summary.csv"), index=False)
     print(sf.to_string(index=False))
