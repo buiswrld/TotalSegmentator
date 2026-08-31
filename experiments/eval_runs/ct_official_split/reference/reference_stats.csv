@@ -1,0 +1,1756 @@
+Organ/Structure Name (organ),Feature/Metric Name (feature),Number of Reference Observations (n),Reference Median Value (median),Reference 25th Percentile (q25),Reference 75th Percentile (q75),Reference Interquartile Range (iqr),Computed in Log Space (log_space)
+adrenal_gland_left,Number of Voxels (num_voxels),686,7.087573,6.737555,7.328437,0.590882,1
+adrenal_gland_left,Volume in Cubic Millimeters (volume_mm3),686,8.303381,7.953117,8.544371,0.591254,1
+adrenal_gland_left,Relative Centroid X Position (centroid_x_rel),686,0.3968,0.3781,0.4178,0.0397,0
+adrenal_gland_left,Relative Centroid Y Position (centroid_y_rel),686,0.461,0.427025,0.49775,0.070725,0
+adrenal_gland_left,Relative Centroid Z Position (centroid_z_rel),686,0.5248,0.15625,0.689975,0.533725,0
+adrenal_gland_left,Relative Bounding Box Width (bbox_x_rel),686,0.05535,0.0463,0.06505,0.01875,0
+adrenal_gland_left,Relative Bounding Box Height (bbox_y_rel),686,0.09125,0.07645,0.1116,0.03515,0
+adrenal_gland_left,Relative Bounding Box Depth (bbox_z_rel),686,0.0769,0.059,0.105875,0.046875,0
+adrenal_gland_left,Bounding Box Volume in Cubic Millimeters (bbox_volume_mm3),686,10.204379,9.806429,10.538996,0.732567,1
+adrenal_gland_left,Mask-to-Bounding-Box Fill Ratio (mask_to_bbox_ratio),686,0.1506,0.126175,0.17885,0.052675,0
+adrenal_gland_left,Mean Hounsfield Unit Intensity (mean_HU),686,37.845,19.5325,56.13,36.5975,0
+adrenal_gland_left,Median Hounsfield Unit Intensity (median_HU),686,39.0,20.25,59.0,38.75,0
+adrenal_gland_left,Hounsfield Unit Intensity Standard Deviation (std_HU),686,39.255,29.9325,52.155,22.2225,0
+adrenal_gland_left,5th Percentile Hounsfield Unit Intensity (p05_HU),686,-33.45,-56.9875,-14.5375,42.45,0
+adrenal_gland_left,95th Percentile Hounsfield Unit Intensity (p95_HU),686,100.0,74.0,137.0,63.0,0
+adrenal_gland_right,Number of Voxels (num_voxels),715,6.933423,6.598505,7.21781,0.619305,1
+adrenal_gland_right,Volume in Cubic Millimeters (volume_mm3),715,8.149134,7.813941,8.433689,0.619747,1
+adrenal_gland_right,Relative Centroid X Position (centroid_x_rel),715,0.5866,0.56975,0.6039,0.03415,0
+adrenal_gland_right,Relative Centroid Y Position (centroid_y_rel),715,0.4368,0.4035,0.4742,0.0707,0
+adrenal_gland_right,Relative Centroid Z Position (centroid_z_rel),715,0.5271,0.161,0.69745,0.53645,0
+adrenal_gland_right,Relative Bounding Box Width (bbox_x_rel),715,0.0541,0.04515,0.0651,0.01995,0
+adrenal_gland_right,Relative Bounding Box Height (bbox_y_rel),715,0.0861,0.0713,0.10475,0.03345,0
+adrenal_gland_right,Relative Bounding Box Depth (bbox_z_rel),715,0.0749,0.05455,0.09925,0.0447,0
+adrenal_gland_right,Bounding Box Volume in Cubic Millimeters (bbox_volume_mm3),715,10.014895,9.562154,10.363188,0.801034,1
+adrenal_gland_right,Mask-to-Bounding-Box Fill Ratio (mask_to_bbox_ratio),715,0.1558,0.1315,0.1835,0.052,0
+adrenal_gland_right,Mean Hounsfield Unit Intensity (mean_HU),715,33.77,16.18,52.095,35.915,0
+adrenal_gland_right,Median Hounsfield Unit Intensity (median_HU),715,37.0,17.0,55.0,38.0,0
+adrenal_gland_right,Hounsfield Unit Intensity Standard Deviation (std_HU),715,41.22,31.31,55.405,24.095,0
+adrenal_gland_right,5th Percentile Hounsfield Unit Intensity (p05_HU),715,-41.0,-65.15,-21.95,43.2,0
+adrenal_gland_right,95th Percentile Hounsfield Unit Intensity (p95_HU),715,100.0,73.0,135.5,62.5,0
+aorta,Number of Voxels (num_voxels),975,10.866376,10.000001,11.287128,1.287127,1
+aorta,Volume in Cubic Millimeters (volume_mm3),975,12.082757,11.216364,12.503514,1.28715,1
+aorta,Relative Centroid X Position (centroid_x_rel),975,0.4679,0.4469,0.48665,0.03975,0
+aorta,Relative Centroid Y Position (centroid_y_rel),975,0.47,0.4308,0.50665,0.07585,0
+aorta,Relative Centroid Z Position (centroid_z_rel),975,0.609,0.49265,0.7355,0.24285,0
+aorta,Relative Bounding Box Width (bbox_x_rel),975,0.1741,0.12855,0.2251,0.09655,0
+aorta,Relative Bounding Box Height (bbox_y_rel),975,0.2939,0.21795,0.37595,0.158,0
+aorta,Relative Bounding Box Depth (bbox_z_rel),975,0.5428,0.45835,0.7794,0.32105,0
+aorta,Bounding Box Volume in Cubic Millimeters (bbox_volume_mm3),975,14.220942,12.986469,14.698943,1.712474,1
+aorta,Mask-to-Bounding-Box Fill Ratio (mask_to_bbox_ratio),975,0.1243,0.1018,0.17855,0.07675,0
+aorta,Mean Hounsfield Unit Intensity (mean_HU),975,143.52,92.105,245.825,153.72,0
+aorta,Median Hounsfield Unit Intensity (median_HU),975,143.0,84.0,252.5,168.5,0
+aorta,Hounsfield Unit Intensity Standard Deviation (std_HU),975,72.35,44.705,108.31,63.605,0
+aorta,5th Percentile Hounsfield Unit Intensity (p05_HU),975,52.0,7.0,96.0,89.0,0
+aorta,95th Percentile Hounsfield Unit Intensity (p95_HU),975,226.0,153.0,373.5,220.5,0
+atrial_appendage_left,Number of Voxels (num_voxels),591,7.612337,7.277246,7.92732,0.650075,1
+atrial_appendage_left,Volume in Cubic Millimeters (volume_mm3),591,8.828384,8.493154,9.143461,0.650307,1
+atrial_appendage_left,Relative Centroid X Position (centroid_x_rel),591,0.4019,0.3798,0.423,0.0432,0
+atrial_appendage_left,Relative Centroid Y Position (centroid_y_rel),591,0.5108,0.4775,0.54365,0.06615,0
+atrial_appendage_left,Relative Centroid Z Position (centroid_z_rel),591,0.61,0.5081,0.76015,0.25205,0
+atrial_appendage_left,Relative Bounding Box Width (bbox_x_rel),591,0.0909,0.0755,0.11235,0.03685,0
+atrial_appendage_left,Relative Bounding Box Height (bbox_y_rel),591,0.092,0.07225,0.1161,0.04385,0
+atrial_appendage_left,Relative Bounding Box Depth (bbox_z_rel),591,0.0548,0.0371,0.08965,0.05255,0
+atrial_appendage_left,Bounding Box Volume in Cubic Millimeters (bbox_volume_mm3),591,10.151021,9.766301,10.503724,0.737424,1
+atrial_appendage_left,Mask-to-Bounding-Box Fill Ratio (mask_to_bbox_ratio),591,0.267,0.234,0.30425,0.07025,0
+atrial_appendage_left,Mean Hounsfield Unit Intensity (mean_HU),591,117.4,70.065,200.605,130.54,0
+atrial_appendage_left,Median Hounsfield Unit Intensity (median_HU),591,119.0,72.0,208.5,136.5,0
+atrial_appendage_left,Hounsfield Unit Intensity Standard Deviation (std_HU),591,61.64,42.345,102.49,60.145,0
+atrial_appendage_left,5th Percentile Hounsfield Unit Intensity (p05_HU),591,15.0,-14.85,46.0,60.85,0
+atrial_appendage_left,95th Percentile Hounsfield Unit Intensity (p95_HU),591,209.4,134.0,337.0,203.0,0
+autochthon_left,Number of Voxels (num_voxels),1001,11.342896,10.354085,11.733514,1.379428,1
+autochthon_left,Volume in Cubic Millimeters (volume_mm3),1001,12.559283,11.570458,12.949903,1.379445,1
+autochthon_left,Relative Centroid X Position (centroid_x_rel),1001,0.4167,0.3978,0.4383,0.0405,0
+autochthon_left,Relative Centroid Y Position (centroid_y_rel),1001,0.237,0.189,0.2817,0.0927,0
+autochthon_left,Relative Centroid Z Position (centroid_z_rel),1001,0.4987,0.3786,0.6028,0.2242,0
+autochthon_left,Relative Bounding Box Width (bbox_x_rel),1001,0.1938,0.1639,0.2235,0.0596,0
+autochthon_left,Relative Bounding Box Height (bbox_y_rel),1001,0.2121,0.1629,0.2688,0.1059,0
+autochthon_left,Relative Bounding Box Depth (bbox_z_rel),1001,0.7609,0.6264,1.0,0.3736,0
+autochthon_left,Bounding Box Volume in Cubic Millimeters (bbox_volume_mm3),1001,14.255134,13.03918,14.82503,1.78585,1
+autochthon_left,Mask-to-Bounding-Box Fill Ratio (mask_to_bbox_ratio),1001,0.1787,0.1289,0.2738,0.1449,0
+autochthon_left,Mean Hounsfield Unit Intensity (mean_HU),1001,27.31,13.34,40.43,27.09,0
+autochthon_left,Median Hounsfield Unit Intensity (median_HU),1001,33.0,19.0,46.0,27.0,0
+autochthon_left,Hounsfield Unit Intensity Standard Deviation (std_HU),1001,42.41,34.64,59.97,25.33,0
+autochthon_left,5th Percentile Hounsfield Unit Intensity (p05_HU),1001,-62.0,-93.0,-34.0,59.0,0
+autochthon_left,95th Percentile Hounsfield Unit Intensity (p95_HU),1001,82.0,67.0,112.8,45.8,0
+autochthon_right,Number of Voxels (num_voxels),1000,11.319225,10.384353,11.719479,1.335126,1
+autochthon_right,Volume in Cubic Millimeters (volume_mm3),1000,12.535612,11.600727,12.935869,1.335142,1
+autochthon_right,Relative Centroid X Position (centroid_x_rel),1000,0.57625,0.558075,0.597625,0.03955,0
+autochthon_right,Relative Centroid Y Position (centroid_y_rel),1000,0.2403,0.1892,0.282225,0.093025,0
+autochthon_right,Relative Centroid Z Position (centroid_z_rel),1000,0.49695,0.3858,0.600775,0.214975,0
+autochthon_right,Relative Bounding Box Width (bbox_x_rel),1000,0.19555,0.16655,0.22495,0.0584,0
+autochthon_right,Relative Bounding Box Height (bbox_y_rel),1000,0.213,0.16285,0.2727,0.10985,0
+autochthon_right,Relative Bounding Box Depth (bbox_z_rel),1000,0.7611,0.62885,1.0,0.37115,0
+autochthon_right,Bounding Box Volume in Cubic Millimeters (bbox_volume_mm3),1000,14.247966,13.017723,14.848674,1.830951,1
+autochthon_right,Mask-to-Bounding-Box Fill Ratio (mask_to_bbox_ratio),1000,0.17515,0.1263,0.27305,0.14675,0
+autochthon_right,Mean Hounsfield Unit Intensity (mean_HU),1000,26.54,11.5275,39.23,27.7025,0
+autochthon_right,Median Hounsfield Unit Intensity (median_HU),1000,33.0,18.0,45.0,27.0,0
+autochthon_right,Hounsfield Unit Intensity Standard Deviation (std_HU),1000,44.145,36.585,63.9875,27.4025,0
+autochthon_right,5th Percentile Hounsfield Unit Intensity (p05_HU),1000,-65.0,-96.0,-40.0,56.0,0
+autochthon_right,95th Percentile Hounsfield Unit Intensity (p95_HU),1000,82.0,67.75,115.0,47.25,0
+brachiocephalic_trunk,Number of Voxels (num_voxels),653,7.323831,7.061334,7.600402,0.539068,1
+brachiocephalic_trunk,Volume in Cubic Millimeters (volume_mm3),653,8.539761,8.277127,8.816446,0.539318,1
+brachiocephalic_trunk,Relative Centroid X Position (centroid_x_rel),653,0.5135,0.4963,0.5357,0.0394,0
+brachiocephalic_trunk,Relative Centroid Y Position (centroid_y_rel),653,0.5522,0.5137,0.5936,0.0799,0
+brachiocephalic_trunk,Relative Centroid Z Position (centroid_z_rel),653,0.8047,0.672,0.8862,0.2142,0
+brachiocephalic_trunk,Relative Bounding Box Width (bbox_x_rel),653,0.0777,0.0629,0.1057,0.0428,0
+brachiocephalic_trunk,Relative Bounding Box Height (bbox_y_rel),653,0.0675,0.0531,0.0865,0.0334,0
+brachiocephalic_trunk,Relative Bounding Box Depth (bbox_z_rel),653,0.0774,0.0508,0.1096,0.0588,0
+brachiocephalic_trunk,Bounding Box Volume in Cubic Millimeters (bbox_volume_mm3),653,9.824214,9.485203,10.139093,0.65389,1
+brachiocephalic_trunk,Mask-to-Bounding-Box Fill Ratio (mask_to_bbox_ratio),653,0.2829,0.2409,0.3303,0.0894,0
+brachiocephalic_trunk,Mean Hounsfield Unit Intensity (mean_HU),653,160.85,104.34,281.29,176.95,0
+brachiocephalic_trunk,Median Hounsfield Unit Intensity (median_HU),653,165.0,110.0,288.0,178.0,0
+brachiocephalic_trunk,Hounsfield Unit Intensity Standard Deviation (std_HU),653,58.41,37.09,91.18,54.09,0
+brachiocephalic_trunk,5th Percentile Hounsfield Unit Intensity (p05_HU),653,64.0,25.0,120.9,95.9,0
+brachiocephalic_trunk,95th Percentile Hounsfield Unit Intensity (p95_HU),653,234.0,150.0,393.55,243.55,0
+brachiocephalic_vein_left,Number of Voxels (num_voxels),651,8.153062,7.880993,8.378965,0.497972,1
+brachiocephalic_vein_left,Volume in Cubic Millimeters (volume_mm3),651,9.369255,9.097122,9.595199,0.498077,1
+brachiocephalic_vein_left,Relative Centroid X Position (centroid_x_rel),651,0.4786,0.45595,0.4987,0.04275,0
+brachiocephalic_vein_left,Relative Centroid Y Position (centroid_y_rel),651,0.5728,0.539,0.61565,0.07665,0
+brachiocephalic_vein_left,Relative Centroid Z Position (centroid_z_rel),651,0.7977,0.6738,0.88545,0.21165,0
+brachiocephalic_vein_left,Relative Bounding Box Width (bbox_x_rel),651,0.1717,0.14625,0.204,0.05775,0
+brachiocephalic_vein_left,Relative Bounding Box Height (bbox_y_rel),651,0.0906,0.0732,0.1139,0.0407,0
+brachiocephalic_vein_left,Relative Bounding Box Depth (bbox_z_rel),651,0.1229,0.07985,0.1674,0.08755,0
+brachiocephalic_vein_left,Bounding Box Volume in Cubic Millimeters (bbox_volume_mm3),651,11.390227,11.11463,11.687475,0.572845,1
+brachiocephalic_vein_left,Mask-to-Bounding-Box Fill Ratio (mask_to_bbox_ratio),651,0.1322,0.1058,0.1615,0.0557,0
+brachiocephalic_vein_left,Mean Hounsfield Unit Intensity (mean_HU),651,120.11,75.88,181.95,106.07,0
+brachiocephalic_vein_left,Median Hounsfield Unit Intensity (median_HU),651,121.0,74.0,178.0,104.0,0
+brachiocephalic_vein_left,Hounsfield Unit Intensity Standard Deviation (std_HU),651,53.52,38.18,105.395,67.215,0
+brachiocephalic_vein_left,5th Percentile Hounsfield Unit Intensity (p05_HU),651,24.0,-7.0,54.0,61.0,0
+brachiocephalic_vein_left,95th Percentile Hounsfield Unit Intensity (p95_HU),651,193.0,134.0,334.5,200.5,0
+brachiocephalic_vein_right,Number of Voxels (num_voxels),655,7.427144,7.134891,7.691198,0.556308,1
+brachiocephalic_vein_right,Volume in Cubic Millimeters (volume_mm3),655,8.643121,8.350725,8.907272,0.556547,1
+brachiocephalic_vein_right,Relative Centroid X Position (centroid_x_rel),655,0.5762,0.55785,0.61045,0.0526,0
+brachiocephalic_vein_right,Relative Centroid Y Position (centroid_y_rel),655,0.5432,0.50835,0.5836,0.07525,0
+brachiocephalic_vein_right,Relative Centroid Z Position (centroid_z_rel),655,0.815,0.672,0.89415,0.22215,0
+brachiocephalic_vein_right,Relative Bounding Box Width (bbox_x_rel),655,0.0636,0.0534,0.0793,0.0259,0
+brachiocephalic_vein_right,Relative Bounding Box Height (bbox_y_rel),655,0.0614,0.0509,0.07885,0.02795,0
+brachiocephalic_vein_right,Relative Bounding Box Depth (bbox_z_rel),655,0.0906,0.06035,0.12765,0.0673,0
+brachiocephalic_vein_right,Bounding Box Volume in Cubic Millimeters (bbox_volume_mm3),655,9.716299,9.3909,10.026896,0.635996,1
+brachiocephalic_vein_right,Mask-to-Bounding-Box Fill Ratio (mask_to_bbox_ratio),655,0.3544,0.29085,0.4326,0.14175,0
+brachiocephalic_vein_right,Mean Hounsfield Unit Intensity (mean_HU),655,138.0,85.855,229.995,144.14,0
+brachiocephalic_vein_right,Median Hounsfield Unit Intensity (median_HU),655,132.0,82.75,214.5,131.75,0
+brachiocephalic_vein_right,Hounsfield Unit Intensity Standard Deviation (std_HU),655,85.45,48.345,184.255,135.91,0
+brachiocephalic_vein_right,5th Percentile Hounsfield Unit Intensity (p05_HU),655,22.2,-19.0,61.0,80.0,0
+brachiocephalic_vein_right,95th Percentile Hounsfield Unit Intensity (p95_HU),655,237.0,157.0,494.2,337.2,0
+brain,Number of Voxels (num_voxels),213,11.979473,10.607006,12.852788,2.245783,1
+brain,Volume in Cubic Millimeters (volume_mm3),213,13.195864,11.823384,14.069182,2.245798,1
+brain,Relative Centroid X Position (centroid_x_rel),213,0.497,0.4828,0.5179,0.0351,0
+brain,Relative Centroid Y Position (centroid_y_rel),213,0.4734,0.4219,0.5476,0.1257,0
+brain,Relative Centroid Z Position (centroid_z_rel),213,0.8907,0.7724,0.9293,0.1569,0
+brain,Relative Bounding Box Width (bbox_x_rel),213,0.4417,0.3088,0.5878,0.279,0
+brain,Relative Bounding Box Height (bbox_y_rel),213,0.4985,0.3481,0.6211,0.273,0
+brain,Relative Bounding Box Depth (bbox_z_rel),213,0.2132,0.1556,0.3973,0.2417,0
+brain,Bounding Box Volume in Cubic Millimeters (bbox_volume_mm3),213,13.989188,12.988606,14.854975,1.866369,1
+brain,Mask-to-Bounding-Box Fill Ratio (mask_to_bbox_ratio),213,0.4299,0.3203,0.461,0.1407,0
+brain,Mean Hounsfield Unit Intensity (mean_HU),213,50.1,43.4,58.0,14.6,0
+brain,Median Hounsfield Unit Intensity (median_HU),213,48.0,42.0,55.0,13.0,0
+brain,Hounsfield Unit Intensity Standard Deviation (std_HU),213,34.09,24.6,51.83,27.23,0
+brain,5th Percentile Hounsfield Unit Intensity (p05_HU),213,10.0,-10.2,21.0,31.2,0
+brain,95th Percentile Hounsfield Unit Intensity (p95_HU),213,92.0,74.0,125.4,51.4,0
+clavicula_left,Number of Voxels (num_voxels),647,8.776939,8.537584,9.005896,0.468312,1
+clavicula_left,Volume in Cubic Millimeters (volume_mm3),647,9.993225,9.753841,10.222205,0.468364,1
+clavicula_left,Relative Centroid X Position (centroid_x_rel),647,0.3377,0.287,0.37665,0.08965,0
+clavicula_left,Relative Centroid Y Position (centroid_y_rel),647,0.5465,0.4999,0.5937,0.0938,0
+clavicula_left,Relative Centroid Z Position (centroid_z_rel),647,0.913,0.66615,0.9513,0.28515,0
+clavicula_left,Relative Bounding Box Width (bbox_x_rel),647,0.2618,0.1985,0.3298,0.1313,0
+clavicula_left,Relative Bounding Box Height (bbox_y_rel),647,0.2451,0.1802,0.29845,0.11825,0
+clavicula_left,Relative Bounding Box Depth (bbox_z_rel),647,0.146,0.09905,0.2082,0.10915,0
+clavicula_left,Bounding Box Volume in Cubic Millimeters (bbox_volume_mm3),647,13.166286,12.551805,13.492699,0.940894,1
+clavicula_left,Mask-to-Bounding-Box Fill Ratio (mask_to_bbox_ratio),647,0.0448,0.036,0.066,0.03,0
+clavicula_left,Mean Hounsfield Unit Intensity (mean_HU),647,470.72,392.795,558.085,165.29,0
+clavicula_left,Median Hounsfield Unit Intensity (median_HU),647,367.0,291.5,452.0,160.5,0
+clavicula_left,Hounsfield Unit Intensity Standard Deviation (std_HU),647,375.35,310.83,437.365,126.535,0
+clavicula_left,5th Percentile Hounsfield Unit Intensity (p05_HU),647,13.0,-31.175,66.6,97.775,0
+clavicula_left,95th Percentile Hounsfield Unit Intensity (p95_HU),647,1197.8,1019.9,1366.5,346.6,0
+clavicula_right,Number of Voxels (num_voxels),643,8.838987,8.56121,9.090768,0.529558,1
+clavicula_right,Volume in Cubic Millimeters (volume_mm3),643,10.05528,9.777471,10.307084,0.529614,1
+clavicula_right,Relative Centroid X Position (centroid_x_rel),643,0.6657,0.62695,0.72265,0.0957,0
+clavicula_right,Relative Centroid Y Position (centroid_y_rel),643,0.5412,0.49585,0.59095,0.0951,0
+clavicula_right,Relative Centroid Z Position (centroid_z_rel),643,0.9143,0.6665,0.9514,0.2849,0
+clavicula_right,Relative Bounding Box Width (bbox_x_rel),643,0.2644,0.20355,0.32715,0.1236,0
+clavicula_right,Relative Bounding Box Height (bbox_y_rel),643,0.2492,0.1797,0.29665,0.11695,0
+clavicula_right,Relative Bounding Box Depth (bbox_z_rel),643,0.1447,0.0995,0.20605,0.10655,0
+clavicula_right,Bounding Box Volume in Cubic Millimeters (bbox_volume_mm3),643,13.181175,12.626808,13.492499,0.865691,1
+clavicula_right,Mask-to-Bounding-Box Fill Ratio (mask_to_bbox_ratio),643,0.0471,0.03775,0.0675,0.02975,0
+clavicula_right,Mean Hounsfield Unit Intensity (mean_HU),643,460.94,380.35,546.995,166.645,0
+clavicula_right,Median Hounsfield Unit Intensity (median_HU),643,352.0,283.5,443.5,160.0,0
+clavicula_right,Hounsfield Unit Intensity Standard Deviation (std_HU),643,374.09,305.635,435.95,130.315,0
+clavicula_right,5th Percentile Hounsfield Unit Intensity (p05_HU),643,13.0,-34.5,59.0,93.5,0
+clavicula_right,95th Percentile Hounsfield Unit Intensity (p95_HU),643,1189.9,999.0,1356.5,357.5,0
+colon,Number of Voxels (num_voxels),798,11.962353,10.597415,12.342896,1.745481,1
+colon,Volume in Cubic Millimeters (volume_mm3),798,13.178744,11.813793,13.559289,1.745496,1
+colon,Relative Centroid X Position (centroid_x_rel),798,0.4912,0.4146,0.52865,0.11405,0
+colon,Relative Centroid Y Position (centroid_y_rel),798,0.57685,0.537475,0.63325,0.095775,0
+colon,Relative Centroid Z Position (centroid_z_rel),798,0.3489,0.12495,0.486475,0.361525,0
+colon,Relative Bounding Box Width (bbox_x_rel),798,0.6219,0.4983,0.7104,0.2121,0
+colon,Relative Bounding Box Height (bbox_y_rel),798,0.4324,0.3128,0.539325,0.226525,0
+colon,Relative Bounding Box Depth (bbox_z_rel),798,0.49645,0.281325,0.68785,0.406525,0
+colon,Bounding Box Volume in Cubic Millimeters (bbox_volume_mm3),798,16.043865,14.247033,16.635647,2.388614,1
+colon,Mask-to-Bounding-Box Fill Ratio (mask_to_bbox_ratio),798,0.06245,0.04265,0.10085,0.0582,0
+colon,Mean Hounsfield Unit Intensity (mean_HU),798,-146.855,-245.6625,-80.875,164.7875,0
+colon,Median Hounsfield Unit Intensity (median_HU),798,-20.0,-69.0,5.875,74.875,0
+colon,Hounsfield Unit Intensity Standard Deviation (std_HU),798,307.855,242.37,380.5525,138.1825,0
+colon,5th Percentile Hounsfield Unit Intensity (p05_HU),798,-958.0,-986.0,-786.25,199.75,0
+colon,95th Percentile Hounsfield Unit Intensity (p95_HU),798,81.0,60.0,109.0,49.0,0
+common_carotid_artery_left,Number of Voxels (num_voxels),676,7.200052,6.965552,7.422523,0.456971,1
+common_carotid_artery_left,Volume in Cubic Millimeters (volume_mm3),676,8.415921,8.181282,8.638498,0.457216,1
+common_carotid_artery_left,Relative Centroid X Position (centroid_x_rel),676,0.44865,0.4255,0.46895,0.04345,0
+common_carotid_artery_left,Relative Centroid Y Position (centroid_y_rel),676,0.53075,0.493675,0.57405,0.080375,0
+common_carotid_artery_left,Relative Centroid Z Position (centroid_z_rel),676,0.8693,0.661875,0.925075,0.2632,0
+common_carotid_artery_left,Relative Bounding Box Width (bbox_x_rel),676,0.0693,0.051775,0.089325,0.03755,0
+common_carotid_artery_left,Relative Bounding Box Height (bbox_y_rel),676,0.0741,0.0563,0.099225,0.042925,0
+common_carotid_artery_left,Relative Bounding Box Depth (bbox_z_rel),676,0.19335,0.132075,0.280725,0.14865,0
+common_carotid_artery_left,Bounding Box Volume in Cubic Millimeters (bbox_volume_mm3),676,10.722854,10.162809,11.202581,1.039773,1
+common_carotid_artery_left,Mask-to-Bounding-Box Fill Ratio (mask_to_bbox_ratio),676,0.1009,0.07355,0.143,0.06945,0
+common_carotid_artery_left,Mean Hounsfield Unit Intensity (mean_HU),676,132.1,86.9975,232.63,145.6325,0
+common_carotid_artery_left,Median Hounsfield Unit Intensity (median_HU),676,139.0,92.75,253.0,160.25,0
+common_carotid_artery_left,Hounsfield Unit Intensity Standard Deviation (std_HU),676,66.475,44.0,106.9975,62.9975,0
+common_carotid_artery_left,5th Percentile Hounsfield Unit Intensity (p05_HU),676,24.0,-8.1875,59.8375,68.025,0
+common_carotid_artery_left,95th Percentile Hounsfield Unit Intensity (p95_HU),676,223.475,147.0,376.3375,229.3375,0
+common_carotid_artery_right,Number of Voxels (num_voxels),641,6.740519,6.43935,7.056175,0.616825,1
+common_carotid_artery_right,Volume in Cubic Millimeters (volume_mm3),641,7.956084,7.654623,8.271963,0.617339,1
+common_carotid_artery_right,Relative Centroid X Position (centroid_x_rel),641,0.5557,0.5351,0.5816,0.0465,0
+common_carotid_artery_right,Relative Centroid Y Position (centroid_y_rel),641,0.5397,0.5008,0.5822,0.0814,0
+common_carotid_artery_right,Relative Centroid Z Position (centroid_z_rel),641,0.9092,0.6779,0.9476,0.2697,0
+common_carotid_artery_right,Relative Bounding Box Width (bbox_x_rel),641,0.0588,0.0464,0.0769,0.0305,0
+common_carotid_artery_right,Relative Bounding Box Height (bbox_y_rel),641,0.0581,0.0449,0.0772,0.0323,0
+common_carotid_artery_right,Relative Bounding Box Depth (bbox_z_rel),641,0.1378,0.0911,0.2069,0.1158,0
+common_carotid_artery_right,Bounding Box Volume in Cubic Millimeters (bbox_volume_mm3),641,10.057453,9.527866,10.577592,1.049726,1
+common_carotid_artery_right,Mask-to-Bounding-Box Fill Ratio (mask_to_bbox_ratio),641,0.1255,0.091,0.1721,0.0811,0
+common_carotid_artery_right,Mean Hounsfield Unit Intensity (mean_HU),641,140.53,93.7,235.56,141.86,0
+common_carotid_artery_right,Median Hounsfield Unit Intensity (median_HU),641,142.0,97.0,246.0,149.0,0
+common_carotid_artery_right,Hounsfield Unit Intensity Standard Deviation (std_HU),641,53.69,36.58,89.09,52.51,0
+common_carotid_artery_right,5th Percentile Hounsfield Unit Intensity (p05_HU),641,50.0,11.95,93.0,81.05,0
+common_carotid_artery_right,95th Percentile Hounsfield Unit Intensity (p95_HU),641,214.0,146.0,353.4,207.4,0
+costal_cartilages,Number of Voxels (num_voxels),892,10.429472,9.924417,10.759619,0.835203,1
+costal_cartilages,Volume in Cubic Millimeters (volume_mm3),892,11.645847,11.140778,11.976,0.835222,1
+costal_cartilages,Relative Centroid X Position (centroid_x_rel),892,0.49185,0.4756,0.5111,0.0355,0
+costal_cartilages,Relative Centroid Y Position (centroid_y_rel),892,0.73025,0.67955,0.793325,0.113775,0
+costal_cartilages,Relative Centroid Z Position (centroid_z_rel),892,0.5713,0.353375,0.72165,0.368275,0
+costal_cartilages,Relative Bounding Box Width (bbox_x_rel),892,0.7128,0.6105,0.79625,0.18575,0
+costal_cartilages,Relative Bounding Box Height (bbox_y_rel),892,0.27295,0.202675,0.352225,0.14955,0
+costal_cartilages,Relative Bounding Box Depth (bbox_z_rel),892,0.45885,0.346475,0.805775,0.4593,0
+costal_cartilages,Bounding Box Volume in Cubic Millimeters (bbox_volume_mm3),892,15.482336,14.684923,15.972914,1.287991,1
+costal_cartilages,Mask-to-Bounding-Box Fill Ratio (mask_to_bbox_ratio),892,0.0218,0.016,0.031225,0.015225,0
+costal_cartilages,Mean Hounsfield Unit Intensity (mean_HU),892,112.325,101.91,127.19,25.28,0
+costal_cartilages,Median Hounsfield Unit Intensity (median_HU),892,105.0,97.0,113.625,16.625,0
+costal_cartilages,Hounsfield Unit Intensity Standard Deviation (std_HU),892,59.84,39.6775,99.39,59.7125,0
+costal_cartilages,5th Percentile Hounsfield Unit Intensity (p05_HU),892,52.0,40.0,60.0,20.0,0
+costal_cartilages,95th Percentile Hounsfield Unit Intensity (p95_HU),892,187.0,149.0,253.0,104.0,0
+duodenum,Number of Voxels (num_voxels),663,9.568993,8.919253,9.836466,0.917213,1
+duodenum,Volume in Cubic Millimeters (volume_mm3),663,10.78534,10.135554,11.052824,0.91727,1
+duodenum,Relative Centroid X Position (centroid_x_rel),663,0.5594,0.5349,0.58465,0.04975,0
+duodenum,Relative Centroid Y Position (centroid_y_rel),663,0.5623,0.521,0.59555,0.07455,0
+duodenum,Relative Centroid Z Position (centroid_z_rel),663,0.443,0.18885,0.6127,0.42385,0
+duodenum,Relative Bounding Box Width (bbox_x_rel),663,0.2376,0.1897,0.272,0.0823,0
+duodenum,Relative Bounding Box Height (bbox_y_rel),663,0.1362,0.10905,0.17145,0.0624,0
+duodenum,Relative Bounding Box Depth (bbox_z_rel),663,0.1488,0.11375,0.20575,0.092,0
+duodenum,Bounding Box Volume in Cubic Millimeters (bbox_volume_mm3),663,12.926534,12.287057,13.168532,0.881475,1
+duodenum,Mask-to-Bounding-Box Fill Ratio (mask_to_bbox_ratio),663,0.1279,0.10345,0.15955,0.0561,0
+duodenum,Mean Hounsfield Unit Intensity (mean_HU),663,28.92,-12.685,53.53,66.215,0
+duodenum,Median Hounsfield Unit Intensity (median_HU),663,51.0,29.0,69.0,40.0,0
+duodenum,Hounsfield Unit Intensity Standard Deviation (std_HU),663,101.61,50.395,212.055,161.66,0
+duodenum,5th Percentile Hounsfield Unit Intensity (p05_HU),663,-69.0,-524.925,-19.0,505.925,0
+duodenum,95th Percentile Hounsfield Unit Intensity (p95_HU),663,111.0,87.0,145.5,58.5,0
+esophagus,Number of Voxels (num_voxels),912,8.989008,8.292044,9.329189,1.037145,1
+esophagus,Volume in Cubic Millimeters (volume_mm3),912,10.205315,9.508264,10.545522,1.037258,1
+esophagus,Relative Centroid X Position (centroid_x_rel),912,0.47725,0.459775,0.493325,0.03355,0
+esophagus,Relative Centroid Y Position (centroid_y_rel),912,0.4459,0.41045,0.4797,0.06925,0
+esophagus,Relative Centroid Z Position (centroid_z_rel),912,0.61395,0.489125,0.791,0.301875,0
+esophagus,Relative Bounding Box Width (bbox_x_rel),912,0.0952,0.0759,0.1212,0.0453,0
+esophagus,Relative Bounding Box Height (bbox_y_rel),912,0.1538,0.1197,0.193,0.0733,0
+esophagus,Relative Bounding Box Depth (bbox_z_rel),912,0.3716,0.270175,0.7152,0.445025,0
+esophagus,Bounding Box Volume in Cubic Millimeters (bbox_volume_mm3),912,12.754543,11.481371,13.178761,1.69739,1
+esophagus,Mask-to-Bounding-Box Fill Ratio (mask_to_bbox_ratio),912,0.09045,0.06765,0.145175,0.077525,0
+esophagus,Mean Hounsfield Unit Intensity (mean_HU),912,11.315,-26.335,31.7325,58.0675,0
+esophagus,Median Hounsfield Unit Intensity (median_HU),912,34.0,23.0,47.0,24.0,0
+esophagus,Hounsfield Unit Intensity Standard Deviation (std_HU),912,130.255,73.5325,207.8325,134.3,0
+esophagus,5th Percentile Hounsfield Unit Intensity (p05_HU),912,-147.65,-515.75,-58.75,457.0,0
+esophagus,95th Percentile Hounsfield Unit Intensity (p95_HU),912,99.8,82.0,132.0,50.0,0
+femur_left,Number of Voxels (num_voxels),486,10.863871,10.608433,11.04543,0.436997,1
+femur_left,Volume in Cubic Millimeters (volume_mm3),486,12.080253,11.824811,12.261814,0.437003,1
+femur_left,Relative Centroid X Position (centroid_x_rel),486,0.22075,0.18985,0.250825,0.060975,0
+femur_left,Relative Centroid Y Position (centroid_y_rel),486,0.44525,0.41215,0.484175,0.072025,0
+femur_left,Relative Centroid Z Position (centroid_z_rel),486,0.0994,0.08285,0.132675,0.049825,0
+femur_left,Relative Bounding Box Width (bbox_x_rel),486,0.2233,0.20145,0.249775,0.048325,0
+femur_left,Relative Bounding Box Height (bbox_y_rel),486,0.1844,0.1586,0.22455,0.06595,0
+femur_left,Relative Bounding Box Depth (bbox_z_rel),486,0.1883,0.15725,0.246525,0.089275,0
+femur_left,Bounding Box Volume in Cubic Millimeters (bbox_volume_mm3),486,13.371112,13.100455,13.60554,0.505085,1
+femur_left,Mask-to-Bounding-Box Fill Ratio (mask_to_bbox_ratio),486,0.2762,0.2484,0.301575,0.053175,0
+femur_left,Mean Hounsfield Unit Intensity (mean_HU),486,334.725,272.3125,401.52,129.2075,0
+femur_left,Median Hounsfield Unit Intensity (median_HU),486,240.0,194.25,287.0,92.75,0
+femur_left,Hounsfield Unit Intensity Standard Deviation (std_HU),486,325.01,274.63,376.6975,102.0675,0
+femur_left,5th Percentile Hounsfield Unit Intensity (p05_HU),486,1.0,-36.0,42.0,78.0,0
+femur_left,95th Percentile Hounsfield Unit Intensity (p95_HU),486,1100.5,898.0,1301.5,403.5,0
+femur_right,Number of Voxels (num_voxels),478,10.856756,10.624356,11.033976,0.409621,1
+femur_right,Volume in Cubic Millimeters (volume_mm3),478,12.073137,11.840734,12.25036,0.409626,1
+femur_right,Relative Centroid X Position (centroid_x_rel),478,0.7749,0.748325,0.805775,0.05745,0
+femur_right,Relative Centroid Y Position (centroid_y_rel),478,0.44365,0.409425,0.4862,0.076775,0
+femur_right,Relative Centroid Z Position (centroid_z_rel),478,0.09635,0.081825,0.125675,0.04385,0
+femur_right,Relative Bounding Box Width (bbox_x_rel),478,0.2235,0.1991,0.247625,0.048525,0
+femur_right,Relative Bounding Box Height (bbox_y_rel),478,0.18365,0.160825,0.2217,0.060875,0
+femur_right,Relative Bounding Box Depth (bbox_z_rel),478,0.18425,0.15685,0.2374,0.08055,0
+femur_right,Bounding Box Volume in Cubic Millimeters (bbox_volume_mm3),478,13.337769,13.091811,13.585439,0.493628,1
+femur_right,Mask-to-Bounding-Box Fill Ratio (mask_to_bbox_ratio),478,0.27775,0.252525,0.30355,0.051025,0
+femur_right,Mean Hounsfield Unit Intensity (mean_HU),478,324.09,270.67,386.345,115.675,0
+femur_right,Median Hounsfield Unit Intensity (median_HU),478,235.0,189.0,279.75,90.75,0
+femur_right,Hounsfield Unit Intensity Standard Deviation (std_HU),478,317.005,271.9875,370.595,98.6075,0
+femur_right,5th Percentile Hounsfield Unit Intensity (p05_HU),478,-1.0,-37.0,37.0,74.0,0
+femur_right,95th Percentile Hounsfield Unit Intensity (p95_HU),478,1085.0,892.25,1271.0,378.75,0
+gallbladder,Number of Voxels (num_voxels),550,8.628088,7.768292,9.15472,1.386428,1
+gallbladder,Volume in Cubic Millimeters (volume_mm3),550,9.844358,8.984391,10.371041,1.38665,1
+gallbladder,Relative Centroid X Position (centroid_x_rel),550,0.6819,0.6444,0.721475,0.077075,0
+gallbladder,Relative Centroid Y Position (centroid_y_rel),550,0.61865,0.574825,0.675975,0.10115,0
+gallbladder,Relative Centroid Z Position (centroid_z_rel),550,0.4856,0.22695,0.6538,0.42685,0
+gallbladder,Relative Bounding Box Width (bbox_x_rel),550,0.10625,0.075425,0.139875,0.06445,0
+gallbladder,Relative Bounding Box Height (bbox_y_rel),550,0.12235,0.0871,0.155875,0.068775,0
+gallbladder,Relative Bounding Box Depth (bbox_z_rel),550,0.0777,0.0541,0.109275,0.055175,0
+gallbladder,Bounding Box Volume in Cubic Millimeters (bbox_volume_mm3),550,11.194282,10.395891,11.692447,1.296556,1
+gallbladder,Mask-to-Bounding-Box Fill Ratio (mask_to_bbox_ratio),550,0.27365,0.20875,0.337825,0.129075,0
+gallbladder,Mean Hounsfield Unit Intensity (mean_HU),550,19.33,12.64,28.23,15.59,0
+gallbladder,Median Hounsfield Unit Intensity (median_HU),550,18.0,12.0,26.0,14.0,0
+gallbladder,Hounsfield Unit Intensity Standard Deviation (std_HU),550,25.07,19.0425,38.62,19.5775,0
+gallbladder,5th Percentile Hounsfield Unit Intensity (p05_HU),550,-19.0,-40.0,-7.0,33.0,0
+gallbladder,95th Percentile Hounsfield Unit Intensity (p95_HU),550,64.0,48.0,92.75,44.75,0
+gluteus_maximus_left,Number of Voxels (num_voxels),515,11.780063,11.536676,11.998426,0.46175,1
+gluteus_maximus_left,Volume in Cubic Millimeters (volume_mm3),515,12.996453,12.753065,13.214817,0.461752,1
+gluteus_maximus_left,Relative Centroid X Position (centroid_x_rel),515,0.2681,0.23915,0.297,0.05785,0
+gluteus_maximus_left,Relative Centroid Y Position (centroid_y_rel),515,0.2818,0.23415,0.3204,0.08625,0
+gluteus_maximus_left,Relative Centroid Z Position (centroid_z_rel),515,0.1444,0.1179,0.1957,0.0778,0
+gluteus_maximus_left,Relative Bounding Box Width (bbox_x_rel),515,0.346,0.3045,0.3802,0.0757,0
+gluteus_maximus_left,Relative Bounding Box Height (bbox_y_rel),515,0.1992,0.1724,0.2339,0.0615,0
+gluteus_maximus_left,Relative Bounding Box Depth (bbox_z_rel),515,0.3239,0.28365,0.43275,0.1491,0
+gluteus_maximus_left,Bounding Box Volume in Cubic Millimeters (bbox_volume_mm3),515,14.460056,14.243503,14.61798,0.374477,1
+gluteus_maximus_left,Mask-to-Bounding-Box Fill Ratio (mask_to_bbox_ratio),515,0.2375,0.2073,0.27515,0.06785,0
+gluteus_maximus_left,Mean Hounsfield Unit Intensity (mean_HU),515,30.11,17.685,40.32,22.635,0
+gluteus_maximus_left,Median Hounsfield Unit Intensity (median_HU),515,33.0,20.0,42.5,22.5,0
+gluteus_maximus_left,Hounsfield Unit Intensity Standard Deviation (std_HU),515,28.47,23.02,38.09,15.07,0
+gluteus_maximus_left,5th Percentile Hounsfield Unit Intensity (p05_HU),515,-27.0,-49.5,-7.0,42.5,0
+gluteus_maximus_left,95th Percentile Hounsfield Unit Intensity (p95_HU),515,70.0,56.0,85.0,29.0,0
+gluteus_maximus_right,Number of Voxels (num_voxels),513,11.810516,11.563581,12.040543,0.476963,1
+gluteus_maximus_right,Volume in Cubic Millimeters (volume_mm3),513,13.026906,12.779969,13.256934,0.476965,1
+gluteus_maximus_right,Relative Centroid X Position (centroid_x_rel),513,0.7317,0.7026,0.7544,0.0518,0
+gluteus_maximus_right,Relative Centroid Y Position (centroid_y_rel),513,0.2835,0.2352,0.3202,0.085,0
+gluteus_maximus_right,Relative Centroid Z Position (centroid_z_rel),513,0.1442,0.1203,0.196,0.0757,0
+gluteus_maximus_right,Relative Bounding Box Width (bbox_x_rel),513,0.3419,0.3086,0.3793,0.0707,0
+gluteus_maximus_right,Relative Bounding Box Height (bbox_y_rel),513,0.2075,0.1778,0.2441,0.0663,0
+gluteus_maximus_right,Relative Bounding Box Depth (bbox_z_rel),513,0.3259,0.2879,0.4426,0.1547,0
+gluteus_maximus_right,Bounding Box Volume in Cubic Millimeters (bbox_volume_mm3),513,14.507996,14.318659,14.661603,0.342945,1
+gluteus_maximus_right,Mask-to-Bounding-Box Fill Ratio (mask_to_bbox_ratio),513,0.2358,0.203,0.2711,0.0681,0
+gluteus_maximus_right,Mean Hounsfield Unit Intensity (mean_HU),513,30.3,16.25,40.74,24.49,0
+gluteus_maximus_right,Median Hounsfield Unit Intensity (median_HU),513,33.0,20.0,43.0,23.0,0
+gluteus_maximus_right,Hounsfield Unit Intensity Standard Deviation (std_HU),513,28.3,23.52,37.36,13.84,0
+gluteus_maximus_right,5th Percentile Hounsfield Unit Intensity (p05_HU),513,-26.0,-50.0,-8.0,42.0,0
+gluteus_maximus_right,95th Percentile Hounsfield Unit Intensity (p95_HU),513,69.0,57.0,84.5,27.5,0
+gluteus_medius_left,Number of Voxels (num_voxels),541,11.103573,10.881926,11.290469,0.408543,1
+gluteus_medius_left,Volume in Cubic Millimeters (volume_mm3),541,12.319958,12.098309,12.506856,0.408547,1
+gluteus_medius_left,Relative Centroid X Position (centroid_x_rel),541,0.1946,0.1609,0.2306,0.0697,0
+gluteus_medius_left,Relative Centroid Y Position (centroid_y_rel),541,0.4083,0.3653,0.4504,0.0851,0
+gluteus_medius_left,Relative Centroid Z Position (centroid_z_rel),541,0.256,0.2187,0.3461,0.1274,0
+gluteus_medius_left,Relative Bounding Box Width (bbox_x_rel),541,0.2222,0.1933,0.249,0.0557,0
+gluteus_medius_left,Relative Bounding Box Height (bbox_y_rel),541,0.2683,0.231,0.3112,0.0802,0
+gluteus_medius_left,Relative Bounding Box Depth (bbox_z_rel),541,0.2205,0.194,0.3074,0.1134,0
+gluteus_medius_left,Bounding Box Volume in Cubic Millimeters (bbox_volume_mm3),541,13.960073,13.757798,14.116615,0.358818,1
+gluteus_medius_left,Mask-to-Bounding-Box Fill Ratio (mask_to_bbox_ratio),541,0.1979,0.1805,0.2174,0.0369,0
+gluteus_medius_left,Mean Hounsfield Unit Intensity (mean_HU),541,37.39,26.27,46.61,20.34,0
+gluteus_medius_left,Median Hounsfield Unit Intensity (median_HU),541,43.0,32.0,51.0,19.0,0
+gluteus_medius_left,Hounsfield Unit Intensity Standard Deviation (std_HU),541,32.98,27.61,41.52,13.91,0
+gluteus_medius_left,5th Percentile Hounsfield Unit Intensity (p05_HU),541,-28.0,-55.0,-8.0,47.0,0
+gluteus_medius_left,95th Percentile Hounsfield Unit Intensity (p95_HU),541,77.0,65.0,92.0,27.0,0
+gluteus_medius_right,Number of Voxels (num_voxels),533,11.08477,10.857247,11.281031,0.423784,1
+gluteus_medius_right,Volume in Cubic Millimeters (volume_mm3),533,12.301154,12.073629,12.497418,0.423788,1
+gluteus_medius_right,Relative Centroid X Position (centroid_x_rel),533,0.8094,0.7796,0.8398,0.0602,0
+gluteus_medius_right,Relative Centroid Y Position (centroid_y_rel),533,0.4043,0.3676,0.4496,0.082,0
+gluteus_medius_right,Relative Centroid Z Position (centroid_z_rel),533,0.2488,0.2148,0.3376,0.1228,0
+gluteus_medius_right,Relative Bounding Box Width (bbox_x_rel),533,0.2271,0.1987,0.2528,0.0541,0
+gluteus_medius_right,Relative Bounding Box Height (bbox_y_rel),533,0.2594,0.2238,0.2982,0.0744,0
+gluteus_medius_right,Relative Bounding Box Depth (bbox_z_rel),533,0.2402,0.2132,0.3323,0.1191,0
+gluteus_medius_right,Bounding Box Volume in Cubic Millimeters (bbox_volume_mm3),533,14.056423,13.852724,14.232563,0.379839,1
+gluteus_medius_right,Mask-to-Bounding-Box Fill Ratio (mask_to_bbox_ratio),533,0.1764,0.1624,0.1928,0.0304,0
+gluteus_medius_right,Mean Hounsfield Unit Intensity (mean_HU),533,38.32,28.93,48.36,19.43,0
+gluteus_medius_right,Median Hounsfield Unit Intensity (median_HU),533,43.0,33.0,51.0,18.0,0
+gluteus_medius_right,Hounsfield Unit Intensity Standard Deviation (std_HU),533,31.62,26.31,40.73,14.42,0
+gluteus_medius_right,5th Percentile Hounsfield Unit Intensity (p05_HU),533,-22.0,-48.0,-1.0,47.0,0
+gluteus_medius_right,95th Percentile Hounsfield Unit Intensity (p95_HU),533,77.0,66.0,91.0,25.0,0
+gluteus_minimus_left,Number of Voxels (num_voxels),497,9.744433,9.548668,9.892831,0.344163,1
+gluteus_minimus_left,Volume in Cubic Millimeters (volume_mm3),497,10.960787,10.765013,11.109191,0.344177,1
+gluteus_minimus_left,Relative Centroid X Position (centroid_x_rel),497,0.2047,0.1743,0.2384,0.0641,0
+gluteus_minimus_left,Relative Centroid Y Position (centroid_y_rel),497,0.4739,0.4384,0.5147,0.0763,0
+gluteus_minimus_left,Relative Centroid Z Position (centroid_z_rel),497,0.2215,0.1901,0.2945,0.1044,0
+gluteus_minimus_left,Relative Bounding Box Width (bbox_x_rel),497,0.1184,0.1062,0.1325,0.0263,0
+gluteus_minimus_left,Relative Bounding Box Height (bbox_y_rel),497,0.2024,0.1779,0.2302,0.0523,0
+gluteus_minimus_left,Relative Bounding Box Depth (bbox_z_rel),497,0.1408,0.1233,0.1918,0.0685,0
+gluteus_minimus_left,Bounding Box Volume in Cubic Millimeters (bbox_volume_mm3),497,12.578734,12.358261,12.750537,0.392276,1
+gluteus_minimus_left,Mask-to-Bounding-Box Fill Ratio (mask_to_bbox_ratio),497,0.1981,0.183,0.2145,0.0315,0
+gluteus_minimus_left,Mean Hounsfield Unit Intensity (mean_HU),497,37.12,18.71,47.16,28.45,0
+gluteus_minimus_left,Median Hounsfield Unit Intensity (median_HU),497,42.0,25.0,50.0,25.0,0
+gluteus_minimus_left,Hounsfield Unit Intensity Standard Deviation (std_HU),497,40.18,32.21,51.73,19.52,0
+gluteus_minimus_left,5th Percentile Hounsfield Unit Intensity (p05_HU),497,-38.35,-75.0,-14.0,61.0,0
+gluteus_minimus_left,95th Percentile Hounsfield Unit Intensity (p95_HU),497,80.5,70.0,98.0,28.0,0
+gluteus_minimus_right,Number of Voxels (num_voxels),491,9.798071,9.61797,9.965875,0.347905,1
+gluteus_minimus_right,Volume in Cubic Millimeters (volume_mm3),491,11.014428,10.834318,11.182237,0.347919,1
+gluteus_minimus_right,Relative Centroid X Position (centroid_x_rel),491,0.791,0.7626,0.8236,0.061,0
+gluteus_minimus_right,Relative Centroid Y Position (centroid_y_rel),491,0.4669,0.4296,0.50675,0.07715,0
+gluteus_minimus_right,Relative Centroid Z Position (centroid_z_rel),491,0.224,0.19405,0.29175,0.0977,0
+gluteus_minimus_right,Relative Bounding Box Width (bbox_x_rel),491,0.1316,0.11725,0.1445,0.02725,0
+gluteus_minimus_right,Relative Bounding Box Height (bbox_y_rel),491,0.1927,0.16985,0.2176,0.04775,0
+gluteus_minimus_right,Relative Bounding Box Depth (bbox_z_rel),491,0.1601,0.13905,0.21785,0.0788,0
+gluteus_minimus_right,Bounding Box Volume in Cubic Millimeters (bbox_volume_mm3),491,12.745787,12.582586,12.921546,0.33896,1
+gluteus_minimus_right,Mask-to-Bounding-Box Fill Ratio (mask_to_bbox_ratio),491,0.1771,0.16245,0.1907,0.02825,0
+gluteus_minimus_right,Mean Hounsfield Unit Intensity (mean_HU),491,36.63,18.975,46.945,27.97,0
+gluteus_minimus_right,Median Hounsfield Unit Intensity (median_HU),491,41.0,25.0,51.0,26.0,0
+gluteus_minimus_right,Hounsfield Unit Intensity Standard Deviation (std_HU),491,42.67,33.345,55.825,22.48,0
+gluteus_minimus_right,5th Percentile Hounsfield Unit Intensity (p05_HU),491,-42.0,-74.0,-14.0,60.0,0
+gluteus_minimus_right,95th Percentile Hounsfield Unit Intensity (p95_HU),491,81.0,71.325,96.5,25.175,0
+heart,Number of Voxels (num_voxels),805,11.953828,11.602775,12.181708,0.578933,1
+heart,Volume in Cubic Millimeters (volume_mm3),805,13.170219,12.819164,13.3981,0.578936,1
+heart,Relative Centroid X Position (centroid_x_rel),805,0.4307,0.4073,0.4564,0.0491,0
+heart,Relative Centroid Y Position (centroid_y_rel),805,0.5791,0.54,0.617,0.077,0
+heart,Relative Centroid Z Position (centroid_z_rel),805,0.6425,0.3992,0.7561,0.3569,0
+heart,Relative Bounding Box Width (bbox_x_rel),805,0.3586,0.3154,0.4241,0.1087,0
+heart,Relative Bounding Box Height (bbox_y_rel),805,0.318,0.2622,0.3933,0.1311,0
+heart,Relative Bounding Box Depth (bbox_z_rel),805,0.2178,0.1578,0.4124,0.2546,0
+heart,Bounding Box Volume in Cubic Millimeters (bbox_volume_mm3),805,14.463706,13.712688,14.698616,0.985928,1
+heart,Mask-to-Bounding-Box Fill Ratio (mask_to_bbox_ratio),805,0.2878,0.2582,0.3399,0.0817,0
+heart,Mean Hounsfield Unit Intensity (mean_HU),805,125.35,92.48,179.62,87.14,0
+heart,Median Hounsfield Unit Intensity (median_HU),805,126.0,97.0,174.0,77.0,0
+heart,Hounsfield Unit Intensity Standard Deviation (std_HU),805,54.35,36.84,104.46,67.62,0
+heart,5th Percentile Hounsfield Unit Intensity (p05_HU),805,38.0,7.0,57.0,50.0,0
+heart,95th Percentile Hounsfield Unit Intensity (p95_HU),805,201.0,142.0,326.0,184.0,0
+hip_left,Number of Voxels (num_voxels),559,11.555535,11.328876,11.711977,0.383101,1
+hip_left,Volume in Cubic Millimeters (volume_mm3),559,12.771923,12.545263,12.928367,0.383104,1
+hip_left,Relative Centroid X Position (centroid_x_rel),559,0.309,0.27925,0.3332,0.05395,0
+hip_left,Relative Centroid Y Position (centroid_y_rel),559,0.4202,0.38075,0.45745,0.0767,0
+hip_left,Relative Centroid Z Position (centroid_z_rel),559,0.2156,0.18505,0.29095,0.1059,0
+hip_left,Relative Bounding Box Width (bbox_x_rel),559,0.3558,0.3077,0.3935,0.0858,0
+hip_left,Relative Bounding Box Height (bbox_y_rel),559,0.3946,0.3394,0.4466,0.1072,0
+hip_left,Relative Bounding Box Depth (bbox_z_rel),559,0.3487,0.31395,0.48675,0.1728,0
+hip_left,Bounding Box Volume in Cubic Millimeters (bbox_volume_mm3),559,15.28282,15.071217,15.416763,0.345546,1
+hip_left,Mask-to-Bounding-Box Fill Ratio (mask_to_bbox_ratio),559,0.0846,0.07755,0.094,0.01645,0
+hip_left,Mean Hounsfield Unit Intensity (mean_HU),559,327.15,279.86,381.03,101.17,0
+hip_left,Median Hounsfield Unit Intensity (median_HU),559,249.0,204.5,297.0,92.5,0
+hip_left,Hounsfield Unit Intensity Standard Deviation (std_HU),559,269.23,237.085,305.715,68.63,0
+hip_left,5th Percentile Hounsfield Unit Intensity (p05_HU),559,31.6,-6.0,68.0,74.0,0
+hip_left,95th Percentile Hounsfield Unit Intensity (p95_HU),559,891.0,795.5,1016.0,220.5,0
+hip_right,Number of Voxels (num_voxels),555,11.554538,11.34453,11.712333,0.367803,1
+hip_right,Volume in Cubic Millimeters (volume_mm3),555,12.770926,12.560917,12.928723,0.367806,1
+hip_right,Relative Centroid X Position (centroid_x_rel),555,0.6915,0.66925,0.7131,0.04385,0
+hip_right,Relative Centroid Y Position (centroid_y_rel),555,0.4156,0.3825,0.45725,0.07475,0
+hip_right,Relative Centroid Z Position (centroid_z_rel),555,0.2147,0.18545,0.2878,0.10235,0
+hip_right,Relative Bounding Box Width (bbox_x_rel),555,0.3547,0.3043,0.3967,0.0924,0
+hip_right,Relative Bounding Box Height (bbox_y_rel),555,0.3902,0.33515,0.448,0.11285,0
+hip_right,Relative Bounding Box Depth (bbox_z_rel),555,0.3464,0.31305,0.4821,0.16905,0
+hip_right,Bounding Box Volume in Cubic Millimeters (bbox_volume_mm3),555,15.292299,15.070525,15.429682,0.359157,1
+hip_right,Mask-to-Bounding-Box Fill Ratio (mask_to_bbox_ratio),555,0.0839,0.0765,0.0928,0.0163,0
+hip_right,Mean Hounsfield Unit Intensity (mean_HU),555,331.34,282.765,387.375,104.61,0
+hip_right,Median Hounsfield Unit Intensity (median_HU),555,249.0,200.5,307.0,106.5,0
+hip_right,Hounsfield Unit Intensity Standard Deviation (std_HU),555,269.15,235.335,307.005,71.67,0
+hip_right,5th Percentile Hounsfield Unit Intensity (p05_HU),555,31.0,-4.0,71.0,75.0,0
+hip_right,95th Percentile Hounsfield Unit Intensity (p95_HU),555,894.0,788.075,1022.5,234.425,0
+humerus_left,Number of Voxels (num_voxels),537,9.471396,8.858226,9.865214,1.006988,1
+humerus_left,Volume in Cubic Millimeters (volume_mm3),537,10.687737,10.074521,11.081573,1.007052,1
+humerus_left,Relative Centroid X Position (centroid_x_rel),537,0.0992,0.0522,0.1393,0.0871,0
+humerus_left,Relative Centroid Y Position (centroid_y_rel),537,0.4463,0.4046,0.4871,0.0825,0
+humerus_left,Relative Centroid Z Position (centroid_z_rel),537,0.9549,0.879,0.9756,0.0966,0
+humerus_left,Relative Bounding Box Width (bbox_x_rel),537,0.1185,0.1008,0.1366,0.0358,0
+humerus_left,Relative Bounding Box Height (bbox_y_rel),537,0.1502,0.1285,0.1901,0.0616,0
+humerus_left,Relative Bounding Box Depth (bbox_z_rel),537,0.0872,0.0563,0.1505,0.0942,0
+humerus_left,Bounding Box Volume in Cubic Millimeters (bbox_volume_mm3),537,11.422218,10.817716,12.01516,1.197444,1
+humerus_left,Mask-to-Bounding-Box Fill Ratio (mask_to_bbox_ratio),537,0.4549,0.3554,0.5008,0.1454,0
+humerus_left,Mean Hounsfield Unit Intensity (mean_HU),537,191.05,150.31,266.27,115.96,0
+humerus_left,Median Hounsfield Unit Intensity (median_HU),537,152.0,113.0,208.0,95.0,0
+humerus_left,Hounsfield Unit Intensity Standard Deviation (std_HU),537,197.71,149.3,273.48,124.18,0
+humerus_left,5th Percentile Hounsfield Unit Intensity (p05_HU),537,-46.0,-85.0,1.0,86.0,0
+humerus_left,95th Percentile Hounsfield Unit Intensity (p95_HU),537,547.0,445.0,758.0,313.0,0
+humerus_right,Number of Voxels (num_voxels),538,9.592295,9.001186,9.990158,0.988972,1
+humerus_right,Volume in Cubic Millimeters (volume_mm3),538,10.808643,10.217494,11.206521,0.989026,1
+humerus_right,Relative Centroid X Position (centroid_x_rel),538,0.8912,0.850475,0.9386,0.088125,0
+humerus_right,Relative Centroid Y Position (centroid_y_rel),538,0.44915,0.41085,0.49055,0.0797,0
+humerus_right,Relative Centroid Z Position (centroid_z_rel),538,0.94865,0.8697,0.971775,0.102075,0
+humerus_right,Relative Bounding Box Width (bbox_x_rel),538,0.12165,0.1045,0.139275,0.034775,0
+humerus_right,Relative Bounding Box Height (bbox_y_rel),538,0.1518,0.131425,0.194525,0.0631,0
+humerus_right,Relative Bounding Box Depth (bbox_z_rel),538,0.0937,0.060775,0.156675,0.0959,0
+humerus_right,Bounding Box Volume in Cubic Millimeters (bbox_volume_mm3),538,11.479245,10.972525,12.137699,1.165174,1
+humerus_right,Mask-to-Bounding-Box Fill Ratio (mask_to_bbox_ratio),538,0.45575,0.346725,0.5099,0.163175,0
+humerus_right,Mean Hounsfield Unit Intensity (mean_HU),538,192.24,153.775,254.72,100.945,0
+humerus_right,Median Hounsfield Unit Intensity (median_HU),538,149.5,112.0,204.0,92.0,0
+humerus_right,Hounsfield Unit Intensity Standard Deviation (std_HU),538,203.45,154.11,275.23,121.12,0
+humerus_right,5th Percentile Hounsfield Unit Intensity (p05_HU),538,-52.0,-87.0,0.0,87.0,0
+humerus_right,95th Percentile Hounsfield Unit Intensity (p95_HU),538,571.025,452.075,779.7,327.625,0
+iliac_artery_left,Number of Voxels (num_voxels),560,8.460834,8.113801,8.729882,0.616081,1
+iliac_artery_left,Volume in Cubic Millimeters (volume_mm3),560,9.67708,9.329986,9.946164,0.616178,1
+iliac_artery_left,Relative Centroid X Position (centroid_x_rel),560,0.39655,0.373875,0.419525,0.04565,0
+iliac_artery_left,Relative Centroid Y Position (centroid_y_rel),560,0.52625,0.488575,0.566975,0.0784,0
+iliac_artery_left,Relative Centroid Z Position (centroid_z_rel),560,0.26235,0.229075,0.35405,0.124975,0
+iliac_artery_left,Relative Bounding Box Width (bbox_x_rel),560,0.2,0.166575,0.2265,0.059925,0
+iliac_artery_left,Relative Bounding Box Height (bbox_y_rel),560,0.14905,0.115975,0.184625,0.06865,0
+iliac_artery_left,Relative Bounding Box Depth (bbox_z_rel),560,0.28935,0.23875,0.3961,0.15735,0
+iliac_artery_left,Bounding Box Volume in Cubic Millimeters (bbox_volume_mm3),560,13.523208,13.185317,13.727358,0.542041,1
+iliac_artery_left,Mask-to-Bounding-Box Fill Ratio (mask_to_bbox_ratio),560,0.0237,0.0191,0.0316,0.0125,0
+iliac_artery_left,Mean Hounsfield Unit Intensity (mean_HU),560,129.375,86.03,187.9275,101.8975,0
+iliac_artery_left,Median Hounsfield Unit Intensity (median_HU),560,119.5,65.375,170.0,104.625,0
+iliac_artery_left,Hounsfield Unit Intensity Standard Deviation (std_HU),560,73.965,40.67,119.21,78.54,0
+iliac_artery_left,5th Percentile Hounsfield Unit Intensity (p05_HU),560,44.5,1.0,77.0,76.0,0
+iliac_artery_left,95th Percentile Hounsfield Unit Intensity (p95_HU),560,211.075,144.0,396.275,252.275,0
+iliac_artery_right,Number of Voxels (num_voxels),555,8.472823,8.128732,8.735364,0.606632,1
+iliac_artery_right,Volume in Cubic Millimeters (volume_mm3),555,9.689071,9.34492,9.951646,0.606726,1
+iliac_artery_right,Relative Centroid X Position (centroid_x_rel),555,0.5963,0.57815,0.61785,0.0397,0
+iliac_artery_right,Relative Centroid Y Position (centroid_y_rel),555,0.5329,0.49625,0.5673,0.07105,0
+iliac_artery_right,Relative Centroid Z Position (centroid_z_rel),555,0.2588,0.2263,0.3528,0.1265,0
+iliac_artery_right,Relative Bounding Box Width (bbox_x_rel),555,0.2093,0.17555,0.24015,0.0646,0
+iliac_artery_right,Relative Bounding Box Height (bbox_y_rel),555,0.1498,0.1168,0.1844,0.0676,0
+iliac_artery_right,Relative Bounding Box Depth (bbox_z_rel),555,0.2973,0.24785,0.4054,0.15755,0
+iliac_artery_right,Bounding Box Volume in Cubic Millimeters (bbox_volume_mm3),555,13.602872,13.30634,13.79872,0.49238,1
+iliac_artery_right,Mask-to-Bounding-Box Fill Ratio (mask_to_bbox_ratio),555,0.0222,0.0176,0.02955,0.01195,0
+iliac_artery_right,Mean Hounsfield Unit Intensity (mean_HU),555,133.32,91.175,198.465,107.29,0
+iliac_artery_right,Median Hounsfield Unit Intensity (median_HU),555,122.0,68.0,178.0,110.0,0
+iliac_artery_right,Hounsfield Unit Intensity Standard Deviation (std_HU),555,74.47,42.015,126.895,84.88,0
+iliac_artery_right,5th Percentile Hounsfield Unit Intensity (p05_HU),555,58.0,6.5,89.825,83.325,0
+iliac_artery_right,95th Percentile Hounsfield Unit Intensity (p95_HU),555,217.0,148.0,407.05,259.05,0
+iliac_vena_left,Number of Voxels (num_voxels),547,9.065546,8.788441,9.262031,0.47359,1
+iliac_vena_left,Volume in Cubic Millimeters (volume_mm3),547,10.28186,10.004729,10.47836,0.473631,1
+iliac_vena_left,Relative Centroid X Position (centroid_x_rel),547,0.4058,0.3852,0.426,0.0408,0
+iliac_vena_left,Relative Centroid Y Position (centroid_y_rel),547,0.5,0.46455,0.538,0.07345,0
+iliac_vena_left,Relative Centroid Z Position (centroid_z_rel),547,0.2468,0.2152,0.3321,0.1169,0
+iliac_vena_left,Relative Bounding Box Width (bbox_x_rel),547,0.2134,0.1818,0.23905,0.05725,0
+iliac_vena_left,Relative Bounding Box Height (bbox_y_rel),547,0.1779,0.1478,0.21725,0.06945,0
+iliac_vena_left,Relative Bounding Box Depth (bbox_z_rel),547,0.2753,0.22785,0.37505,0.1472,0
+iliac_vena_left,Bounding Box Volume in Cubic Millimeters (bbox_volume_mm3),547,13.71812,13.489716,13.86866,0.378944,1
+iliac_vena_left,Mask-to-Bounding-Box Fill Ratio (mask_to_bbox_ratio),547,0.0343,0.02895,0.04235,0.0134,0
+iliac_vena_left,Mean Hounsfield Unit Intensity (mean_HU),547,63.22,44.26,83.19,38.93,0
+iliac_vena_left,Median Hounsfield Unit Intensity (median_HU),547,64.0,45.0,85.0,40.0,0
+iliac_vena_left,Hounsfield Unit Intensity Standard Deviation (std_HU),547,30.39,24.355,40.82,16.465,0
+iliac_vena_left,5th Percentile Hounsfield Unit Intensity (p05_HU),547,10.0,-10.075,30.0,40.075,0
+iliac_vena_left,95th Percentile Hounsfield Unit Intensity (p95_HU),547,115.0,88.5,143.0,54.5,0
+iliac_vena_right,Number of Voxels (num_voxels),544,8.88454,8.606798,9.066989,0.460192,1
+iliac_vena_right,Volume in Cubic Millimeters (volume_mm3),544,10.100838,9.823064,10.283304,0.460239,1
+iliac_vena_right,Relative Centroid X Position (centroid_x_rel),544,0.60765,0.589525,0.626525,0.037,0
+iliac_vena_right,Relative Centroid Y Position (centroid_y_rel),544,0.50605,0.4696,0.5405,0.0709,0
+iliac_vena_right,Relative Centroid Z Position (centroid_z_rel),544,0.2432,0.210075,0.32645,0.116375,0
+iliac_vena_right,Relative Bounding Box Width (bbox_x_rel),544,0.1494,0.12125,0.171225,0.049975,0
+iliac_vena_right,Relative Bounding Box Height (bbox_y_rel),544,0.16995,0.1401,0.204925,0.064825,0
+iliac_vena_right,Relative Bounding Box Depth (bbox_z_rel),544,0.27735,0.232225,0.385125,0.1529,0
+iliac_vena_right,Bounding Box Volume in Cubic Millimeters (bbox_volume_mm3),544,13.314188,13.04919,13.517357,0.468167,1
+iliac_vena_right,Mask-to-Bounding-Box Fill Ratio (mask_to_bbox_ratio),544,0.0422,0.03505,0.05225,0.0172,0
+iliac_vena_right,Mean Hounsfield Unit Intensity (mean_HU),544,63.945,43.785,83.8925,40.1075,0
+iliac_vena_right,Median Hounsfield Unit Intensity (median_HU),544,65.0,44.0,85.0,41.0,0
+iliac_vena_right,Hounsfield Unit Intensity Standard Deviation (std_HU),544,27.965,21.5875,36.615,15.0275,0
+iliac_vena_right,5th Percentile Hounsfield Unit Intensity (p05_HU),544,16.0,-4.475,37.0,41.475,0
+iliac_vena_right,95th Percentile Hounsfield Unit Intensity (p95_HU),544,111.0,85.0,141.0,56.0,0
+iliopsoas_left,Number of Voxels (num_voxels),715,10.98974,9.737846,11.333631,1.595785,1
+iliopsoas_left,Volume in Cubic Millimeters (volume_mm3),715,12.206124,10.9542,12.550018,1.595819,1
+iliopsoas_left,Relative Centroid X Position (centroid_x_rel),715,0.339,0.3083,0.3853,0.077,0
+iliopsoas_left,Relative Centroid Y Position (centroid_y_rel),715,0.4635,0.4057,0.50755,0.10185,0
+iliopsoas_left,Relative Centroid Z Position (centroid_z_rel),715,0.2747,0.12555,0.38595,0.2604,0
+iliopsoas_left,Relative Bounding Box Width (bbox_x_rel),715,0.231,0.13025,0.26425,0.134,0
+iliopsoas_left,Relative Bounding Box Height (bbox_y_rel),715,0.247,0.16325,0.2931,0.12985,0
+iliopsoas_left,Relative Bounding Box Depth (bbox_z_rel),715,0.4864,0.30815,0.6709,0.36275,0
+iliopsoas_left,Bounding Box Volume in Cubic Millimeters (bbox_volume_mm3),715,14.75718,12.601964,15.008954,2.40699,1
+iliopsoas_left,Mask-to-Bounding-Box Fill Ratio (mask_to_bbox_ratio),715,0.1021,0.07785,0.1995,0.12165,0
+iliopsoas_left,Mean Hounsfield Unit Intensity (mean_HU),715,49.8,42.405,56.025,13.62,0
+iliopsoas_left,Median Hounsfield Unit Intensity (median_HU),715,51.0,45.0,57.0,12.0,0
+iliopsoas_left,Hounsfield Unit Intensity Standard Deviation (std_HU),715,38.36,29.655,54.265,24.61,0
+iliopsoas_left,5th Percentile Hounsfield Unit Intensity (p05_HU),715,-8.0,-33.0,7.0,40.0,0
+iliopsoas_left,95th Percentile Hounsfield Unit Intensity (p95_HU),715,91.0,80.0,117.0,37.0,0
+iliopsoas_right,Number of Voxels (num_voxels),714,10.926208,9.618716,11.280057,1.661341,1
+iliopsoas_right,Volume in Cubic Millimeters (volume_mm3),714,12.142591,10.835065,12.496443,1.661379,1
+iliopsoas_right,Relative Centroid X Position (centroid_x_rel),714,0.65425,0.6041,0.6789,0.0748,0
+iliopsoas_right,Relative Centroid Y Position (centroid_y_rel),714,0.45375,0.39775,0.500575,0.102825,0
+iliopsoas_right,Relative Centroid Z Position (centroid_z_rel),714,0.27785,0.121725,0.39075,0.269025,0
+iliopsoas_right,Relative Bounding Box Width (bbox_x_rel),714,0.2189,0.1116,0.25225,0.14065,0
+iliopsoas_right,Relative Bounding Box Height (bbox_y_rel),714,0.2432,0.1605,0.292575,0.132075,0
+iliopsoas_right,Relative Bounding Box Depth (bbox_z_rel),714,0.49,0.30815,0.6786,0.37045,0
+iliopsoas_right,Bounding Box Volume in Cubic Millimeters (bbox_volume_mm3),714,14.700994,12.341042,14.963832,2.62279,1
+iliopsoas_right,Mask-to-Bounding-Box Fill Ratio (mask_to_bbox_ratio),714,0.1022,0.07775,0.20545,0.1277,0
+iliopsoas_right,Mean Hounsfield Unit Intensity (mean_HU),714,49.05,41.5375,54.2575,12.72,0
+iliopsoas_right,Median Hounsfield Unit Intensity (median_HU),714,51.0,44.0,56.0,12.0,0
+iliopsoas_right,Hounsfield Unit Intensity Standard Deviation (std_HU),714,32.175,25.925,45.4625,19.5375,0
+iliopsoas_right,5th Percentile Hounsfield Unit Intensity (p05_HU),714,-8.0,-33.0,5.0,38.0,0
+iliopsoas_right,95th Percentile Hounsfield Unit Intensity (p95_HU),714,91.0,80.0,117.0,37.0,0
+inferior_vena_cava,Number of Voxels (num_voxels),857,9.743143,9.241645,10.083222,0.841577,1
+inferior_vena_cava,Volume in Cubic Millimeters (volume_mm3),857,10.959497,10.457972,11.299588,0.841616,1
+inferior_vena_cava,Relative Centroid X Position (centroid_x_rel),857,0.5527,0.5376,0.5711,0.0335,0
+inferior_vena_cava,Relative Centroid Y Position (centroid_y_rel),857,0.5036,0.4683,0.5392,0.0709,0
+inferior_vena_cava,Relative Centroid Z Position (centroid_z_rel),857,0.5056,0.2146,0.6969,0.4823,0
+inferior_vena_cava,Relative Bounding Box Width (bbox_x_rel),857,0.1093,0.0921,0.1273,0.0352,0
+inferior_vena_cava,Relative Bounding Box Height (bbox_y_rel),857,0.1081,0.089,0.1339,0.0449,0
+inferior_vena_cava,Relative Bounding Box Depth (bbox_z_rel),857,0.3735,0.323,0.4793,0.1563,0
+inferior_vena_cava,Bounding Box Volume in Cubic Millimeters (bbox_volume_mm3),857,12.492792,11.841989,12.934384,1.092395,1
+inferior_vena_cava,Mask-to-Bounding-Box Fill Ratio (mask_to_bbox_ratio),857,0.2299,0.1771,0.2907,0.1136,0
+inferior_vena_cava,Mean Hounsfield Unit Intensity (mean_HU),857,83.81,50.08,108.19,58.11,0
+inferior_vena_cava,Median Hounsfield Unit Intensity (median_HU),857,83.0,48.0,107.0,59.0,0
+inferior_vena_cava,Hounsfield Unit Intensity Standard Deviation (std_HU),857,35.57,26.74,54.42,27.68,0
+inferior_vena_cava,5th Percentile Hounsfield Unit Intensity (p05_HU),857,16.0,-11.0,48.0,59.0,0
+inferior_vena_cava,95th Percentile Hounsfield Unit Intensity (p95_HU),857,147.0,111.0,190.75,79.75,0
+kidney_cyst_left,Number of Voxels (num_voxels),26,9.694238,8.694707,10.320387,1.62568,1
+kidney_cyst_left,Volume in Cubic Millimeters (volume_mm3),26,10.91059,9.910984,11.536759,1.625775,1
+kidney_cyst_left,Relative Centroid X Position (centroid_x_rel),26,0.27935,0.253875,0.319725,0.06585,0
+kidney_cyst_left,Relative Centroid Y Position (centroid_y_rel),26,0.41415,0.378325,0.4574,0.079075,0
+kidney_cyst_left,Relative Centroid Z Position (centroid_z_rel),26,0.52115,0.42305,0.670475,0.247425,0
+kidney_cyst_left,Relative Bounding Box Width (bbox_x_rel),26,0.1298,0.094475,0.16965,0.075175,0
+kidney_cyst_left,Relative Bounding Box Height (bbox_y_rel),26,0.1275,0.0925,0.16165,0.06915,0
+kidney_cyst_left,Relative Bounding Box Depth (bbox_z_rel),26,0.11045,0.065875,0.1411,0.075225,0
+kidney_cyst_left,Bounding Box Volume in Cubic Millimeters (bbox_volume_mm3),26,11.845999,10.986516,12.355626,1.369111,1
+kidney_cyst_left,Mask-to-Bounding-Box Fill Ratio (mask_to_bbox_ratio),26,0.47615,0.3065,0.508375,0.201875,0
+kidney_cyst_left,Mean Hounsfield Unit Intensity (mean_HU),26,6.86,1.8825,12.865,10.9825,0
+kidney_cyst_left,Median Hounsfield Unit Intensity (median_HU),26,8.0,2.5,11.75,9.25,0
+kidney_cyst_left,Hounsfield Unit Intensity Standard Deviation (std_HU),26,36.02,28.985,45.335,16.35,0
+kidney_cyst_left,5th Percentile Hounsfield Unit Intensity (p05_HU),26,-53.5,-75.0,-37.25,37.75,0
+kidney_cyst_left,95th Percentile Hounsfield Unit Intensity (p95_HU),26,52.5,41.0,88.75,47.75,0
+kidney_cyst_right,Number of Voxels (num_voxels),22,9.109482,8.194858,9.980647,1.785789,1
+kidney_cyst_right,Volume in Cubic Millimeters (volume_mm3),22,10.325799,9.411058,11.19701,1.785951,1
+kidney_cyst_right,Relative Centroid X Position (centroid_x_rel),22,0.69935,0.642525,0.7194,0.076875,0
+kidney_cyst_right,Relative Centroid Y Position (centroid_y_rel),22,0.4179,0.3938,0.48005,0.08625,0
+kidney_cyst_right,Relative Centroid Z Position (centroid_z_rel),22,0.48575,0.37525,0.6178,0.24255,0
+kidney_cyst_right,Relative Bounding Box Width (bbox_x_rel),22,0.09895,0.07285,0.150625,0.077775,0
+kidney_cyst_right,Relative Bounding Box Height (bbox_y_rel),22,0.11125,0.077525,0.1568,0.079275,0
+kidney_cyst_right,Relative Bounding Box Depth (bbox_z_rel),22,0.0786,0.060425,0.15015,0.089725,0
+kidney_cyst_right,Bounding Box Volume in Cubic Millimeters (bbox_volume_mm3),22,11.111353,10.106501,12.032163,1.925662,1
+kidney_cyst_right,Mask-to-Bounding-Box Fill Ratio (mask_to_bbox_ratio),22,0.4876,0.4217,0.5415,0.1198,0
+kidney_cyst_right,Mean Hounsfield Unit Intensity (mean_HU),22,10.36,5.8275,15.855,10.0275,0
+kidney_cyst_right,Median Hounsfield Unit Intensity (median_HU),22,9.0,7.25,13.5,6.25,0
+kidney_cyst_right,Hounsfield Unit Intensity Standard Deviation (std_HU),22,33.75,26.19,43.755,17.565,0
+kidney_cyst_right,5th Percentile Hounsfield Unit Intensity (p05_HU),22,-43.0,-52.25,-31.05,21.2,0
+kidney_cyst_right,95th Percentile Hounsfield Unit Intensity (p95_HU),22,70.175,38.0375,96.7375,58.7,0
+kidney_left,Number of Voxels (num_voxels),692,10.530481,9.945743,10.801477,0.855734,1
+kidney_left,Volume in Cubic Millimeters (volume_mm3),692,11.746858,11.162104,12.017858,0.855754,1
+kidney_left,Relative Centroid X Position (centroid_x_rel),692,0.31405,0.28895,0.3415,0.05255,0
+kidney_left,Relative Centroid Y Position (centroid_y_rel),692,0.3975,0.360675,0.437625,0.07695,0
+kidney_left,Relative Centroid Z Position (centroid_z_rel),692,0.4566,0.115875,0.6159,0.500025,0
+kidney_left,Relative Bounding Box Width (bbox_x_rel),692,0.1654,0.14215,0.185725,0.043575,0
+kidney_left,Relative Bounding Box Height (bbox_y_rel),692,0.16955,0.1434,0.20335,0.05995,0
+kidney_left,Relative Bounding Box Depth (bbox_z_rel),692,0.17025,0.133025,0.23025,0.097225,0
+kidney_left,Bounding Box Volume in Cubic Millimeters (bbox_volume_mm3),692,12.862864,12.220122,13.153084,0.932962,1
+kidney_left,Mask-to-Bounding-Box Fill Ratio (mask_to_bbox_ratio),692,0.3359,0.3039,0.37325,0.06935,0
+kidney_left,Mean Hounsfield Unit Intensity (mean_HU),692,111.115,66.7975,142.285,75.4875,0
+kidney_left,Median Hounsfield Unit Intensity (median_HU),692,117.0,69.0,150.25,81.25,0
+kidney_left,Hounsfield Unit Intensity Standard Deviation (std_HU),692,44.015,32.22,63.85,31.63,0
+kidney_left,5th Percentile Hounsfield Unit Intensity (p05_HU),692,23.55,-15.0,52.0,67.0,0
+kidney_left,95th Percentile Hounsfield Unit Intensity (p95_HU),692,177.0,127.0,223.25,96.25,0
+kidney_right,Number of Voxels (num_voxels),673,10.538423,10.102666,10.798023,0.695357,1
+kidney_right,Volume in Cubic Millimeters (volume_mm3),673,11.7548,11.319033,12.014404,0.695372,1
+kidney_right,Relative Centroid X Position (centroid_x_rel),673,0.6729,0.6488,0.698,0.0492,0
+kidney_right,Relative Centroid Y Position (centroid_y_rel),673,0.3993,0.3621,0.4426,0.0805,0
+kidney_right,Relative Centroid Z Position (centroid_z_rel),673,0.4472,0.1274,0.6091,0.4817,0
+kidney_right,Relative Bounding Box Width (bbox_x_rel),673,0.1638,0.1434,0.1842,0.0408,0
+kidney_right,Relative Bounding Box Height (bbox_y_rel),673,0.1725,0.1456,0.207,0.0614,0
+kidney_right,Relative Bounding Box Depth (bbox_z_rel),673,0.1671,0.1344,0.2296,0.0952,0
+kidney_right,Bounding Box Volume in Cubic Millimeters (bbox_volume_mm3),673,12.908791,12.344838,13.150346,0.805508,1
+kidney_right,Mask-to-Bounding-Box Fill Ratio (mask_to_bbox_ratio),673,0.3329,0.3034,0.3733,0.0699,0
+kidney_right,Mean Hounsfield Unit Intensity (mean_HU),673,114.33,73.65,144.73,71.08,0
+kidney_right,Median Hounsfield Unit Intensity (median_HU),673,121.0,75.0,151.0,76.0,0
+kidney_right,Hounsfield Unit Intensity Standard Deviation (std_HU),673,42.96,31.95,63.27,31.32,0
+kidney_right,5th Percentile Hounsfield Unit Intensity (p05_HU),673,27.0,-8.05,57.0,65.05,0
+kidney_right,95th Percentile Hounsfield Unit Intensity (p95_HU),673,179.0,132.7,224.0,91.3,0
+liver,Number of Voxels (num_voxels),822,12.900315,12.602826,13.132175,0.529349,1
+liver,Volume in Cubic Millimeters (volume_mm3),822,14.116709,13.819219,14.348569,0.52935,1
+liver,Relative Centroid X Position (centroid_x_rel),822,0.6749,0.646125,0.706475,0.06035,0
+liver,Relative Centroid Y Position (centroid_y_rel),822,0.55015,0.511525,0.59605,0.084525,0
+liver,Relative Centroid Z Position (centroid_z_rel),822,0.5231,0.1609,0.6999,0.539,0
+liver,Relative Bounding Box Width (bbox_x_rel),822,0.5409,0.4703,0.6068,0.1365,0
+liver,Relative Bounding Box Height (bbox_y_rel),822,0.48615,0.423975,0.585875,0.1619,0
+liver,Relative Bounding Box Depth (bbox_z_rel),822,0.2948,0.2413,0.38595,0.14465,0
+liver,Bounding Box Volume in Cubic Millimeters (bbox_volume_mm3),822,15.403486,14.908213,15.674052,0.765839,1
+liver,Mask-to-Bounding-Box Fill Ratio (mask_to_bbox_ratio),822,0.2798,0.248025,0.3326,0.084575,0
+liver,Mean Hounsfield Unit Intensity (mean_HU),822,72.225,53.225,96.005,42.78,0
+liver,Median Hounsfield Unit Intensity (median_HU),822,72.0,54.0,97.0,43.0,0
+liver,Hounsfield Unit Intensity Standard Deviation (std_HU),822,27.77,20.9025,42.8725,21.97,0
+liver,5th Percentile Hounsfield Unit Intensity (p05_HU),822,23.5,-7.0,51.0,58.0,0
+liver,95th Percentile Hounsfield Unit Intensity (p95_HU),822,123.0,98.0,156.0,58.0,0
+lung_lower_lobe_left,Number of Voxels (num_voxels),880,12.144782,11.574377,12.57508,1.000703,1
+lung_lower_lobe_left,Volume in Cubic Millimeters (volume_mm3),880,13.361174,12.790765,13.791473,1.000707,1
+lung_lower_lobe_left,Relative Centroid X Position (centroid_x_rel),880,0.29035,0.2586,0.3217,0.0631,0
+lung_lower_lobe_left,Relative Centroid Y Position (centroid_y_rel),880,0.35245,0.303825,0.393025,0.0892,0
+lung_lower_lobe_left,Relative Centroid Z Position (centroid_z_rel),880,0.60045,0.374975,0.755325,0.38035,0
+lung_lower_lobe_left,Relative Bounding Box Width (bbox_x_rel),880,0.32,0.27805,0.362225,0.084175,0
+lung_lower_lobe_left,Relative Bounding Box Height (bbox_y_rel),880,0.41215,0.3174,0.4977,0.1803,0
+lung_lower_lobe_left,Relative Bounding Box Depth (bbox_z_rel),880,0.33175,0.21645,0.621875,0.405425,0
+lung_lower_lobe_left,Bounding Box Volume in Cubic Millimeters (bbox_volume_mm3),880,14.743916,14.158636,15.185429,1.026794,1
+lung_lower_lobe_left,Mask-to-Bounding-Box Fill Ratio (mask_to_bbox_ratio),880,0.2551,0.2157,0.300925,0.085225,0
+lung_lower_lobe_left,Mean Hounsfield Unit Intensity (mean_HU),880,-757.465,-806.395,-677.0875,129.3075,0
+lung_lower_lobe_left,Median Hounsfield Unit Intensity (median_HU),880,-810.0,-851.0,-740.0,111.0,0
+lung_lower_lobe_left,Hounsfield Unit Intensity Standard Deviation (std_HU),880,165.765,142.9675,202.2525,59.285,0
+lung_lower_lobe_left,5th Percentile Hounsfield Unit Intensity (p05_HU),880,-900.0,-933.25,-862.0,71.25,0
+lung_lower_lobe_left,95th Percentile Hounsfield Unit Intensity (p95_HU),880,-423.0,-512.5,-261.0,251.5,0
+lung_lower_lobe_right,Number of Voxels (num_voxels),867,12.290179,11.73518,12.72185,0.98667,1
+lung_lower_lobe_right,Volume in Cubic Millimeters (volume_mm3),867,13.506571,12.951569,13.938243,0.986674,1
+lung_lower_lobe_right,Relative Centroid X Position (centroid_x_rel),867,0.6844,0.6569,0.7128,0.0559,0
+lung_lower_lobe_right,Relative Centroid Y Position (centroid_y_rel),867,0.3606,0.31545,0.40035,0.0849,0
+lung_lower_lobe_right,Relative Centroid Z Position (centroid_z_rel),867,0.618,0.378,0.76185,0.38385,0
+lung_lower_lobe_right,Relative Bounding Box Width (bbox_x_rel),867,0.3652,0.3183,0.41115,0.09285,0
+lung_lower_lobe_right,Relative Bounding Box Height (bbox_y_rel),867,0.4405,0.3506,0.52505,0.17445,0
+lung_lower_lobe_right,Relative Bounding Box Depth (bbox_z_rel),867,0.3103,0.2116,0.5773,0.3657,0
+lung_lower_lobe_right,Bounding Box Volume in Cubic Millimeters (bbox_volume_mm3),867,14.893815,14.254176,15.343775,1.089599,1
+lung_lower_lobe_right,Mask-to-Bounding-Box Fill Ratio (mask_to_bbox_ratio),867,0.25,0.21745,0.2846,0.06715,0
+lung_lower_lobe_right,Mean Hounsfield Unit Intensity (mean_HU),867,-765.66,-812.1,-685.175,126.925,0
+lung_lower_lobe_right,Median Hounsfield Unit Intensity (median_HU),867,-816.0,-856.0,-753.0,103.0,0
+lung_lower_lobe_right,Hounsfield Unit Intensity Standard Deviation (std_HU),867,166.44,142.44,201.82,59.38,0
+lung_lower_lobe_right,5th Percentile Hounsfield Unit Intensity (p05_HU),867,-902.0,-937.0,-865.5,71.5,0
+lung_lower_lobe_right,95th Percentile Hounsfield Unit Intensity (p95_HU),867,-429.0,-526.5,-286.0,240.5,0
+lung_middle_lobe_right,Number of Voxels (num_voxels),769,11.487854,10.922317,11.81587,0.893554,1
+lung_middle_lobe_right,Volume in Cubic Millimeters (volume_mm3),769,12.704242,12.138699,13.032261,0.893561,1
+lung_middle_lobe_right,Relative Centroid X Position (centroid_x_rel),769,0.6975,0.6716,0.7288,0.0572,0
+lung_middle_lobe_right,Relative Centroid Y Position (centroid_y_rel),769,0.612,0.5679,0.6553,0.0874,0
+lung_middle_lobe_right,Relative Centroid Z Position (centroid_z_rel),769,0.6776,0.4314,0.8044,0.373,0
+lung_middle_lobe_right,Relative Bounding Box Width (bbox_x_rel),769,0.3245,0.2733,0.3675,0.0942,0
+lung_middle_lobe_right,Relative Bounding Box Height (bbox_y_rel),769,0.3279,0.2613,0.4126,0.1513,0
+lung_middle_lobe_right,Relative Bounding Box Depth (bbox_z_rel),769,0.186,0.1377,0.3333,0.1956,0
+lung_middle_lobe_right,Bounding Box Volume in Cubic Millimeters (bbox_volume_mm3),769,14.065422,13.540732,14.380818,0.840086,1
+lung_middle_lobe_right,Mask-to-Bounding-Box Fill Ratio (mask_to_bbox_ratio),769,0.2573,0.2302,0.2808,0.0506,0
+lung_middle_lobe_right,Mean Hounsfield Unit Intensity (mean_HU),769,-819.21,-848.74,-780.53,68.21,0
+lung_middle_lobe_right,Median Hounsfield Unit Intensity (median_HU),769,-861.0,-886.0,-829.0,57.0,0
+lung_middle_lobe_right,Hounsfield Unit Intensity Standard Deviation (std_HU),769,142.68,124.71,166.15,41.44,0
+lung_middle_lobe_right,5th Percentile Hounsfield Unit Intensity (p05_HU),769,-928.0,-953.0,-902.0,51.0,0
+lung_middle_lobe_right,95th Percentile Hounsfield Unit Intensity (p95_HU),769,-551.0,-603.0,-471.0,132.0,0
+lung_upper_lobe_left,Number of Voxels (num_voxels),902,12.367932,10.96293,12.774455,1.811526,1
+lung_upper_lobe_left,Volume in Cubic Millimeters (volume_mm3),902,13.584324,12.179313,13.990849,1.811536,1
+lung_upper_lobe_left,Relative Centroid X Position (centroid_x_rel),902,0.28175,0.240075,0.314775,0.0747,0
+lung_upper_lobe_left,Relative Centroid Y Position (centroid_y_rel),902,0.51915,0.47335,0.57025,0.0969,0
+lung_upper_lobe_left,Relative Centroid Z Position (centroid_z_rel),902,0.71965,0.589425,0.835875,0.24645,0
+lung_upper_lobe_left,Relative Bounding Box Width (bbox_x_rel),902,0.32745,0.26145,0.3796,0.11815,0
+lung_upper_lobe_left,Relative Bounding Box Height (bbox_y_rel),902,0.4411,0.33455,0.544275,0.209725,0
+lung_upper_lobe_left,Relative Bounding Box Depth (bbox_z_rel),902,0.36205,0.23455,0.673875,0.439325,0
+lung_upper_lobe_left,Bounding Box Volume in Cubic Millimeters (bbox_volume_mm3),902,14.980445,13.545248,15.406657,1.86141,1
+lung_upper_lobe_left,Mask-to-Bounding-Box Fill Ratio (mask_to_bbox_ratio),902,0.2414,0.211725,0.283025,0.0713,0
+lung_upper_lobe_left,Mean Hounsfield Unit Intensity (mean_HU),902,-801.515,-833.9275,-750.6475,83.28,0
+lung_upper_lobe_left,Median Hounsfield Unit Intensity (median_HU),902,-843.0,-872.0,-797.0,75.0,0
+lung_upper_lobe_left,Hounsfield Unit Intensity Standard Deviation (std_HU),902,145.975,128.52,169.945,41.425,0
+lung_upper_lobe_left,5th Percentile Hounsfield Unit Intensity (p05_HU),902,-919.5,-952.0,-889.0,63.0,0
+lung_upper_lobe_left,95th Percentile Hounsfield Unit Intensity (p95_HU),902,-510.0,-573.0,-425.775,147.225,0
+lung_upper_lobe_right,Number of Voxels (num_voxels),768,12.303081,11.579454,12.67073,1.091276,1
+lung_upper_lobe_right,Volume in Cubic Millimeters (volume_mm3),768,13.519473,12.795843,13.887123,1.09128,1
+lung_upper_lobe_right,Relative Centroid X Position (centroid_x_rel),768,0.67045,0.643725,0.70895,0.065225,0
+lung_upper_lobe_right,Relative Centroid Y Position (centroid_y_rel),768,0.49125,0.451125,0.534625,0.0835,0
+lung_upper_lobe_right,Relative Centroid Z Position (centroid_z_rel),768,0.728,0.610625,0.8423,0.231675,0
+lung_upper_lobe_right,Relative Bounding Box Width (bbox_x_rel),768,0.3472,0.299275,0.3975,0.098225,0
+lung_upper_lobe_right,Relative Bounding Box Height (bbox_y_rel),768,0.48095,0.39355,0.579225,0.185675,0
+lung_upper_lobe_right,Relative Bounding Box Depth (bbox_z_rel),768,0.27545,0.209075,0.45105,0.241975,0
+lung_upper_lobe_right,Bounding Box Volume in Cubic Millimeters (bbox_volume_mm3),768,14.73534,13.88828,15.089783,1.201503,1
+lung_upper_lobe_right,Mask-to-Bounding-Box Fill Ratio (mask_to_bbox_ratio),768,0.30775,0.277775,0.33975,0.061975,0
+lung_upper_lobe_right,Mean Hounsfield Unit Intensity (mean_HU),768,-795.08,-828.4625,-746.16,82.3025,0
+lung_upper_lobe_right,Median Hounsfield Unit Intensity (median_HU),768,-837.0,-866.0,-791.0,75.0,0
+lung_upper_lobe_right,Hounsfield Unit Intensity Standard Deviation (std_HU),768,146.835,129.375,172.1525,42.7775,0
+lung_upper_lobe_right,5th Percentile Hounsfield Unit Intensity (p05_HU),768,-912.0,-945.0,-881.0,64.0,0
+lung_upper_lobe_right,95th Percentile Hounsfield Unit Intensity (p95_HU),768,-511.85,-578.2,-427.75,150.45,0
+pancreas,Number of Voxels (num_voxels),697,9.773151,9.391661,10.063052,0.671391,1
+pancreas,Volume in Cubic Millimeters (volume_mm3),697,10.989506,10.607998,11.279417,0.671419,1
+pancreas,Relative Centroid X Position (centroid_x_rel),697,0.4498,0.4224,0.4762,0.0538,0
+pancreas,Relative Centroid Y Position (centroid_y_rel),697,0.56,0.5204,0.594,0.0736,0
+pancreas,Relative Centroid Z Position (centroid_z_rel),697,0.4864,0.1524,0.671,0.5186,0
+pancreas,Relative Bounding Box Width (bbox_x_rel),697,0.3145,0.2705,0.364,0.0935,0
+pancreas,Relative Bounding Box Height (bbox_y_rel),697,0.1888,0.1506,0.2267,0.0761,0
+pancreas,Relative Bounding Box Depth (bbox_z_rel),697,0.1485,0.1143,0.197,0.0827,0
+pancreas,Bounding Box Volume in Cubic Millimeters (bbox_volume_mm3),697,13.370123,12.816198,13.686002,0.869804,1
+pancreas,Mask-to-Bounding-Box Fill Ratio (mask_to_bbox_ratio),697,0.1012,0.0754,0.1304,0.055,0
+pancreas,Mean Hounsfield Unit Intensity (mean_HU),697,64.74,42.09,83.71,41.62,0
+pancreas,Median Hounsfield Unit Intensity (median_HU),697,68.0,45.0,86.0,41.0,0
+pancreas,Hounsfield Unit Intensity Standard Deviation (std_HU),697,37.08,27.81,51.18,23.37,0
+pancreas,5th Percentile Hounsfield Unit Intensity (p05_HU),697,-8.0,-41.0,21.0,62.0,0
+pancreas,95th Percentile Hounsfield Unit Intensity (p95_HU),697,120.0,96.0,158.0,62.0,0
+portal_vein_and_splenic_vein,Number of Voxels (num_voxels),718,8.712266,8.113715,9.031662,0.917947,1
+portal_vein_and_splenic_vein,Volume in Cubic Millimeters (volume_mm3),718,9.928546,9.3299,10.247973,0.918073,1
+portal_vein_and_splenic_vein,Relative Centroid X Position (centroid_x_rel),718,0.5186,0.494275,0.542875,0.0486,0
+portal_vein_and_splenic_vein,Relative Centroid Y Position (centroid_y_rel),718,0.54985,0.512275,0.583475,0.0712,0
+portal_vein_and_splenic_vein,Relative Centroid Z Position (centroid_z_rel),718,0.5155,0.13665,0.666025,0.529375,0
+portal_vein_and_splenic_vein,Relative Bounding Box Width (bbox_x_rel),718,0.4331,0.37335,0.484625,0.111275,0
+portal_vein_and_splenic_vein,Relative Bounding Box Height (bbox_y_rel),718,0.23315,0.1858,0.279,0.0932,0
+portal_vein_and_splenic_vein,Relative Bounding Box Depth (bbox_z_rel),718,0.11005,0.0832,0.144575,0.061375,0
+portal_vein_and_splenic_vein,Bounding Box Volume in Cubic Millimeters (bbox_volume_mm3),718,13.52204,13.01809,13.90363,0.88554,1
+portal_vein_and_splenic_vein,Mask-to-Bounding-Box Fill Ratio (mask_to_bbox_ratio),718,0.0265,0.020025,0.03605,0.016025,0
+portal_vein_and_splenic_vein,Mean Hounsfield Unit Intensity (mean_HU),718,112.71,75.835,142.7275,66.8925,0
+portal_vein_and_splenic_vein,Median Hounsfield Unit Intensity (median_HU),718,116.0,74.5,147.0,72.5,0
+portal_vein_and_splenic_vein,Hounsfield Unit Intensity Standard Deviation (std_HU),718,44.07,30.71,64.95,34.24,0
+portal_vein_and_splenic_vein,5th Percentile Hounsfield Unit Intensity (p05_HU),718,28.0,-9.4875,61.0,70.4875,0
+portal_vein_and_splenic_vein,95th Percentile Hounsfield Unit Intensity (p95_HU),718,181.0,137.0,237.0,100.0,0
+prostate,Number of Voxels (num_voxels),271,9.014082,8.75494,9.228039,0.4731,1
+prostate,Volume in Cubic Millimeters (volume_mm3),271,10.230392,9.971224,10.444366,0.473141,1
+prostate,Relative Centroid X Position (centroid_x_rel),271,0.4971,0.484,0.50965,0.02565,0
+prostate,Relative Centroid Y Position (centroid_y_rel),271,0.431,0.39415,0.46935,0.0752,0
+prostate,Relative Centroid Z Position (centroid_z_rel),271,0.1144,0.09475,0.15475,0.06,0
+prostate,Relative Bounding Box Width (bbox_x_rel),271,0.1125,0.09805,0.1267,0.02865,0
+prostate,Relative Bounding Box Height (bbox_y_rel),271,0.1017,0.0869,0.11705,0.03015,0
+prostate,Relative Bounding Box Depth (bbox_z_rel),271,0.0599,0.0482,0.07965,0.03145,0
+prostate,Bounding Box Volume in Cubic Millimeters (bbox_volume_mm3),271,10.935497,10.693306,11.153888,0.460582,1
+prostate,Mask-to-Bounding-Box Fill Ratio (mask_to_bbox_ratio),271,0.5014,0.45775,0.5322,0.07445,0
+prostate,Mean Hounsfield Unit Intensity (mean_HU),271,45.41,37.505,54.115,16.61,0
+prostate,Median Hounsfield Unit Intensity (median_HU),271,45.0,37.0,54.0,17.0,0
+prostate,Hounsfield Unit Intensity Standard Deviation (std_HU),271,25.79,20.005,41.615,21.61,0
+prostate,5th Percentile Hounsfield Unit Intensity (p05_HU),271,5.0,-13.0,18.0,31.0,0
+prostate,95th Percentile Hounsfield Unit Intensity (p95_HU),271,84.0,71.0,101.0,30.0,0
+pulmonary_vein,Number of Voxels (num_voxels),688,8.779556,8.467108,8.982875,0.515766,1
+pulmonary_vein,Volume in Cubic Millimeters (volume_mm3),688,9.995844,9.683356,10.199182,0.515826,1
+pulmonary_vein,Relative Centroid X Position (centroid_x_rel),688,0.4895,0.47125,0.515325,0.044075,0
+pulmonary_vein,Relative Centroid Y Position (centroid_y_rel),688,0.4454,0.412075,0.478425,0.06635,0
+pulmonary_vein,Relative Centroid Z Position (centroid_z_rel),688,0.64,0.485675,0.7629,0.277225,0
+pulmonary_vein,Relative Bounding Box Width (bbox_x_rel),688,0.3037,0.2612,0.35355,0.09235,0
+pulmonary_vein,Relative Bounding Box Height (bbox_y_rel),688,0.1486,0.121575,0.182,0.060425,0
+pulmonary_vein,Relative Bounding Box Depth (bbox_z_rel),688,0.1146,0.0842,0.205975,0.121775,0
+pulmonary_vein,Bounding Box Volume in Cubic Millimeters (bbox_volume_mm3),688,12.800453,12.457148,13.067445,0.610298,1
+pulmonary_vein,Mask-to-Bounding-Box Fill Ratio (mask_to_bbox_ratio),688,0.0616,0.0527,0.0714,0.0187,0
+pulmonary_vein,Mean Hounsfield Unit Intensity (mean_HU),688,138.875,94.05,241.9825,147.9325,0
+pulmonary_vein,Median Hounsfield Unit Intensity (median_HU),688,150.0,102.0,260.25,158.25,0
+pulmonary_vein,Hounsfield Unit Intensity Standard Deviation (std_HU),688,65.665,46.3575,99.3025,52.945,0
+pulmonary_vein,5th Percentile Hounsfield Unit Intensity (p05_HU),688,31.0,-7.275,74.0,81.275,0
+pulmonary_vein,95th Percentile Hounsfield Unit Intensity (p95_HU),688,218.5,150.9125,349.25,198.3375,0
+rib_left_1,Number of Voxels (num_voxels),662,7.902302,7.587817,8.18716,0.599343,1
+rib_left_1,Volume in Cubic Millimeters (volume_mm3),662,9.118437,8.803856,9.403359,0.599504,1
+rib_left_1,Relative Centroid X Position (centroid_x_rel),662,0.3382,0.3075,0.366125,0.058625,0
+rib_left_1,Relative Centroid Y Position (centroid_y_rel),662,0.52515,0.483425,0.564525,0.0811,0
+rib_left_1,Relative Centroid Z Position (centroid_z_rel),662,0.8826,0.66335,0.930475,0.267125,0
+rib_left_1,Relative Bounding Box Width (bbox_x_rel),662,0.1098,0.0954,0.1296,0.0342,0
+rib_left_1,Relative Bounding Box Height (bbox_y_rel),662,0.2368,0.19425,0.280775,0.086525,0
+rib_left_1,Relative Bounding Box Depth (bbox_z_rel),662,0.14925,0.102525,0.221925,0.1194,0
+rib_left_1,Bounding Box Volume in Cubic Millimeters (bbox_volume_mm3),662,12.190135,11.839545,12.431673,0.592128,1
+rib_left_1,Mask-to-Bounding-Box Fill Ratio (mask_to_bbox_ratio),662,0.0485,0.041425,0.0578,0.016375,0
+rib_left_1,Mean Hounsfield Unit Intensity (mean_HU),662,422.935,357.4075,509.3475,151.94,0
+rib_left_1,Median Hounsfield Unit Intensity (median_HU),662,386.5,324.5,461.0,136.5,0
+rib_left_1,Hounsfield Unit Intensity Standard Deviation (std_HU),662,235.22,195.25,293.335,98.085,0
+rib_left_1,5th Percentile Hounsfield Unit Intensity (p05_HU),662,98.8,45.15,139.825,94.675,0
+rib_left_1,95th Percentile Hounsfield Unit Intensity (p95_HU),662,868.9,721.25,1059.775,338.525,0
+rib_left_10,Number of Voxels (num_voxels),771,8.202208,7.901192,8.475328,0.574136,1
+rib_left_10,Volume in Cubic Millimeters (volume_mm3),771,9.418411,9.117327,9.691577,0.57425,1
+rib_left_10,Relative Centroid X Position (centroid_x_rel),771,0.2232,0.19155,0.255,0.06345,0
+rib_left_10,Relative Centroid Y Position (centroid_y_rel),771,0.2996,0.2543,0.3445,0.0902,0
+rib_left_10,Relative Centroid Z Position (centroid_z_rel),771,0.573,0.24325,0.69715,0.4539,0
+rib_left_10,Relative Bounding Box Width (bbox_x_rel),771,0.2862,0.24085,0.32385,0.083,0
+rib_left_10,Relative Bounding Box Height (bbox_y_rel),771,0.3065,0.23615,0.3611,0.12495,0
+rib_left_10,Relative Bounding Box Depth (bbox_z_rel),771,0.2467,0.19265,0.33715,0.1445,0
+rib_left_10,Bounding Box Volume in Cubic Millimeters (bbox_volume_mm3),771,14.193077,13.696315,14.46019,0.763875,1
+rib_left_10,Mask-to-Bounding-Box Fill Ratio (mask_to_bbox_ratio),771,0.009,0.0076,0.012,0.0044,0
+rib_left_10,Mean Hounsfield Unit Intensity (mean_HU),771,405.33,337.445,496.885,159.44,0
+rib_left_10,Median Hounsfield Unit Intensity (median_HU),771,379.0,316.5,469.5,153.0,0
+rib_left_10,Hounsfield Unit Intensity Standard Deviation (std_HU),771,207.57,171.44,261.995,90.555,0
+rib_left_10,5th Percentile Hounsfield Unit Intensity (p05_HU),771,102.05,33.625,163.1,129.475,0
+rib_left_10,95th Percentile Hounsfield Unit Intensity (p95_HU),771,804.65,660.025,981.0,320.975,0
+rib_left_11,Number of Voxels (num_voxels),744,7.765357,7.426847,8.041896,0.615049,1
+rib_left_11,Volume in Cubic Millimeters (volume_mm3),744,8.981454,8.642823,9.258064,0.615241,1
+rib_left_11,Relative Centroid X Position (centroid_x_rel),744,0.2709,0.24005,0.306025,0.065975,0
+rib_left_11,Relative Centroid Y Position (centroid_y_rel),744,0.27015,0.22905,0.312975,0.083925,0
+rib_left_11,Relative Centroid Z Position (centroid_z_rel),744,0.5345,0.1835,0.6667,0.4832,0
+rib_left_11,Relative Bounding Box Width (bbox_x_rel),744,0.2553,0.212425,0.29295,0.080525,0
+rib_left_11,Relative Bounding Box Height (bbox_y_rel),744,0.1811,0.125925,0.231875,0.10595,0
+rib_left_11,Relative Bounding Box Depth (bbox_z_rel),744,0.20945,0.16285,0.277925,0.115075,0
+rib_left_11,Bounding Box Volume in Cubic Millimeters (bbox_volume_mm3),744,13.449267,12.723464,13.835008,1.111544,1
+rib_left_11,Mask-to-Bounding-Box Fill Ratio (mask_to_bbox_ratio),744,0.0118,0.0095,0.019125,0.009625,0
+rib_left_11,Mean Hounsfield Unit Intensity (mean_HU),744,415.455,343.9375,505.3275,161.39,0
+rib_left_11,Median Hounsfield Unit Intensity (median_HU),744,391.0,319.75,488.0,168.25,0
+rib_left_11,Hounsfield Unit Intensity Standard Deviation (std_HU),744,193.795,156.04,248.5175,92.4775,0
+rib_left_11,5th Percentile Hounsfield Unit Intensity (p05_HU),744,126.8,57.5875,189.0875,131.5,0
+rib_left_11,95th Percentile Hounsfield Unit Intensity (p95_HU),744,780.05,628.675,964.775,336.1,0
+rib_left_12,Number of Voxels (num_voxels),674,6.861698,6.230481,7.241903,1.011422,1
+rib_left_12,Volume in Cubic Millimeters (volume_mm3),674,8.077356,7.445488,8.457794,1.012307,1
+rib_left_12,Relative Centroid X Position (centroid_x_rel),674,0.343,0.311675,0.372325,0.06065,0
+rib_left_12,Relative Centroid Y Position (centroid_y_rel),674,0.2697,0.2285,0.309925,0.081425,0
+rib_left_12,Relative Centroid Z Position (centroid_z_rel),674,0.5185,0.16075,0.667625,0.506875,0
+rib_left_12,Relative Bounding Box Width (bbox_x_rel),674,0.1719,0.1194,0.2091,0.0897,0
+rib_left_12,Relative Bounding Box Height (bbox_y_rel),674,0.0606,0.04295,0.089075,0.046125,0
+rib_left_12,Relative Bounding Box Depth (bbox_z_rel),674,0.12485,0.08305,0.1798,0.09675,0
+rib_left_12,Bounding Box Volume in Cubic Millimeters (bbox_volume_mm3),674,11.408406,10.164953,12.173489,2.008536,1
+rib_left_12,Mask-to-Bounding-Box Fill Ratio (mask_to_bbox_ratio),674,0.03815,0.023325,0.076,0.052675,0
+rib_left_12,Mean Hounsfield Unit Intensity (mean_HU),674,379.27,307.665,464.8925,157.2275,0
+rib_left_12,Median Hounsfield Unit Intensity (median_HU),674,362.0,291.125,449.375,158.25,0
+rib_left_12,Hounsfield Unit Intensity Standard Deviation (std_HU),674,149.14,118.0175,197.28,79.2625,0
+rib_left_12,5th Percentile Hounsfield Unit Intensity (p05_HU),674,155.425,96.0875,211.375,115.2875,0
+rib_left_12,95th Percentile Hounsfield Unit Intensity (p95_HU),674,657.55,532.275,818.9625,286.6875,0
+rib_left_2,Number of Voxels (num_voxels),673,8.058644,7.803027,8.294799,0.491773,1
+rib_left_2,Volume in Cubic Millimeters (volume_mm3),673,9.274816,9.019134,9.511019,0.491885,1
+rib_left_2,Relative Centroid X Position (centroid_x_rel),673,0.2824,0.2413,0.3147,0.0734,0
+rib_left_2,Relative Centroid Y Position (centroid_y_rel),673,0.4795,0.4415,0.5221,0.0806,0
+rib_left_2,Relative Centroid Z Position (centroid_z_rel),673,0.8533,0.6384,0.9131,0.2747,0
+rib_left_2,Relative Bounding Box Width (bbox_x_rel),673,0.1861,0.1632,0.2139,0.0507,0
+rib_left_2,Relative Bounding Box Height (bbox_y_rel),673,0.337,0.2772,0.4011,0.1239,0
+rib_left_2,Relative Bounding Box Depth (bbox_z_rel),673,0.1768,0.1207,0.2535,0.1328,0
+rib_left_2,Bounding Box Volume in Cubic Millimeters (bbox_volume_mm3),673,13.264634,12.955853,13.478632,0.522779,1
+rib_left_2,Mask-to-Bounding-Box Fill Ratio (mask_to_bbox_ratio),673,0.0195,0.0161,0.0248,0.0087,0
+rib_left_2,Mean Hounsfield Unit Intensity (mean_HU),673,329.61,272.62,404.29,131.67,0
+rib_left_2,Median Hounsfield Unit Intensity (median_HU),673,310.5,256.0,373.5,117.5,0
+rib_left_2,Hounsfield Unit Intensity Standard Deviation (std_HU),673,183.89,142.92,228.66,85.74,0
+rib_left_2,5th Percentile Hounsfield Unit Intensity (p05_HU),673,68.0,8.0,119.0,111.0,0
+rib_left_2,95th Percentile Hounsfield Unit Intensity (p95_HU),673,663.05,544.0,817.0,273.0,0
+rib_left_3,Number of Voxels (num_voxels),683,8.171034,7.855544,8.469682,0.614137,1
+rib_left_3,Volume in Cubic Millimeters (volume_mm3),683,9.387231,9.071667,9.685929,0.614262,1
+rib_left_3,Relative Centroid X Position (centroid_x_rel),683,0.2479,0.20155,0.2834,0.08185,0
+rib_left_3,Relative Centroid Y Position (centroid_y_rel),683,0.4707,0.41565,0.5115,0.09585,0
+rib_left_3,Relative Centroid Z Position (centroid_z_rel),683,0.7837,0.6224,0.87325,0.25085,0
+rib_left_3,Relative Bounding Box Width (bbox_x_rel),683,0.2235,0.1954,0.25585,0.06045,0
+rib_left_3,Relative Bounding Box Height (bbox_y_rel),683,0.4032,0.3317,0.48225,0.15055,0
+rib_left_3,Relative Bounding Box Depth (bbox_z_rel),683,0.1962,0.13985,0.2857,0.14585,0
+rib_left_3,Bounding Box Volume in Cubic Millimeters (bbox_volume_mm3),683,13.846471,13.412698,14.072291,0.659593,1
+rib_left_3,Mask-to-Bounding-Box Fill Ratio (mask_to_bbox_ratio),683,0.0129,0.0102,0.0175,0.0073,0
+rib_left_3,Mean Hounsfield Unit Intensity (mean_HU),683,312.78,257.32,385.99,128.67,0
+rib_left_3,Median Hounsfield Unit Intensity (median_HU),683,295.0,244.0,369.0,125.0,0
+rib_left_3,Hounsfield Unit Intensity Standard Deviation (std_HU),683,178.25,138.0,228.6,90.6,0
+rib_left_3,5th Percentile Hounsfield Unit Intensity (p05_HU),683,52.0,-9.0,107.125,116.125,0
+rib_left_3,95th Percentile Hounsfield Unit Intensity (p95_HU),683,639.35,509.525,796.825,287.3,0
+rib_left_4,Number of Voxels (num_voxels),710,8.378621,7.883626,8.66086,0.777234,1
+rib_left_4,Volume in Cubic Millimeters (volume_mm3),710,9.594854,9.099756,9.877133,0.777377,1
+rib_left_4,Relative Centroid X Position (centroid_x_rel),710,0.22795,0.18005,0.26595,0.0859,0
+rib_left_4,Relative Centroid Y Position (centroid_y_rel),710,0.467,0.4096,0.51055,0.10095,0
+rib_left_4,Relative Centroid Z Position (centroid_z_rel),710,0.71985,0.606075,0.837375,0.2313,0
+rib_left_4,Relative Bounding Box Width (bbox_x_rel),710,0.23105,0.1979,0.2624,0.0645,0
+rib_left_4,Relative Bounding Box Height (bbox_y_rel),710,0.4489,0.34375,0.544925,0.201175,0
+rib_left_4,Relative Bounding Box Depth (bbox_z_rel),710,0.21025,0.144525,0.33165,0.187125,0
+rib_left_4,Bounding Box Volume in Cubic Millimeters (bbox_volume_mm3),710,14.167101,13.492209,14.397146,0.904937,1
+rib_left_4,Mask-to-Bounding-Box Fill Ratio (mask_to_bbox_ratio),710,0.0119,0.009125,0.0172,0.008075,0
+rib_left_4,Mean Hounsfield Unit Intensity (mean_HU),710,323.73,258.7975,399.0725,140.275,0
+rib_left_4,Median Hounsfield Unit Intensity (median_HU),710,304.0,244.125,376.75,132.625,0
+rib_left_4,Hounsfield Unit Intensity Standard Deviation (std_HU),710,190.495,148.195,237.035,88.84,0
+rib_left_4,5th Percentile Hounsfield Unit Intensity (p05_HU),710,46.7,-7.0,109.0,116.0,0
+rib_left_4,95th Percentile Hounsfield Unit Intensity (p95_HU),710,674.0,540.0,834.5875,294.5875,0
+rib_left_5,Number of Voxels (num_voxels),756,8.429127,7.675429,8.778248,1.102819,1
+rib_left_5,Volume in Cubic Millimeters (volume_mm3),756,9.645368,8.891498,9.994535,1.103037,1
+rib_left_5,Relative Centroid X Position (centroid_x_rel),756,0.22135,0.1805,0.25915,0.07865,0
+rib_left_5,Relative Centroid Y Position (centroid_y_rel),756,0.46465,0.4142,0.5168,0.1026,0
+rib_left_5,Relative Centroid Z Position (centroid_z_rel),756,0.6703,0.5523,0.802875,0.250575,0
+rib_left_5,Relative Bounding Box Width (bbox_x_rel),756,0.23515,0.193225,0.269025,0.0758,0
+rib_left_5,Relative Bounding Box Height (bbox_y_rel),756,0.4651,0.285325,0.5701,0.284775,0
+rib_left_5,Relative Bounding Box Depth (bbox_z_rel),756,0.2199,0.141825,0.3731,0.231275,0
+rib_left_5,Bounding Box Volume in Cubic Millimeters (bbox_volume_mm3),756,14.368157,12.655354,14.598948,1.943594,1
+rib_left_5,Mask-to-Bounding-Box Fill Ratio (mask_to_bbox_ratio),756,0.0108,0.008475,0.026375,0.0179,0
+rib_left_5,Mean Hounsfield Unit Intensity (mean_HU),756,314.37,251.8275,395.335,143.5075,0
+rib_left_5,Median Hounsfield Unit Intensity (median_HU),756,293.0,230.0,370.25,140.25,0
+rib_left_5,Hounsfield Unit Intensity Standard Deviation (std_HU),756,197.135,154.39,246.1,91.71,0
+rib_left_5,5th Percentile Hounsfield Unit Intensity (p05_HU),756,34.0,-16.0,93.075,109.075,0
+rib_left_5,95th Percentile Hounsfield Unit Intensity (p95_HU),756,680.0,543.0,844.625,301.625,0
+rib_left_6,Number of Voxels (num_voxels),793,8.531293,7.689829,8.905716,1.215887,1
+rib_left_6,Volume in Cubic Millimeters (volume_mm3),793,9.74755,8.905903,10.122016,1.216113,1
+rib_left_6,Relative Centroid X Position (centroid_x_rel),793,0.2092,0.1707,0.2443,0.0736,0
+rib_left_6,Relative Centroid Y Position (centroid_y_rel),793,0.4574,0.415,0.5281,0.1131,0
+rib_left_6,Relative Centroid Z Position (centroid_z_rel),793,0.6728,0.4937,0.779,0.2853,0
+rib_left_6,Relative Bounding Box Width (bbox_x_rel),793,0.232,0.1499,0.2727,0.1228,0
+rib_left_6,Relative Bounding Box Height (bbox_y_rel),793,0.4675,0.2557,0.5756,0.3199,0
+rib_left_6,Relative Bounding Box Depth (bbox_z_rel),793,0.2336,0.1461,0.4187,0.2726,0
+rib_left_6,Bounding Box Volume in Cubic Millimeters (bbox_volume_mm3),793,14.475477,12.392355,14.734537,2.342183,1
+rib_left_6,Mask-to-Bounding-Box Fill Ratio (mask_to_bbox_ratio),793,0.011,0.0086,0.0341,0.0255,0
+rib_left_6,Mean Hounsfield Unit Intensity (mean_HU),793,318.76,257.97,405.22,147.25,0
+rib_left_6,Median Hounsfield Unit Intensity (median_HU),793,290.5,232.0,369.0,137.0,0
+rib_left_6,Hounsfield Unit Intensity Standard Deviation (std_HU),793,212.41,168.29,267.99,99.7,0
+rib_left_6,5th Percentile Hounsfield Unit Intensity (p05_HU),793,22.0,-25.0,80.0,105.0,0
+rib_left_6,95th Percentile Hounsfield Unit Intensity (p95_HU),793,727.0,579.0,892.0,313.0,0
+rib_left_7,Number of Voxels (num_voxels),780,8.591558,7.964937,8.929037,0.964099,1
+rib_left_7,Volume in Cubic Millimeters (volume_mm3),780,9.807822,9.181088,10.145339,0.964251,1
+rib_left_7,Relative Centroid X Position (centroid_x_rel),780,0.19245,0.1535,0.22645,0.07295,0
+rib_left_7,Relative Centroid Y Position (centroid_y_rel),780,0.4311,0.3869,0.501,0.1141,0
+rib_left_7,Relative Centroid Z Position (centroid_z_rel),780,0.6852,0.4515,0.759175,0.307675,0
+rib_left_7,Relative Bounding Box Width (bbox_x_rel),780,0.24895,0.122925,0.293425,0.1705,0
+rib_left_7,Relative Bounding Box Height (bbox_y_rel),780,0.4621,0.324275,0.5594,0.235125,0
+rib_left_7,Relative Bounding Box Depth (bbox_z_rel),780,0.2563,0.185075,0.44245,0.257375,0
+rib_left_7,Bounding Box Volume in Cubic Millimeters (bbox_volume_mm3),780,14.604885,12.777703,14.854013,2.07631,1
+rib_left_7,Mask-to-Bounding-Box Fill Ratio (mask_to_bbox_ratio),780,0.01,0.007975,0.027525,0.01955,0
+rib_left_7,Mean Hounsfield Unit Intensity (mean_HU),780,339.225,273.6025,420.0625,146.46,0
+rib_left_7,Median Hounsfield Unit Intensity (median_HU),780,309.0,247.75,387.0,139.25,0
+rib_left_7,Hounsfield Unit Intensity Standard Deviation (std_HU),780,215.85,173.95,266.1125,92.1625,0
+rib_left_7,5th Percentile Hounsfield Unit Intensity (p05_HU),780,33.725,-21.0,89.0,110.0,0
+rib_left_7,95th Percentile Hounsfield Unit Intensity (p95_HU),780,750.5,606.0,905.2,299.2,0
+rib_left_8,Number of Voxels (num_voxels),779,8.444192,8.037217,8.755265,0.718048,1
+rib_left_8,Volume in Cubic Millimeters (volume_mm3),779,9.660436,9.253385,9.971549,0.718164,1
+rib_left_8,Relative Centroid X Position (centroid_x_rel),779,0.1901,0.1501,0.2257,0.0756,0
+rib_left_8,Relative Centroid Y Position (centroid_y_rel),779,0.3857,0.33625,0.4482,0.11195,0
+rib_left_8,Relative Centroid Z Position (centroid_z_rel),779,0.6562,0.3914,0.75705,0.36565,0
+rib_left_8,Relative Bounding Box Width (bbox_x_rel),779,0.2632,0.1583,0.31,0.1517,0
+rib_left_8,Relative Bounding Box Height (bbox_y_rel),779,0.4192,0.3282,0.4926,0.1644,0
+rib_left_8,Relative Bounding Box Depth (bbox_z_rel),779,0.2605,0.20305,0.4242,0.22115,0
+rib_left_8,Bounding Box Volume in Cubic Millimeters (bbox_volume_mm3),779,14.557573,13.10828,14.832516,1.724236,1
+rib_left_8,Mask-to-Bounding-Box Fill Ratio (mask_to_bbox_ratio),779,0.0086,0.00705,0.02005,0.013,0
+rib_left_8,Mean Hounsfield Unit Intensity (mean_HU),779,351.73,288.54,434.07,145.53,0
+rib_left_8,Median Hounsfield Unit Intensity (median_HU),779,328.0,261.0,406.0,145.0,0
+rib_left_8,Hounsfield Unit Intensity Standard Deviation (std_HU),779,202.78,164.17,254.455,90.285,0
+rib_left_8,5th Percentile Hounsfield Unit Intensity (p05_HU),779,59.0,0.0,121.875,121.875,0
+rib_left_8,95th Percentile Hounsfield Unit Intensity (p95_HU),779,735.0,613.375,892.225,278.85,0
+rib_left_9,Number of Voxels (num_voxels),783,8.397283,8.076203,8.665009,0.588806,1
+rib_left_9,Volume in Cubic Millimeters (volume_mm3),783,9.61352,9.29238,9.881283,0.588903,1
+rib_left_9,Relative Centroid X Position (centroid_x_rel),783,0.2001,0.1588,0.2347,0.0759,0
+rib_left_9,Relative Centroid Y Position (centroid_y_rel),783,0.3398,0.29015,0.38845,0.0983,0
+rib_left_9,Relative Centroid Z Position (centroid_z_rel),783,0.6172,0.30855,0.7437,0.43515,0
+rib_left_9,Relative Bounding Box Width (bbox_x_rel),783,0.2792,0.2225,0.3201,0.0976,0
+rib_left_9,Relative Bounding Box Height (bbox_y_rel),783,0.3779,0.2975,0.4344,0.1369,0
+rib_left_9,Relative Bounding Box Depth (bbox_z_rel),783,0.2507,0.1982,0.37045,0.17225,0
+rib_left_9,Bounding Box Volume in Cubic Millimeters (bbox_volume_mm3),783,14.433069,13.839269,14.669666,0.830397,1
+rib_left_9,Mask-to-Bounding-Box Fill Ratio (mask_to_bbox_ratio),783,0.0087,0.0073,0.0128,0.0055,0
+rib_left_9,Mean Hounsfield Unit Intensity (mean_HU),783,376.36,307.575,461.295,153.72,0
+rib_left_9,Median Hounsfield Unit Intensity (median_HU),783,347.0,284.25,430.75,146.5,0
+rib_left_9,Hounsfield Unit Intensity Standard Deviation (std_HU),783,213.13,169.135,263.745,94.61,0
+rib_left_9,5th Percentile Hounsfield Unit Intensity (p05_HU),783,65.0,4.9,129.05,124.15,0
+rib_left_9,95th Percentile Hounsfield Unit Intensity (p95_HU),783,776.45,634.45,937.475,303.025,0
+rib_right_1,Number of Voxels (num_voxels),659,7.944492,7.615033,8.184095,0.569062,1
+rib_right_1,Volume in Cubic Millimeters (volume_mm3),659,9.160637,8.831081,9.400294,0.569213,1
+rib_right_1,Relative Centroid X Position (centroid_x_rel),659,0.6508,0.6272,0.68785,0.06065,0
+rib_right_1,Relative Centroid Y Position (centroid_y_rel),659,0.5208,0.4811,0.5616,0.0805,0
+rib_right_1,Relative Centroid Z Position (centroid_z_rel),659,0.8725,0.65275,0.92735,0.2746,0
+rib_right_1,Relative Bounding Box Width (bbox_x_rel),659,0.1145,0.09775,0.13435,0.0366,0
+rib_right_1,Relative Bounding Box Height (bbox_y_rel),659,0.2298,0.1845,0.27975,0.09525,0
+rib_right_1,Relative Bounding Box Depth (bbox_z_rel),659,0.1429,0.09985,0.21605,0.1162,0
+rib_right_1,Bounding Box Volume in Cubic Millimeters (bbox_volume_mm3),659,12.205263,11.897286,12.427239,0.529953,1
+rib_right_1,Mask-to-Bounding-Box Fill Ratio (mask_to_bbox_ratio),659,0.0479,0.04175,0.058,0.01625,0
+rib_right_1,Mean Hounsfield Unit Intensity (mean_HU),659,421.13,347.21,512.685,165.475,0
+rib_right_1,Median Hounsfield Unit Intensity (median_HU),659,380.0,318.0,460.5,142.5,0
+rib_right_1,Hounsfield Unit Intensity Standard Deviation (std_HU),659,238.2,196.285,300.725,104.44,0
+rib_right_1,5th Percentile Hounsfield Unit Intensity (p05_HU),659,92.7,43.475,134.0,90.525,0
+rib_right_1,95th Percentile Hounsfield Unit Intensity (p95_HU),659,876.0,726.825,1058.675,331.85,0
+rib_right_10,Number of Voxels (num_voxels),753,8.220134,7.925158,8.474912,0.549754,1
+rib_right_10,Volume in Cubic Millimeters (volume_mm3),753,9.43634,9.141299,9.69116,0.549861,1
+rib_right_10,Relative Centroid X Position (centroid_x_rel),753,0.7694,0.7378,0.8006,0.0628,0
+rib_right_10,Relative Centroid Y Position (centroid_y_rel),753,0.2955,0.2596,0.3445,0.0849,0
+rib_right_10,Relative Centroid Z Position (centroid_z_rel),753,0.5793,0.2538,0.7352,0.4814,0
+rib_right_10,Relative Bounding Box Width (bbox_x_rel),753,0.2884,0.2448,0.3206,0.0758,0
+rib_right_10,Relative Bounding Box Height (bbox_y_rel),753,0.3098,0.2473,0.371,0.1237,0
+rib_right_10,Relative Bounding Box Depth (bbox_z_rel),753,0.2481,0.1912,0.3321,0.1409,0
+rib_right_10,Bounding Box Volume in Cubic Millimeters (bbox_volume_mm3),753,14.219131,13.801008,14.496932,0.695923,1
+rib_right_10,Mask-to-Bounding-Box Fill Ratio (mask_to_bbox_ratio),753,0.0088,0.0075,0.0115,0.004,0
+rib_right_10,Mean Hounsfield Unit Intensity (mean_HU),753,415.94,347.47,498.28,150.81,0
+rib_right_10,Median Hounsfield Unit Intensity (median_HU),753,386.0,323.0,466.0,143.0,0
+rib_right_10,Hounsfield Unit Intensity Standard Deviation (std_HU),753,209.09,173.92,265.28,91.36,0
+rib_right_10,5th Percentile Hounsfield Unit Intensity (p05_HU),753,108.0,37.0,166.0,129.0,0
+rib_right_10,95th Percentile Hounsfield Unit Intensity (p95_HU),753,812.6,672.35,999.0,326.65,0
+rib_right_11,Number of Voxels (num_voxels),752,7.739139,7.397255,8.022486,0.625231,1
+rib_right_11,Volume in Cubic Millimeters (volume_mm3),752,8.955228,8.613218,9.238651,0.625433,1
+rib_right_11,Relative Centroid X Position (centroid_x_rel),752,0.72465,0.689375,0.754925,0.06555,0
+rib_right_11,Relative Centroid Y Position (centroid_y_rel),752,0.26935,0.224975,0.311225,0.08625,0
+rib_right_11,Relative Centroid Z Position (centroid_z_rel),752,0.5308,0.177975,0.670075,0.4921,0
+rib_right_11,Relative Bounding Box Width (bbox_x_rel),752,0.2524,0.211525,0.286575,0.07505,0
+rib_right_11,Relative Bounding Box Height (bbox_y_rel),752,0.1876,0.121575,0.2347,0.113125,0
+rib_right_11,Relative Bounding Box Depth (bbox_z_rel),752,0.20945,0.160725,0.278725,0.118,0
+rib_right_11,Bounding Box Volume in Cubic Millimeters (bbox_volume_mm3),752,13.449072,12.701634,13.824124,1.122491,1
+rib_right_11,Mask-to-Bounding-Box Fill Ratio (mask_to_bbox_ratio),752,0.0119,0.0093,0.018925,0.009625,0
+rib_right_11,Mean Hounsfield Unit Intensity (mean_HU),752,416.085,354.65,517.315,162.665,0
+rib_right_11,Median Hounsfield Unit Intensity (median_HU),752,394.0,334.0,487.25,153.25,0
+rib_right_11,Hounsfield Unit Intensity Standard Deviation (std_HU),752,192.115,157.7475,252.87,95.1225,0
+rib_right_11,5th Percentile Hounsfield Unit Intensity (p05_HU),752,130.15,63.75,192.0,128.25,0
+rib_right_11,95th Percentile Hounsfield Unit Intensity (p95_HU),752,789.2,638.6875,961.7,323.0125,0
+rib_right_12,Number of Voxels (num_voxels),669,6.828712,6.238325,7.221105,0.98278,1
+rib_right_12,Volume in Cubic Millimeters (volume_mm3),669,8.044344,7.453342,8.436987,0.983645,1
+rib_right_12,Relative Centroid X Position (centroid_x_rel),669,0.6521,0.6211,0.6844,0.0633,0
+rib_right_12,Relative Centroid Y Position (centroid_y_rel),669,0.2687,0.2293,0.3105,0.0812,0
+rib_right_12,Relative Centroid Z Position (centroid_z_rel),669,0.5099,0.1565,0.6571,0.5006,0
+rib_right_12,Relative Bounding Box Width (bbox_x_rel),669,0.166,0.1169,0.2115,0.0946,0
+rib_right_12,Relative Bounding Box Height (bbox_y_rel),669,0.0601,0.0392,0.0909,0.0517,0
+rib_right_12,Relative Bounding Box Depth (bbox_z_rel),669,0.1345,0.0874,0.1919,0.1045,0
+rib_right_12,Bounding Box Volume in Cubic Millimeters (bbox_volume_mm3),669,11.369173,10.029283,12.239119,2.209836,1
+rib_right_12,Mask-to-Bounding-Box Fill Ratio (mask_to_bbox_ratio),669,0.0378,0.0213,0.0847,0.0634,0
+rib_right_12,Mean Hounsfield Unit Intensity (mean_HU),669,384.62,314.76,467.37,152.61,0
+rib_right_12,Median Hounsfield Unit Intensity (median_HU),669,367.0,301.5,443.0,141.5,0
+rib_right_12,Hounsfield Unit Intensity Standard Deviation (std_HU),669,154.8,123.53,204.65,81.12,0
+rib_right_12,5th Percentile Hounsfield Unit Intensity (p05_HU),669,161.15,100.0,211.15,111.15,0
+rib_right_12,95th Percentile Hounsfield Unit Intensity (p95_HU),669,675.1,545.5,846.6,301.1,0
+rib_right_2,Number of Voxels (num_voxels),667,8.076826,7.803638,8.308322,0.504684,1
+rib_right_2,Volume in Cubic Millimeters (volume_mm3),667,9.293003,9.019746,9.524544,0.504797,1
+rib_right_2,Relative Centroid X Position (centroid_x_rel),667,0.7051,0.67855,0.7516,0.07305,0
+rib_right_2,Relative Centroid Y Position (centroid_y_rel),667,0.4755,0.44015,0.5223,0.08215,0
+rib_right_2,Relative Centroid Z Position (centroid_z_rel),667,0.8422,0.63455,0.9088,0.27425,0
+rib_right_2,Relative Bounding Box Width (bbox_x_rel),667,0.1862,0.1629,0.2164,0.0535,0
+rib_right_2,Relative Bounding Box Height (bbox_y_rel),667,0.3251,0.27055,0.3936,0.12305,0
+rib_right_2,Relative Bounding Box Depth (bbox_z_rel),667,0.1602,0.11705,0.2489,0.13185,0
+rib_right_2,Bounding Box Volume in Cubic Millimeters (bbox_volume_mm3),667,13.262718,12.960363,13.464839,0.504476,1
+rib_right_2,Mask-to-Bounding-Box Fill Ratio (mask_to_bbox_ratio),667,0.02,0.0164,0.025,0.0086,0
+rib_right_2,Mean Hounsfield Unit Intensity (mean_HU),667,332.73,278.025,411.945,133.92,0
+rib_right_2,Median Hounsfield Unit Intensity (median_HU),667,309.0,258.75,383.75,125.0,0
+rib_right_2,Hounsfield Unit Intensity Standard Deviation (std_HU),667,187.57,146.475,238.89,92.415,0
+rib_right_2,5th Percentile Hounsfield Unit Intensity (p05_HU),667,65.8,15.0,123.925,108.925,0
+rib_right_2,95th Percentile Hounsfield Unit Intensity (p95_HU),667,684.15,550.8,860.9,310.1,0
+rib_right_3,Number of Voxels (num_voxels),675,8.185907,7.8146,8.469682,0.655082,1
+rib_right_3,Volume in Cubic Millimeters (volume_mm3),675,9.402107,9.030711,9.68593,0.655219,1
+rib_right_3,Relative Centroid X Position (centroid_x_rel),675,0.7379,0.70825,0.78335,0.0751,0
+rib_right_3,Relative Centroid Y Position (centroid_y_rel),675,0.468,0.42525,0.50815,0.0829,0
+rib_right_3,Relative Centroid Z Position (centroid_z_rel),675,0.7717,0.62015,0.8689,0.24875,0
+rib_right_3,Relative Bounding Box Width (bbox_x_rel),675,0.2239,0.193,0.25685,0.06385,0
+rib_right_3,Relative Bounding Box Height (bbox_y_rel),675,0.3952,0.32025,0.46535,0.1451,0
+rib_right_3,Relative Bounding Box Depth (bbox_z_rel),675,0.183,0.13205,0.28005,0.148,0
+rib_right_3,Bounding Box Volume in Cubic Millimeters (bbox_volume_mm3),675,13.858786,13.378005,14.086053,0.708048,1
+rib_right_3,Mask-to-Bounding-Box Fill Ratio (mask_to_bbox_ratio),675,0.013,0.0102,0.01785,0.00765,0
+rib_right_3,Mean Hounsfield Unit Intensity (mean_HU),675,312.66,249.97,386.42,136.45,0
+rib_right_3,Median Hounsfield Unit Intensity (median_HU),675,299.0,239.0,365.5,126.5,0
+rib_right_3,Hounsfield Unit Intensity Standard Deviation (std_HU),675,176.97,138.745,230.055,91.31,0
+rib_right_3,5th Percentile Hounsfield Unit Intensity (p05_HU),675,52.0,-7.775,113.8,121.575,0
+rib_right_3,95th Percentile Hounsfield Unit Intensity (p95_HU),675,638.0,509.5,807.75,298.25,0
+rib_right_4,Number of Voxels (num_voxels),688,8.409274,7.879206,8.692784,0.813578,1
+rib_right_4,Volume in Cubic Millimeters (volume_mm3),688,9.625512,9.095335,9.909061,0.813727,1
+rib_right_4,Relative Centroid X Position (centroid_x_rel),688,0.75765,0.727175,0.792425,0.06525,0
+rib_right_4,Relative Centroid Y Position (centroid_y_rel),688,0.4616,0.410125,0.502725,0.0926,0
+rib_right_4,Relative Centroid Z Position (centroid_z_rel),688,0.7132,0.589875,0.836875,0.247,0
+rib_right_4,Relative Bounding Box Width (bbox_x_rel),688,0.23895,0.203975,0.2707,0.066725,0
+rib_right_4,Relative Bounding Box Height (bbox_y_rel),688,0.4411,0.340275,0.5221,0.181825,0
+rib_right_4,Relative Bounding Box Depth (bbox_z_rel),688,0.1989,0.1415,0.319625,0.178125,0
+rib_right_4,Bounding Box Volume in Cubic Millimeters (bbox_volume_mm3),688,14.214956,13.267768,14.447921,1.180153,1
+rib_right_4,Mask-to-Bounding-Box Fill Ratio (mask_to_bbox_ratio),688,0.0115,0.009,0.019,0.01,0
+rib_right_4,Mean Hounsfield Unit Intensity (mean_HU),688,330.84,255.13,407.3825,152.2525,0
+rib_right_4,Median Hounsfield Unit Intensity (median_HU),688,307.0,239.75,382.625,142.875,0
+rib_right_4,Hounsfield Unit Intensity Standard Deviation (std_HU),688,195.285,150.685,245.4825,94.7975,0
+rib_right_4,5th Percentile Hounsfield Unit Intensity (p05_HU),688,41.0,-14.925,103.85,118.775,0
+rib_right_4,95th Percentile Hounsfield Unit Intensity (p95_HU),688,687.275,545.4875,853.0,307.5125,0
+rib_right_5,Number of Voxels (num_voxels),726,8.503801,7.674979,8.828128,1.153149,1
+rib_right_5,Volume in Cubic Millimeters (volume_mm3),726,9.720054,8.891047,10.04442,1.153373,1
+rib_right_5,Relative Centroid X Position (centroid_x_rel),726,0.76265,0.7305,0.7997,0.0692,0
+rib_right_5,Relative Centroid Y Position (centroid_y_rel),726,0.4565,0.4063,0.5037,0.0974,0
+rib_right_5,Relative Centroid Z Position (centroid_z_rel),726,0.68465,0.55285,0.805175,0.252325,0
+rib_right_5,Relative Bounding Box Width (bbox_x_rel),726,0.2445,0.198575,0.280475,0.0819,0
+rib_right_5,Relative Bounding Box Height (bbox_y_rel),726,0.4674,0.27915,0.5584,0.27925,0
+rib_right_5,Relative Bounding Box Depth (bbox_z_rel),726,0.2132,0.1325,0.355525,0.223025,0
+rib_right_5,Bounding Box Volume in Cubic Millimeters (bbox_volume_mm3),726,14.412738,12.67773,14.667386,1.989656,1
+rib_right_5,Mask-to-Bounding-Box Fill Ratio (mask_to_bbox_ratio),726,0.01085,0.0084,0.026925,0.018525,0
+rib_right_5,Mean Hounsfield Unit Intensity (mean_HU),726,327.905,258.2525,411.6675,153.415,0
+rib_right_5,Median Hounsfield Unit Intensity (median_HU),726,300.0,240.125,382.0,141.875,0
+rib_right_5,Hounsfield Unit Intensity Standard Deviation (std_HU),726,210.675,161.8625,259.97,98.1075,0
+rib_right_5,5th Percentile Hounsfield Unit Intensity (p05_HU),726,25.85,-21.75,89.775,111.525,0
+rib_right_5,95th Percentile Hounsfield Unit Intensity (p95_HU),726,719.5,566.375,882.0,315.625,0
+rib_right_6,Number of Voxels (num_voxels),756,8.591558,7.674035,8.919152,1.245117,1
+rib_right_6,Volume in Cubic Millimeters (volume_mm3),756,9.807823,8.890103,10.135453,1.24535,1
+rib_right_6,Relative Centroid X Position (centroid_x_rel),756,0.77715,0.7447,0.80725,0.06255,0
+rib_right_6,Relative Centroid Y Position (centroid_y_rel),756,0.4508,0.40965,0.513825,0.104175,0
+rib_right_6,Relative Centroid Z Position (centroid_z_rel),756,0.71475,0.515175,0.78755,0.272375,0
+rib_right_6,Relative Bounding Box Width (bbox_x_rel),756,0.23905,0.154725,0.27885,0.124125,0
+rib_right_6,Relative Bounding Box Height (bbox_y_rel),756,0.4658,0.241075,0.5566,0.315525,0
+rib_right_6,Relative Bounding Box Depth (bbox_z_rel),756,0.22345,0.137975,0.382425,0.24445,0
+rib_right_6,Bounding Box Volume in Cubic Millimeters (bbox_volume_mm3),756,14.500585,12.367387,14.785463,2.418076,1
+rib_right_6,Mask-to-Bounding-Box Fill Ratio (mask_to_bbox_ratio),756,0.01105,0.0086,0.03285,0.02425,0
+rib_right_6,Mean Hounsfield Unit Intensity (mean_HU),756,322.835,259.56,409.1925,149.6325,0
+rib_right_6,Median Hounsfield Unit Intensity (median_HU),756,293.0,234.0,372.625,138.625,0
+rib_right_6,Hounsfield Unit Intensity Standard Deviation (std_HU),756,211.985,169.59,267.0325,97.4425,0
+rib_right_6,5th Percentile Hounsfield Unit Intensity (p05_HU),756,29.075,-18.0,88.9625,106.9625,0
+rib_right_6,95th Percentile Hounsfield Unit Intensity (p95_HU),756,718.0,590.75,906.85,316.1,0
+rib_right_7,Number of Voxels (num_voxels),743,8.656433,8.132264,8.955254,0.82299,1
+rib_right_7,Volume in Cubic Millimeters (volume_mm3),743,9.872706,9.348453,10.171559,0.823106,1
+rib_right_7,Relative Centroid X Position (centroid_x_rel),743,0.795,0.7623,0.82765,0.06535,0
+rib_right_7,Relative Centroid Y Position (centroid_y_rel),743,0.4271,0.3879,0.50425,0.11635,0
+rib_right_7,Relative Centroid Z Position (centroid_z_rel),743,0.6982,0.46355,0.78135,0.3178,0
+rib_right_7,Relative Bounding Box Width (bbox_x_rel),743,0.2574,0.1412,0.2966,0.1554,0
+rib_right_7,Relative Bounding Box Height (bbox_y_rel),743,0.4592,0.3203,0.54905,0.22875,0
+rib_right_7,Relative Bounding Box Depth (bbox_z_rel),743,0.25,0.1799,0.42035,0.24045,0
+rib_right_7,Bounding Box Volume in Cubic Millimeters (bbox_volume_mm3),743,14.644153,12.969484,14.901384,1.931899,1
+rib_right_7,Mask-to-Bounding-Box Fill Ratio (mask_to_bbox_ratio),743,0.0099,0.0079,0.0244,0.0165,0
+rib_right_7,Mean Hounsfield Unit Intensity (mean_HU),743,343.4,276.255,419.27,143.015,0
+rib_right_7,Median Hounsfield Unit Intensity (median_HU),743,311.0,249.25,379.5,130.25,0
+rib_right_7,Hounsfield Unit Intensity Standard Deviation (std_HU),743,214.6,171.055,266.455,95.4,0
+rib_right_7,5th Percentile Hounsfield Unit Intensity (p05_HU),743,40.3,-11.05,98.0,109.05,0
+rib_right_7,95th Percentile Hounsfield Unit Intensity (p95_HU),743,740.7,616.075,919.0,302.925,0
+rib_right_8,Number of Voxels (num_voxels),750,8.521982,8.135708,8.820847,0.685139,1
+rib_right_8,Volume in Cubic Millimeters (volume_mm3),750,9.738237,9.351897,10.037139,0.685242,1
+rib_right_8,Relative Centroid X Position (centroid_x_rel),750,0.79705,0.765225,0.8378,0.072575,0
+rib_right_8,Relative Centroid Y Position (centroid_y_rel),750,0.3834,0.343125,0.444575,0.10145,0
+rib_right_8,Relative Centroid Z Position (centroid_z_rel),750,0.6653,0.398925,0.7743,0.375375,0
+rib_right_8,Relative Bounding Box Width (bbox_x_rel),750,0.27355,0.17665,0.316475,0.139825,0
+rib_right_8,Relative Bounding Box Height (bbox_y_rel),750,0.4306,0.3404,0.5027,0.1623,0
+rib_right_8,Relative Bounding Box Depth (bbox_z_rel),750,0.2552,0.197075,0.42205,0.224975,0
+rib_right_8,Bounding Box Volume in Cubic Millimeters (bbox_volume_mm3),750,14.609598,13.675743,14.874375,1.198632,1
+rib_right_8,Mask-to-Bounding-Box Fill Ratio (mask_to_bbox_ratio),750,0.0086,0.0071,0.01595,0.00885,0
+rib_right_8,Mean Hounsfield Unit Intensity (mean_HU),750,350.36,286.7775,432.6675,145.89,0
+rib_right_8,Median Hounsfield Unit Intensity (median_HU),750,324.0,263.25,400.0,136.75,0
+rib_right_8,Hounsfield Unit Intensity Standard Deviation (std_HU),750,206.625,164.075,256.405,92.33,0
+rib_right_8,5th Percentile Hounsfield Unit Intensity (p05_HU),750,55.0,0.0,116.0,116.0,0
+rib_right_8,95th Percentile Hounsfield Unit Intensity (p95_HU),750,741.8,613.775,913.85,300.075,0
+rib_right_9,Number of Voxels (num_voxels),754,8.456275,8.152846,8.701928,0.549082,1
+rib_right_9,Volume in Cubic Millimeters (volume_mm3),754,9.672521,9.369039,9.918207,0.549168,1
+rib_right_9,Relative Centroid X Position (centroid_x_rel),754,0.79215,0.7606,0.829075,0.068475,0
+rib_right_9,Relative Centroid Y Position (centroid_y_rel),754,0.338,0.299,0.390025,0.091025,0
+rib_right_9,Relative Centroid Z Position (centroid_z_rel),754,0.6249,0.3301,0.775975,0.445875,0
+rib_right_9,Relative Bounding Box Width (bbox_x_rel),754,0.28515,0.237575,0.3208,0.083225,0
+rib_right_9,Relative Bounding Box Height (bbox_y_rel),754,0.39125,0.3226,0.455025,0.132425,0
+rib_right_9,Relative Bounding Box Depth (bbox_z_rel),754,0.2556,0.2,0.374875,0.174875,0
+rib_right_9,Bounding Box Volume in Cubic Millimeters (bbox_volume_mm3),754,14.474251,14.057635,14.730304,0.67267,1
+rib_right_9,Mask-to-Bounding-Box Fill Ratio (mask_to_bbox_ratio),754,0.0088,0.0073,0.0116,0.0043,0
+rib_right_9,Mean Hounsfield Unit Intensity (mean_HU),754,373.235,306.0125,456.54,150.5275,0
+rib_right_9,Median Hounsfield Unit Intensity (median_HU),754,346.0,279.625,419.75,140.125,0
+rib_right_9,Hounsfield Unit Intensity Standard Deviation (std_HU),754,211.78,170.64,266.965,96.325,0
+rib_right_9,5th Percentile Hounsfield Unit Intensity (p05_HU),754,67.0,11.775,128.0,116.225,0
+rib_right_9,95th Percentile Hounsfield Unit Intensity (p95_HU),754,772.925,636.475,961.05,324.575,0
+sacrum,Number of Voxels (num_voxels),531,10.838816,10.706755,10.952857,0.246102,1
+sacrum,Volume in Cubic Millimeters (volume_mm3),531,12.055197,11.923135,12.16924,0.246105,1
+sacrum,Relative Centroid X Position (centroid_x_rel),531,0.4997,0.48495,0.51435,0.0294,0
+sacrum,Relative Centroid Y Position (centroid_y_rel),531,0.2971,0.2536,0.33225,0.07865,0
+sacrum,Relative Centroid Z Position (centroid_z_rel),531,0.2658,0.2317,0.3581,0.1264,0
+sacrum,Relative Bounding Box Width (bbox_x_rel),531,0.3039,0.27255,0.336,0.06345,0
+sacrum,Relative Bounding Box Height (bbox_y_rel),531,0.2308,0.20385,0.2671,0.06325,0
+sacrum,Relative Bounding Box Depth (bbox_z_rel),531,0.2449,0.2068,0.32925,0.12245,0
+sacrum,Bounding Box Volume in Cubic Millimeters (bbox_volume_mm3),531,14.195351,14.029399,14.318103,0.288705,1
+sacrum,Mask-to-Bounding-Box Fill Ratio (mask_to_bbox_ratio),531,0.1193,0.11155,0.1294,0.01785,0
+sacrum,Mean Hounsfield Unit Intensity (mean_HU),531,196.42,159.44,239.82,80.38,0
+sacrum,Median Hounsfield Unit Intensity (median_HU),531,154.0,122.0,193.5,71.5,0
+sacrum,Hounsfield Unit Intensity Standard Deviation (std_HU),531,193.07,169.48,224.95,55.47,0
+sacrum,5th Percentile Hounsfield Unit Intensity (p05_HU),531,-31.0,-61.0,6.0,67.0,0
+sacrum,95th Percentile Hounsfield Unit Intensity (p95_HU),531,586.0,504.0,686.95,182.95,0
+scapula_left,Number of Voxels (num_voxels),715,10.142071,9.601536,10.409732,0.808196,1
+scapula_left,Volume in Cubic Millimeters (volume_mm3),715,11.358439,10.817884,11.626106,0.808222,1
+scapula_left,Relative Centroid X Position (centroid_x_rel),715,0.1627,0.1085,0.204,0.0955,0
+scapula_left,Relative Centroid Y Position (centroid_y_rel),715,0.3119,0.26765,0.3533,0.08565,0
+scapula_left,Relative Centroid Z Position (centroid_z_rel),715,0.8196,0.707,0.895,0.188,0
+scapula_left,Relative Bounding Box Width (bbox_x_rel),715,0.2531,0.2111,0.2882,0.0771,0
+scapula_left,Relative Bounding Box Height (bbox_y_rel),715,0.2624,0.2185,0.3236,0.1051,0
+scapula_left,Relative Bounding Box Depth (bbox_z_rel),715,0.3134,0.25,0.50775,0.25775,0
+scapula_left,Bounding Box Volume in Cubic Millimeters (bbox_volume_mm3),715,14.160972,13.449582,14.405984,0.956401,1
+scapula_left,Mask-to-Bounding-Box Fill Ratio (mask_to_bbox_ratio),715,0.0645,0.056,0.0764,0.0204,0
+scapula_left,Mean Hounsfield Unit Intensity (mean_HU),715,351.09,306.82,411.455,104.635,0
+scapula_left,Median Hounsfield Unit Intensity (median_HU),715,287.0,248.0,337.0,89.0,0
+scapula_left,Hounsfield Unit Intensity Standard Deviation (std_HU),715,275.1,231.465,324.11,92.645,0
+scapula_left,5th Percentile Hounsfield Unit Intensity (p05_HU),715,35.0,2.5,55.5,53.0,0
+scapula_left,95th Percentile Hounsfield Unit Intensity (p95_HU),715,914.0,780.225,1068.85,288.625,0
+scapula_right,Number of Voxels (num_voxels),692,10.167043,9.698456,10.411441,0.712985,1
+scapula_right,Volume in Cubic Millimeters (volume_mm3),692,11.383412,10.914808,11.627815,0.713007,1
+scapula_right,Relative Centroid X Position (centroid_x_rel),692,0.82735,0.793,0.87715,0.08415,0
+scapula_right,Relative Centroid Y Position (centroid_y_rel),692,0.31885,0.27845,0.358175,0.079725,0
+scapula_right,Relative Centroid Z Position (centroid_z_rel),692,0.8171,0.708575,0.89545,0.186875,0
+scapula_right,Relative Bounding Box Width (bbox_x_rel),692,0.2529,0.210275,0.2874,0.077125,0
+scapula_right,Relative Bounding Box Height (bbox_y_rel),692,0.2661,0.22135,0.335275,0.113925,0
+scapula_right,Relative Bounding Box Depth (bbox_z_rel),692,0.2991,0.247125,0.49635,0.249225,0
+scapula_right,Bounding Box Volume in Cubic Millimeters (bbox_volume_mm3),692,14.228933,13.711513,14.462211,0.750698,1
+scapula_right,Mask-to-Bounding-Box Fill Ratio (mask_to_bbox_ratio),692,0.06295,0.05455,0.0725,0.01795,0
+scapula_right,Mean Hounsfield Unit Intensity (mean_HU),692,372.115,320.8575,426.91,106.0525,0
+scapula_right,Median Hounsfield Unit Intensity (median_HU),692,303.0,260.0,358.25,98.25,0
+scapula_right,Hounsfield Unit Intensity Standard Deviation (std_HU),692,279.255,230.7225,327.6625,96.94,0
+scapula_right,5th Percentile Hounsfield Unit Intensity (p05_HU),692,44.5,8.75,72.0,63.25,0
+scapula_right,95th Percentile Hounsfield Unit Intensity (p95_HU),692,941.0,790.75,1095.0,304.25,0
+skull,Number of Voxels (num_voxels),388,10.958129,7.87502,11.888436,4.013416,1
+skull,Volume in Cubic Millimeters (volume_mm3),388,12.174512,9.091148,13.104827,4.013678,1
+skull,Relative Centroid X Position (centroid_x_rel),388,0.49895,0.4819,0.516575,0.034675,0
+skull,Relative Centroid Y Position (centroid_y_rel),388,0.6401,0.53355,0.742825,0.209275,0
+skull,Relative Centroid Z Position (centroid_z_rel),388,0.89225,0.8058,0.9813,0.1755,0
+skull,Relative Bounding Box Width (bbox_x_rel),388,0.3468,0.161775,0.561475,0.3997,0
+skull,Relative Bounding Box Height (bbox_y_rel),388,0.42895,0.099025,0.73245,0.633425,0
+skull,Relative Bounding Box Depth (bbox_z_rel),388,0.2692,0.04065,0.52245,0.4818,0
+skull,Bounding Box Volume in Cubic Millimeters (bbox_volume_mm3),388,14.294994,10.689453,15.184394,4.494941,1
+skull,Mask-to-Bounding-Box Fill Ratio (mask_to_bbox_ratio),388,0.14945,0.126175,0.252825,0.12665,0
+skull,Mean Hounsfield Unit Intensity (mean_HU),388,720.5,625.095,819.5675,194.4725,0
+skull,Median Hounsfield Unit Intensity (median_HU),388,670.0,536.75,819.5,282.75,0
+skull,Hounsfield Unit Intensity Standard Deviation (std_HU),388,543.33,470.9575,635.2625,164.305,0
+skull,5th Percentile Hounsfield Unit Intensity (p05_HU),388,8.0,-53.7375,66.0,119.7375,0
+skull,95th Percentile Hounsfield Unit Intensity (p95_HU),388,1565.0,1421.75,1739.0,317.25,0
+small_bowel,Number of Voxels (num_voxels),710,12.204756,10.970949,12.61738,1.646431,1
+small_bowel,Volume in Cubic Millimeters (volume_mm3),710,13.421147,12.187332,13.833773,1.64644,1
+small_bowel,Relative Centroid X Position (centroid_x_rel),710,0.43235,0.3807,0.472925,0.092225,0
+small_bowel,Relative Centroid Y Position (centroid_y_rel),710,0.6015,0.553725,0.6505,0.096775,0
+small_bowel,Relative Centroid Z Position (centroid_z_rel),710,0.3392,0.15945,0.47705,0.3176,0
+small_bowel,Relative Bounding Box Width (bbox_x_rel),710,0.53645,0.4318,0.63155,0.19975,0
+small_bowel,Relative Bounding Box Height (bbox_y_rel),710,0.3197,0.24085,0.39585,0.155,0
+small_bowel,Relative Bounding Box Depth (bbox_z_rel),710,0.3759,0.273325,0.5074,0.234075,0
+small_bowel,Bounding Box Volume in Cubic Millimeters (bbox_volume_mm3),710,15.463315,14.274136,15.851093,1.576957,1
+small_bowel,Mask-to-Bounding-Box Fill Ratio (mask_to_bbox_ratio),710,0.14225,0.11545,0.18195,0.0665,0
+small_bowel,Mean Hounsfield Unit Intensity (mean_HU),710,-1.7,-45.1,28.4475,73.5475,0
+small_bowel,Median Hounsfield Unit Intensity (median_HU),710,33.0,14.25,53.0,38.75,0
+small_bowel,Hounsfield Unit Intensity Standard Deviation (std_HU),710,159.175,102.08,237.255,135.175,0
+small_bowel,5th Percentile Hounsfield Unit Intensity (p05_HU),710,-165.5,-727.5,-89.25,638.25,0
+small_bowel,95th Percentile Hounsfield Unit Intensity (p95_HU),710,97.0,75.0,142.0,67.0,0
+spinal_cord,Number of Voxels (num_voxels),1043,9.627075,9.15181,9.975645,0.823835,1
+spinal_cord,Volume in Cubic Millimeters (volume_mm3),1043,10.843424,10.368131,11.192008,0.823877,1
+spinal_cord,Relative Centroid X Position (centroid_x_rel),1043,0.4977,0.48365,0.51375,0.0301,0
+spinal_cord,Relative Centroid Y Position (centroid_y_rel),1043,0.3278,0.2806,0.3724,0.0918,0
+spinal_cord,Relative Centroid Z Position (centroid_z_rel),1043,0.5158,0.4701,0.62885,0.15875,0
+spinal_cord,Relative Bounding Box Width (bbox_x_rel),1043,0.0815,0.0669,0.1053,0.0384,0
+spinal_cord,Relative Bounding Box Height (bbox_y_rel),1043,0.1841,0.1281,0.2523,0.1242,0
+spinal_cord,Relative Bounding Box Depth (bbox_z_rel),1043,0.7525,0.64825,1.0,0.35175,0
+spinal_cord,Bounding Box Volume in Cubic Millimeters (bbox_volume_mm3),1043,13.131623,12.320422,13.807954,1.487532,1
+spinal_cord,Mask-to-Bounding-Box Fill Ratio (mask_to_bbox_ratio),1043,0.101,0.0711,0.16625,0.09515,0
+spinal_cord,Mean Hounsfield Unit Intensity (mean_HU),1043,21.92,16.245,28.98,12.735,0
+spinal_cord,Median Hounsfield Unit Intensity (median_HU),1043,23.0,17.0,30.0,13.0,0
+spinal_cord,Hounsfield Unit Intensity Standard Deviation (std_HU),1043,36.57,27.155,58.935,31.78,0
+spinal_cord,5th Percentile Hounsfield Unit Intensity (p05_HU),1043,-38.0,-75.0,-22.0,53.0,0
+spinal_cord,95th Percentile Hounsfield Unit Intensity (p95_HU),1043,78.0,63.0,111.0,48.0,0
+spleen,Number of Voxels (num_voxels),776,10.86813,10.435005,11.229564,0.794559,1
+spleen,Volume in Cubic Millimeters (volume_mm3),776,12.084512,11.65138,12.44595,0.79457,1
+spleen,Relative Centroid X Position (centroid_x_rel),776,0.2377,0.20505,0.26835,0.0633,0
+spleen,Relative Centroid Y Position (centroid_y_rel),776,0.39125,0.34665,0.4364,0.08975,0
+spleen,Relative Centroid Z Position (centroid_z_rel),776,0.51925,0.13565,0.653775,0.518125,0
+spleen,Relative Bounding Box Width (bbox_x_rel),776,0.23605,0.207375,0.26675,0.059375,0
+spleen,Relative Bounding Box Height (bbox_y_rel),776,0.2504,0.2045,0.304625,0.100125,0
+spleen,Relative Bounding Box Depth (bbox_z_rel),776,0.18415,0.132875,0.238925,0.10605,0
+spleen,Bounding Box Volume in Cubic Millimeters (bbox_volume_mm3),776,13.32297,12.873981,13.724167,0.850185,1
+spleen,Mask-to-Bounding-Box Fill Ratio (mask_to_bbox_ratio),776,0.2956,0.262175,0.3346,0.072425,0
+spleen,Mean Hounsfield Unit Intensity (mean_HU),776,86.89,60.44,107.9875,47.5475,0
+spleen,Median Hounsfield Unit Intensity (median_HU),776,89.0,62.0,110.25,48.25,0
+spleen,Hounsfield Unit Intensity Standard Deviation (std_HU),776,31.465,23.46,46.765,23.305,0
+spleen,5th Percentile Hounsfield Unit Intensity (p05_HU),776,27.0,-7.0,51.0,58.0,0
+spleen,95th Percentile Hounsfield Unit Intensity (p95_HU),776,135.0,105.75,174.5,68.75,0
+sternum,Number of Voxels (num_voxels),830,9.648305,8.850159,9.972174,1.122015,1
+sternum,Volume in Cubic Millimeters (volume_mm3),830,10.864655,10.066453,11.188536,1.122083,1
+sternum,Relative Centroid X Position (centroid_x_rel),830,0.49615,0.479725,0.5144,0.034675,0
+sternum,Relative Centroid Y Position (centroid_y_rel),830,0.7013,0.6548,0.7632,0.1084,0
+sternum,Relative Centroid Z Position (centroid_z_rel),830,0.71595,0.5938,0.8364,0.2426,0
+sternum,Relative Bounding Box Width (bbox_x_rel),830,0.15695,0.127125,0.189625,0.0625,0
+sternum,Relative Bounding Box Height (bbox_y_rel),830,0.1563,0.091525,0.2066,0.115075,0
+sternum,Relative Bounding Box Depth (bbox_z_rel),830,0.26935,0.1862,0.5136,0.3274,0
+sternum,Bounding Box Volume in Cubic Millimeters (bbox_volume_mm3),830,12.975782,11.257595,13.472231,2.214636,1
+sternum,Mask-to-Bounding-Box Fill Ratio (mask_to_bbox_ratio),830,0.1266,0.099425,0.252725,0.1533,0
+sternum,Mean Hounsfield Unit Intensity (mean_HU),830,216.205,171.87,269.9125,98.0425,0
+sternum,Median Hounsfield Unit Intensity (median_HU),830,178.0,140.0,221.0,81.0,0
+sternum,Hounsfield Unit Intensity Standard Deviation (std_HU),830,168.22,134.67,225.8225,91.1525,0
+sternum,5th Percentile Hounsfield Unit Intensity (p05_HU),830,6.2,-32.4875,45.0,77.4875,0
+sternum,95th Percentile Hounsfield Unit Intensity (p95_HU),830,526.5,436.1,673.6,237.5,0
+stomach,Number of Voxels (num_voxels),792,11.124782,10.674457,11.615294,0.940837,1
+stomach,Volume in Cubic Millimeters (volume_mm3),792,12.341167,11.890836,12.831683,0.940847,1
+stomach,Relative Centroid X Position (centroid_x_rel),792,0.37285,0.335525,0.407375,0.07185,0
+stomach,Relative Centroid Y Position (centroid_y_rel),792,0.5961,0.54775,0.642625,0.094875,0
+stomach,Relative Centroid Z Position (centroid_z_rel),792,0.51855,0.140775,0.668875,0.5281,0
+stomach,Relative Bounding Box Width (bbox_x_rel),792,0.3213,0.270325,0.38975,0.119425,0
+stomach,Relative Bounding Box Height (bbox_y_rel),792,0.345,0.280125,0.413225,0.1331,0
+stomach,Relative Bounding Box Depth (bbox_z_rel),792,0.20285,0.150475,0.26115,0.110675,0
+stomach,Bounding Box Volume in Cubic Millimeters (bbox_volume_mm3),792,14.106996,13.550289,14.512502,0.962213,1
+stomach,Mask-to-Bounding-Box Fill Ratio (mask_to_bbox_ratio),792,0.18795,0.1505,0.254125,0.103625,0
+stomach,Mean Hounsfield Unit Intensity (mean_HU),792,-23.7,-97.8275,20.4725,118.3,0
+stomach,Median Hounsfield Unit Intensity (median_HU),792,34.0,18.0,55.0,37.0,0
+stomach,Hounsfield Unit Intensity Standard Deviation (std_HU),792,233.205,130.835,336.54,205.705,0
+stomach,5th Percentile Hounsfield Unit Intensity (p05_HU),792,-741.0,-973.0,-91.75,881.25,0
+stomach,95th Percentile Hounsfield Unit Intensity (p95_HU),792,106.0,81.0,143.2,62.2,0
+subclavian_artery_left,Number of Voxels (num_voxels),674,7.773372,7.466084,8.014501,0.548417,1
+subclavian_artery_left,Volume in Cubic Millimeters (volume_mm3),674,8.989471,8.682077,9.230664,0.548587,1
+subclavian_artery_left,Relative Centroid X Position (centroid_x_rel),674,0.38355,0.3555,0.411,0.0555,0
+subclavian_artery_left,Relative Centroid Y Position (centroid_y_rel),674,0.49675,0.4569,0.5337,0.0768,0
+subclavian_artery_left,Relative Centroid Z Position (centroid_z_rel),674,0.8661,0.644175,0.924075,0.2799,0
+subclavian_artery_left,Relative Bounding Box Width (bbox_x_rel),674,0.2538,0.216825,0.28905,0.072225,0
+subclavian_artery_left,Relative Bounding Box Height (bbox_y_rel),674,0.083,0.0661,0.10875,0.04265,0
+subclavian_artery_left,Relative Bounding Box Depth (bbox_z_rel),674,0.11755,0.0819,0.17245,0.09055,0
+subclavian_artery_left,Bounding Box Volume in Cubic Millimeters (bbox_volume_mm3),674,11.677906,11.305295,12.012302,0.707007,1
+subclavian_artery_left,Mask-to-Bounding-Box Fill Ratio (mask_to_bbox_ratio),674,0.0684,0.055525,0.0869,0.031375,0
+subclavian_artery_left,Mean Hounsfield Unit Intensity (mean_HU),674,126.315,80.655,224.36,143.705,0
+subclavian_artery_left,Median Hounsfield Unit Intensity (median_HU),674,130.5,85.25,235.75,150.5,0
+subclavian_artery_left,Hounsfield Unit Intensity Standard Deviation (std_HU),674,78.32,52.2125,119.2425,67.03,0
+subclavian_artery_left,5th Percentile Hounsfield Unit Intensity (p05_HU),674,17.0,-14.0,51.0,65.0,0
+subclavian_artery_left,95th Percentile Hounsfield Unit Intensity (p95_HU),674,228.2,149.0,379.45,230.45,0
+subclavian_artery_right,Number of Voxels (num_voxels),651,7.652546,7.327451,7.925699,0.598248,1
+subclavian_artery_right,Volume in Cubic Millimeters (volume_mm3),651,8.868608,8.543384,9.141841,0.598457,1
+subclavian_artery_right,Relative Centroid X Position (centroid_x_rel),651,0.6242,0.6012,0.6587,0.0575,0
+subclavian_artery_right,Relative Centroid Y Position (centroid_y_rel),651,0.5074,0.4667,0.54965,0.08295,0
+subclavian_artery_right,Relative Centroid Z Position (centroid_z_rel),651,0.8804,0.64435,0.93135,0.287,0
+subclavian_artery_right,Relative Bounding Box Width (bbox_x_rel),651,0.2366,0.20695,0.2729,0.06595,0
+subclavian_artery_right,Relative Bounding Box Height (bbox_y_rel),651,0.0772,0.0625,0.0975,0.035,0
+subclavian_artery_right,Relative Bounding Box Depth (bbox_z_rel),651,0.089,0.05845,0.1231,0.06465,0
+subclavian_artery_right,Bounding Box Volume in Cubic Millimeters (bbox_volume_mm3),651,11.23879,10.895882,11.583815,0.687933,1
+subclavian_artery_right,Mask-to-Bounding-Box Fill Ratio (mask_to_bbox_ratio),651,0.0951,0.0796,0.1161,0.0365,0
+subclavian_artery_right,Mean Hounsfield Unit Intensity (mean_HU),651,132.29,84.66,225.26,140.6,0
+subclavian_artery_right,Median Hounsfield Unit Intensity (median_HU),651,135.0,88.0,229.0,141.0,0
+subclavian_artery_right,Hounsfield Unit Intensity Standard Deviation (std_HU),651,68.29,44.345,105.73,61.385,0
+subclavian_artery_right,5th Percentile Hounsfield Unit Intensity (p05_HU),651,33.0,-3.225,66.625,69.85,0
+subclavian_artery_right,95th Percentile Hounsfield Unit Intensity (p95_HU),651,218.05,144.0,366.1,222.1,0
+superior_vena_cava,Number of Voxels (num_voxels),682,8.660341,8.313239,8.911226,0.597987,1
+superior_vena_cava,Volume in Cubic Millimeters (volume_mm3),682,9.876614,9.529462,10.127527,0.598065,1
+superior_vena_cava,Relative Centroid X Position (centroid_x_rel),682,0.56445,0.54585,0.597075,0.051225,0
+superior_vena_cava,Relative Centroid Y Position (centroid_y_rel),682,0.5274,0.494125,0.5649,0.070775,0
+superior_vena_cava,Relative Centroid Z Position (centroid_z_rel),682,0.6568,0.56955,0.804775,0.235225,0
+superior_vena_cava,Relative Bounding Box Width (bbox_x_rel),682,0.0679,0.057125,0.0844,0.027275,0
+superior_vena_cava,Relative Bounding Box Height (bbox_y_rel),682,0.09105,0.074825,0.11385,0.039025,0
+superior_vena_cava,Relative Bounding Box Depth (bbox_z_rel),682,0.15265,0.11815,0.27395,0.1558,0
+superior_vena_cava,Bounding Box Volume in Cubic Millimeters (bbox_volume_mm3),682,10.977184,10.563563,11.257285,0.693723,1
+superior_vena_cava,Mask-to-Bounding-Box Fill Ratio (mask_to_bbox_ratio),682,0.3473,0.302,0.398,0.096,0
+superior_vena_cava,Mean Hounsfield Unit Intensity (mean_HU),682,154.92,107.045,272.53,165.485,0
+superior_vena_cava,Median Hounsfield Unit Intensity (median_HU),682,154.0,106.0,251.5,145.5,0
+superior_vena_cava,Hounsfield Unit Intensity Standard Deviation (std_HU),682,70.975,38.54,173.02,134.48,0
+superior_vena_cava,5th Percentile Hounsfield Unit Intensity (p05_HU),682,49.0,8.25,85.3,77.05,0
+superior_vena_cava,95th Percentile Hounsfield Unit Intensity (p95_HU),682,251.0,161.7,497.675,335.975,0
+thyroid_gland,Number of Voxels (num_voxels),625,8.249314,7.890208,8.516393,0.626185,1
+thyroid_gland,Volume in Cubic Millimeters (volume_mm3),625,9.465525,9.10634,9.732647,0.626307,1
+thyroid_gland,Relative Centroid X Position (centroid_x_rel),625,0.5016,0.4846,0.5182,0.0336,0
+thyroid_gland,Relative Centroid Y Position (centroid_y_rel),625,0.5584,0.5212,0.6022,0.081,0
+thyroid_gland,Relative Centroid Z Position (centroid_z_rel),625,0.9216,0.6574,0.9553,0.2979,0
+thyroid_gland,Relative Bounding Box Width (bbox_x_rel),625,0.1403,0.1188,0.1686,0.0498,0
+thyroid_gland,Relative Bounding Box Height (bbox_y_rel),625,0.0868,0.0721,0.1091,0.037,0
+thyroid_gland,Relative Bounding Box Depth (bbox_z_rel),625,0.0969,0.0656,0.1429,0.0773,0
+thyroid_gland,Bounding Box Volume in Cubic Millimeters (bbox_volume_mm3),625,11.010085,10.688507,11.35378,0.665273,1
+thyroid_gland,Mask-to-Bounding-Box Fill Ratio (mask_to_bbox_ratio),625,0.2128,0.1807,0.2427,0.062,0
+thyroid_gland,Mean Hounsfield Unit Intensity (mean_HU),625,125.93,96.55,149.77,53.22,0
+thyroid_gland,Median Hounsfield Unit Intensity (median_HU),625,128.0,97.0,152.0,55.0,0
+thyroid_gland,Hounsfield Unit Intensity Standard Deviation (std_HU),625,41.23,31.92,58.16,26.24,0
+thyroid_gland,5th Percentile Hounsfield Unit Intensity (p05_HU),625,53.0,24.0,78.0,54.0,0
+thyroid_gland,95th Percentile Hounsfield Unit Intensity (p95_HU),625,188.0,154.0,241.0,87.0,0
+trachea,Number of Voxels (num_voxels),708,9.165029,8.860322,9.422983,0.562661,1
+trachea,Volume in Cubic Millimeters (volume_mm3),708,10.38135,10.076617,10.639322,0.562704,1
+trachea,Relative Centroid X Position (centroid_x_rel),708,0.505,0.488875,0.52615,0.037275,0
+trachea,Relative Centroid Y Position (centroid_y_rel),708,0.4803,0.44185,0.51875,0.0769,0
+trachea,Relative Centroid Z Position (centroid_z_rel),708,0.7608,0.610175,0.8593,0.249125,0
+trachea,Relative Bounding Box Width (bbox_x_rel),708,0.2222,0.18675,0.2563,0.06955,0
+trachea,Relative Bounding Box Height (bbox_y_rel),708,0.18015,0.1413,0.224025,0.082725,0
+trachea,Relative Bounding Box Depth (bbox_z_rel),708,0.2917,0.18995,0.392325,0.202375,0
+trachea,Bounding Box Volume in Cubic Millimeters (bbox_volume_mm3),708,13.221173,12.667545,13.473531,0.805985,1
+trachea,Mask-to-Bounding-Box Fill Ratio (mask_to_bbox_ratio),708,0.0653,0.053,0.090325,0.037325,0
+trachea,Mean Hounsfield Unit Intensity (mean_HU),708,-868.635,-894.5175,-833.71,60.8075,0
+trachea,Median Hounsfield Unit Intensity (median_HU),708,-950.0,-970.0,-930.0,40.0,0
+trachea,Hounsfield Unit Intensity Standard Deviation (std_HU),708,196.595,177.415,219.67,42.255,0
+trachea,5th Percentile Hounsfield Unit Intensity (p05_HU),708,-1015.0,-1023.0,-1001.0,22.0,0
+trachea,95th Percentile Hounsfield Unit Intensity (p95_HU),708,-397.975,-459.0,-333.925,125.075,0
+urinary_bladder,Number of Voxels (num_voxels),492,10.632376,10.162161,11.131143,0.968982,1
+urinary_bladder,Volume in Cubic Millimeters (volume_mm3),492,11.848754,11.378529,12.347528,0.968999,1
+urinary_bladder,Relative Centroid X Position (centroid_x_rel),492,0.50095,0.486375,0.51635,0.029975,0
+urinary_bladder,Relative Centroid Y Position (centroid_y_rel),492,0.51065,0.47415,0.55775,0.0836,0
+urinary_bladder,Relative Centroid Z Position (centroid_z_rel),492,0.1608,0.125775,0.2182,0.092425,0
+urinary_bladder,Relative Bounding Box Width (bbox_x_rel),492,0.20345,0.174175,0.240675,0.0665,0
+urinary_bladder,Relative Bounding Box Height (bbox_y_rel),492,0.21565,0.177975,0.272275,0.0943,0
+urinary_bladder,Relative Bounding Box Depth (bbox_z_rel),492,0.0964,0.0692,0.1395,0.0703,0
+urinary_bladder,Bounding Box Volume in Cubic Millimeters (bbox_volume_mm3),492,12.685372,12.256133,13.113053,0.856921,1
+urinary_bladder,Mask-to-Bounding-Box Fill Ratio (mask_to_bbox_ratio),492,0.44795,0.396125,0.499,0.102875,0
+urinary_bladder,Mean Hounsfield Unit Intensity (mean_HU),492,11.585,3.5375,19.585,16.0475,0
+urinary_bladder,Median Hounsfield Unit Intensity (median_HU),492,14.0,7.0,22.0,15.0,0
+urinary_bladder,Hounsfield Unit Intensity Standard Deviation (std_HU),492,36.915,29.335,58.1475,28.8125,0
+urinary_bladder,5th Percentile Hounsfield Unit Intensity (p05_HU),492,-46.5,-71.0,-26.0,45.0,0
+urinary_bladder,95th Percentile Hounsfield Unit Intensity (p95_HU),492,58.0,46.0,81.0,35.0,0
+vertebrae_C1,Number of Voxels (num_voxels),209,8.321178,8.146999,8.492491,0.345492,1
+vertebrae_C1,Volume in Cubic Millimeters (volume_mm3),209,9.537403,9.36319,9.708742,0.345552,1
+vertebrae_C1,Relative Centroid X Position (centroid_x_rel),209,0.4996,0.4807,0.5146,0.0339,0
+vertebrae_C1,Relative Centroid Y Position (centroid_y_rel),209,0.513,0.4655,0.5645,0.099,0
+vertebrae_C1,Relative Centroid Z Position (centroid_z_rel),209,0.7547,0.5607,0.8077,0.247,0
+vertebrae_C1,Relative Bounding Box Width (bbox_x_rel),209,0.2849,0.2156,0.3796,0.164,0
+vertebrae_C1,Relative Bounding Box Height (bbox_y_rel),209,0.1754,0.1317,0.2137,0.082,0
+vertebrae_C1,Relative Bounding Box Depth (bbox_z_rel),209,0.0898,0.0625,0.1104,0.0479,0
+vertebrae_C1,Bounding Box Volume in Cubic Millimeters (bbox_volume_mm3),209,11.425023,11.250266,11.619029,0.368763,1
+vertebrae_C1,Mask-to-Bounding-Box Fill Ratio (mask_to_bbox_ratio),209,0.1522,0.1382,0.167,0.0288,0
+vertebrae_C1,Mean Hounsfield Unit Intensity (mean_HU),209,595.87,511.33,692.68,181.35,0
+vertebrae_C1,Median Hounsfield Unit Intensity (median_HU),209,515.0,440.0,621.0,181.0,0
+vertebrae_C1,Hounsfield Unit Intensity Standard Deviation (std_HU),209,355.01,277.89,416.34,138.45,0
+vertebrae_C1,5th Percentile Hounsfield Unit Intensity (p05_HU),209,139.3,65.0,183.0,118.0,0
+vertebrae_C1,95th Percentile Hounsfield Unit Intensity (p95_HU),209,1306.0,1088.95,1464.0,375.05,0
+vertebrae_C2,Number of Voxels (num_voxels),216,8.534632,8.349009,8.725425,0.376416,1
+vertebrae_C2,Volume in Cubic Millimeters (volume_mm3),216,9.750889,9.565238,9.941706,0.376468,1
+vertebrae_C2,Relative Centroid X Position (centroid_x_rel),216,0.4969,0.48065,0.512075,0.031425,0
+vertebrae_C2,Relative Centroid Y Position (centroid_y_rel),216,0.50675,0.45855,0.5552,0.09665,0
+vertebrae_C2,Relative Centroid Z Position (centroid_z_rel),216,0.70485,0.5355,0.7782,0.2427,0
+vertebrae_C2,Relative Bounding Box Width (bbox_x_rel),216,0.1914,0.1316,0.262125,0.130525,0
+vertebrae_C2,Relative Bounding Box Height (bbox_y_rel),216,0.1921,0.1311,0.236975,0.105875,0
+vertebrae_C2,Relative Bounding Box Depth (bbox_z_rel),216,0.1352,0.0705,0.179925,0.109425,0
+vertebrae_C2,Bounding Box Volume in Cubic Millimeters (bbox_volume_mm3),216,11.749909,11.489907,11.917397,0.42749,1
+vertebrae_C2,Mask-to-Bounding-Box Fill Ratio (mask_to_bbox_ratio),216,0.1441,0.1285,0.160775,0.032275,0
+vertebrae_C2,Mean Hounsfield Unit Intensity (mean_HU),216,538.945,450.7375,682.335,231.5975,0
+vertebrae_C2,Median Hounsfield Unit Intensity (median_HU),216,469.5,382.375,611.625,229.25,0
+vertebrae_C2,Hounsfield Unit Intensity Standard Deviation (std_HU),216,299.45,241.4025,371.73,130.3275,0
+vertebrae_C2,5th Percentile Hounsfield Unit Intensity (p05_HU),216,168.0,96.75,218.925,122.175,0
+vertebrae_C2,95th Percentile Hounsfield Unit Intensity (p95_HU),216,1188.475,951.65,1386.55,434.9,0
+vertebrae_C3,Number of Voxels (num_voxels),205,8.223627,8.016648,8.393895,0.377247,1
+vertebrae_C3,Volume in Cubic Millimeters (volume_mm3),205,9.439833,9.232811,9.610131,0.37732,1
+vertebrae_C3,Relative Centroid X Position (centroid_x_rel),205,0.4966,0.4803,0.5126,0.0323,0
+vertebrae_C3,Relative Centroid Y Position (centroid_y_rel),205,0.502,0.4636,0.56,0.0964,0
+vertebrae_C3,Relative Centroid Z Position (centroid_z_rel),205,0.6574,0.5612,0.7643,0.2031,0
+vertebrae_C3,Relative Bounding Box Width (bbox_x_rel),205,0.1919,0.1404,0.2621,0.1217,0
+vertebrae_C3,Relative Bounding Box Height (bbox_y_rel),205,0.171,0.1227,0.2177,0.095,0
+vertebrae_C3,Relative Bounding Box Depth (bbox_z_rel),205,0.0867,0.0429,0.1132,0.0703,0
+vertebrae_C3,Bounding Box Volume in Cubic Millimeters (bbox_volume_mm3),205,11.152945,10.958792,11.346711,0.387919,1
+vertebrae_C3,Mask-to-Bounding-Box Fill Ratio (mask_to_bbox_ratio),205,0.1789,0.1656,0.1947,0.0291,0
+vertebrae_C3,Mean Hounsfield Unit Intensity (mean_HU),205,510.59,432.04,614.84,182.8,0
+vertebrae_C3,Median Hounsfield Unit Intensity (median_HU),205,445.0,377.0,556.0,179.0,0
+vertebrae_C3,Hounsfield Unit Intensity Standard Deviation (std_HU),205,267.76,212.64,343.96,131.32,0
+vertebrae_C3,5th Percentile Hounsfield Unit Intensity (p05_HU),205,177.0,106.0,209.0,103.0,0
+vertebrae_C3,95th Percentile Hounsfield Unit Intensity (p95_HU),205,1071.05,867.7,1291.6,423.9,0
+vertebrae_C4,Number of Voxels (num_voxels),216,8.208625,8.002694,8.373727,0.371033,1
+vertebrae_C4,Volume in Cubic Millimeters (volume_mm3),216,9.424829,9.218854,9.58996,0.371105,1
+vertebrae_C4,Relative Centroid X Position (centroid_x_rel),216,0.4957,0.48035,0.511625,0.031275,0
+vertebrae_C4,Relative Centroid Y Position (centroid_y_rel),216,0.49105,0.454025,0.554875,0.10085,0
+vertebrae_C4,Relative Centroid Z Position (centroid_z_rel),216,0.60675,0.50305,0.7557,0.25265,0
+vertebrae_C4,Relative Bounding Box Width (bbox_x_rel),216,0.1913,0.14575,0.25345,0.1077,0
+vertebrae_C4,Relative Bounding Box Height (bbox_y_rel),216,0.16485,0.119625,0.21775,0.098125,0
+vertebrae_C4,Relative Bounding Box Depth (bbox_z_rel),216,0.085,0.041125,0.114575,0.07345,0
+vertebrae_C4,Bounding Box Volume in Cubic Millimeters (bbox_volume_mm3),216,11.185121,10.91587,11.381892,0.466023,1
+vertebrae_C4,Mask-to-Bounding-Box Fill Ratio (mask_to_bbox_ratio),216,0.1703,0.1593,0.18735,0.02805,0
+vertebrae_C4,Mean Hounsfield Unit Intensity (mean_HU),216,539.325,456.6225,638.55,181.9275,0
+vertebrae_C4,Median Hounsfield Unit Intensity (median_HU),216,476.0,407.375,580.0,172.625,0
+vertebrae_C4,Hounsfield Unit Intensity Standard Deviation (std_HU),216,267.365,223.155,341.9975,118.8425,0
+vertebrae_C4,5th Percentile Hounsfield Unit Intensity (p05_HU),216,192.65,131.0,238.0,107.0,0
+vertebrae_C4,95th Percentile Hounsfield Unit Intensity (p95_HU),216,1080.55,898.075,1317.0875,419.0125,0
+vertebrae_C5,Number of Voxels (num_voxels),276,8.198775,7.563213,8.416708,0.853495,1
+vertebrae_C5,Volume in Cubic Millimeters (volume_mm3),276,9.414977,8.779243,9.632949,0.853705,1
+vertebrae_C5,Relative Centroid X Position (centroid_x_rel),276,0.49575,0.47645,0.51055,0.0341,0
+vertebrae_C5,Relative Centroid Y Position (centroid_y_rel),276,0.4891,0.44495,0.550725,0.105775,0
+vertebrae_C5,Relative Centroid Z Position (centroid_z_rel),276,0.67875,0.476675,0.973775,0.4971,0
+vertebrae_C5,Relative Bounding Box Width (bbox_x_rel),276,0.1718,0.11975,0.237075,0.117325,0
+vertebrae_C5,Relative Bounding Box Height (bbox_y_rel),276,0.15215,0.0961,0.211925,0.115825,0
+vertebrae_C5,Relative Bounding Box Depth (bbox_z_rel),276,0.0716,0.032775,0.1132,0.080425,0
+vertebrae_C5,Bounding Box Volume in Cubic Millimeters (bbox_volume_mm3),276,11.240874,10.76949,11.459219,0.689728,1
+vertebrae_C5,Mask-to-Bounding-Box Fill Ratio (mask_to_bbox_ratio),276,0.1645,0.148675,0.189025,0.04035,0
+vertebrae_C5,Mean Hounsfield Unit Intensity (mean_HU),276,499.965,421.6,597.8575,176.2575,0
+vertebrae_C5,Median Hounsfield Unit Intensity (median_HU),276,447.0,381.125,541.875,160.75,0
+vertebrae_C5,Hounsfield Unit Intensity Standard Deviation (std_HU),276,236.505,184.9425,312.75,127.8075,0
+vertebrae_C5,5th Percentile Hounsfield Unit Intensity (p05_HU),276,191.25,128.0,240.45,112.45,0
+vertebrae_C5,95th Percentile Hounsfield Unit Intensity (p95_HU),276,964.35,779.45,1210.625,431.175,0
+vertebrae_C6,Number of Voxels (num_voxels),455,7.844241,5.975061,8.375398,2.400337,1
+vertebrae_C6,Volume in Cubic Millimeters (volume_mm3),455,9.06036,7.189664,9.591631,2.401967,1
+vertebrae_C6,Relative Centroid X Position (centroid_x_rel),455,0.4981,0.47935,0.5145,0.03515,0
+vertebrae_C6,Relative Centroid Y Position (centroid_y_rel),455,0.486,0.4371,0.537,0.0999,0
+vertebrae_C6,Relative Centroid Z Position (centroid_z_rel),455,0.9748,0.4973,0.9907,0.4934,0
+vertebrae_C6,Relative Bounding Box Width (bbox_x_rel),455,0.1384,0.0985,0.1977,0.0992,0
+vertebrae_C6,Relative Bounding Box Height (bbox_y_rel),455,0.1155,0.0454,0.2029,0.1575,0
+vertebrae_C6,Relative Bounding Box Depth (bbox_z_rel),455,0.0426,0.02235,0.08585,0.0635,0
+vertebrae_C6,Bounding Box Volume in Cubic Millimeters (bbox_volume_mm3),455,10.932064,8.595889,11.519121,2.923233,1
+vertebrae_C6,Mask-to-Bounding-Box Fill Ratio (mask_to_bbox_ratio),455,0.169,0.14395,0.26465,0.1207,0
+vertebrae_C6,Mean Hounsfield Unit Intensity (mean_HU),455,434.74,371.06,527.875,156.815,0
+vertebrae_C6,Median Hounsfield Unit Intensity (median_HU),455,402.0,339.0,483.0,144.0,0
+vertebrae_C6,Hounsfield Unit Intensity Standard Deviation (std_HU),455,191.72,138.815,253.345,114.53,0
+vertebrae_C6,5th Percentile Hounsfield Unit Intensity (p05_HU),455,182.0,136.925,229.925,93.0,0
+vertebrae_C6,95th Percentile Hounsfield Unit Intensity (p95_HU),455,792.0,653.575,994.7,341.125,0
+vertebrae_C7,Number of Voxels (num_voxels),607,8.288534,7.538739,8.60089,1.062151,1
+vertebrae_C7,Volume in Cubic Millimeters (volume_mm3),607,9.504753,8.754759,9.817156,1.062397,1
+vertebrae_C7,Relative Centroid X Position (centroid_x_rel),607,0.4969,0.47965,0.5133,0.03365,0
+vertebrae_C7,Relative Centroid Y Position (centroid_y_rel),607,0.4543,0.4084,0.5005,0.0921,0
+vertebrae_C7,Relative Centroid Z Position (centroid_z_rel),607,0.9703,0.67975,0.98645,0.3067,0
+vertebrae_C7,Relative Bounding Box Width (bbox_x_rel),607,0.1782,0.14055,0.2175,0.07695,0
+vertebrae_C7,Relative Bounding Box Height (bbox_y_rel),607,0.1597,0.1076,0.21655,0.10895,0
+vertebrae_C7,Relative Bounding Box Depth (bbox_z_rel),607,0.0535,0.0343,0.09405,0.05975,0
+vertebrae_C7,Bounding Box Volume in Cubic Millimeters (bbox_volume_mm3),607,11.538603,10.572152,11.907335,1.335183,1
+vertebrae_C7,Mask-to-Bounding-Box Fill Ratio (mask_to_bbox_ratio),607,0.1341,0.11755,0.16805,0.0505,0
+vertebrae_C7,Mean Hounsfield Unit Intensity (mean_HU),607,374.29,312.58,436.355,123.775,0
+vertebrae_C7,Median Hounsfield Unit Intensity (median_HU),607,330.5,277.0,384.75,107.75,0
+vertebrae_C7,Hounsfield Unit Intensity Standard Deviation (std_HU),607,198.9,150.24,249.635,99.395,0
+vertebrae_C7,5th Percentile Hounsfield Unit Intensity (p05_HU),607,123.0,85.5,161.0,75.5,0
+vertebrae_C7,95th Percentile Hounsfield Unit Intensity (p95_HU),607,761.0,613.525,927.075,313.55,0
+vertebrae_L1,Number of Voxels (num_voxels),690,9.616172,9.408679,9.777953,0.369274,1
+vertebrae_L1,Volume in Cubic Millimeters (volume_mm3),690,10.83252,10.625016,10.994308,0.369292,1
+vertebrae_L1,Relative Centroid X Position (centroid_x_rel),690,0.49715,0.483525,0.5133,0.029775,0
+vertebrae_L1,Relative Centroid Y Position (centroid_y_rel),690,0.3489,0.31155,0.385525,0.073975,0
+vertebrae_L1,Relative Centroid Z Position (centroid_z_rel),690,0.51265,0.1467,0.66155,0.51485,0
+vertebrae_L1,Relative Bounding Box Width (bbox_x_rel),690,0.18785,0.164,0.21085,0.04685,0
+vertebrae_L1,Relative Bounding Box Height (bbox_y_rel),690,0.2183,0.193125,0.247,0.053875,0
+vertebrae_L1,Relative Bounding Box Depth (bbox_z_rel),690,0.10945,0.0796,0.137175,0.057575,0
+vertebrae_L1,Bounding Box Volume in Cubic Millimeters (bbox_volume_mm3),690,12.630509,12.40032,12.830652,0.430332,1
+vertebrae_L1,Mask-to-Bounding-Box Fill Ratio (mask_to_bbox_ratio),690,0.1651,0.149625,0.1874,0.037775,0
+vertebrae_L1,Mean Hounsfield Unit Intensity (mean_HU),690,307.435,259.8775,357.15,97.2725,0
+vertebrae_L1,Median Hounsfield Unit Intensity (median_HU),690,239.5,201.0,283.0,82.0,0
+vertebrae_L1,Hounsfield Unit Intensity Standard Deviation (std_HU),690,223.505,191.255,262.8525,71.5975,0
+vertebrae_L1,5th Percentile Hounsfield Unit Intensity (p05_HU),690,78.0,36.0,119.0,83.0,0
+vertebrae_L1,95th Percentile Hounsfield Unit Intensity (p95_HU),690,791.0,673.025,932.225,259.2,0
+vertebrae_L2,Number of Voxels (num_voxels),615,9.706073,9.48888,9.853956,0.365076,1
+vertebrae_L2,Volume in Cubic Millimeters (volume_mm3),615,10.922425,10.705222,11.070314,0.365092,1
+vertebrae_L2,Relative Centroid X Position (centroid_x_rel),615,0.4974,0.4817,0.51285,0.03115,0
+vertebrae_L2,Relative Centroid Y Position (centroid_y_rel),615,0.3715,0.33455,0.40855,0.074,0
+vertebrae_L2,Relative Centroid Z Position (centroid_z_rel),615,0.4716,0.2635,0.63575,0.37225,0
+vertebrae_L2,Relative Bounding Box Width (bbox_x_rel),615,0.2067,0.1828,0.23,0.0472,0
+vertebrae_L2,Relative Bounding Box Height (bbox_y_rel),615,0.2278,0.1993,0.2612,0.0619,0
+vertebrae_L2,Relative Bounding Box Depth (bbox_z_rel),615,0.0959,0.0808,0.12825,0.04745,0
+vertebrae_L2,Bounding Box Volume in Cubic Millimeters (bbox_volume_mm3),615,12.840149,12.612241,13.030907,0.418666,1
+vertebrae_L2,Mask-to-Bounding-Box Fill Ratio (mask_to_bbox_ratio),615,0.1456,0.1337,0.16,0.0263,0
+vertebrae_L2,Mean Hounsfield Unit Intensity (mean_HU),615,319.44,272.45,371.1,98.65,0
+vertebrae_L2,Median Hounsfield Unit Intensity (median_HU),615,249.0,212.0,295.0,83.0,0
+vertebrae_L2,Hounsfield Unit Intensity Standard Deviation (std_HU),615,231.8,200.94,270.545,69.605,0
+vertebrae_L2,5th Percentile Hounsfield Unit Intensity (p05_HU),615,80.0,42.0,120.5,78.5,0
+vertebrae_L2,95th Percentile Hounsfield Unit Intensity (p95_HU),615,824.35,693.5,967.0,273.5,0
+vertebrae_L3,Number of Voxels (num_voxels),557,9.819889,9.639262,9.968526,0.329264,1
+vertebrae_L3,Volume in Cubic Millimeters (volume_mm3),557,11.036246,10.855611,11.184888,0.329277,1
+vertebrae_L3,Relative Centroid X Position (centroid_x_rel),557,0.4966,0.4819,0.5136,0.0317,0
+vertebrae_L3,Relative Centroid Y Position (centroid_y_rel),557,0.3877,0.3526,0.4254,0.0728,0
+vertebrae_L3,Relative Centroid Z Position (centroid_z_rel),557,0.4321,0.3705,0.5955,0.225,0
+vertebrae_L3,Relative Bounding Box Width (bbox_x_rel),557,0.2325,0.2042,0.2593,0.0551,0
+vertebrae_L3,Relative Bounding Box Height (bbox_y_rel),557,0.2348,0.2099,0.268,0.0581,0
+vertebrae_L3,Relative Bounding Box Depth (bbox_z_rel),557,0.0936,0.0793,0.1253,0.046,0
+vertebrae_L3,Bounding Box Volume in Cubic Millimeters (bbox_volume_mm3),557,12.976964,12.787781,13.144897,0.357115,1
+vertebrae_L3,Mask-to-Bounding-Box Fill Ratio (mask_to_bbox_ratio),557,0.144,0.132,0.1549,0.0229,0
+vertebrae_L3,Mean Hounsfield Unit Intensity (mean_HU),557,324.04,278.18,381.19,103.01,0
+vertebrae_L3,Median Hounsfield Unit Intensity (median_HU),557,254.0,215.0,300.0,85.0,0
+vertebrae_L3,Hounsfield Unit Intensity Standard Deviation (std_HU),557,233.7,200.56,270.0,69.44,0
+vertebrae_L3,5th Percentile Hounsfield Unit Intensity (p05_HU),557,81.0,43.0,127.0,84.0,0
+vertebrae_L3,95th Percentile Hounsfield Unit Intensity (p95_HU),557,826.4,714.0,965.0,251.0,0
+vertebrae_L4,Number of Voxels (num_voxels),548,9.828818,9.664088,9.966544,0.302457,1
+vertebrae_L4,Volume in Cubic Millimeters (volume_mm3),548,11.045175,10.880438,11.182907,0.302469,1
+vertebrae_L4,Relative Centroid X Position (centroid_x_rel),548,0.49695,0.4833,0.512525,0.029225,0
+vertebrae_L4,Relative Centroid Y Position (centroid_y_rel),548,0.4027,0.364625,0.442,0.077375,0
+vertebrae_L4,Relative Centroid Z Position (centroid_z_rel),548,0.3855,0.34695,0.53255,0.1856,0
+vertebrae_L4,Relative Bounding Box Width (bbox_x_rel),548,0.2258,0.2,0.25,0.05,0
+vertebrae_L4,Relative Bounding Box Height (bbox_y_rel),548,0.2345,0.207125,0.271525,0.0644,0
+vertebrae_L4,Relative Bounding Box Depth (bbox_z_rel),548,0.0913,0.074875,0.1176,0.042725,0
+vertebrae_L4,Bounding Box Volume in Cubic Millimeters (bbox_volume_mm3),548,12.838267,12.670947,13.020902,0.349955,1
+vertebrae_L4,Mask-to-Bounding-Box Fill Ratio (mask_to_bbox_ratio),548,0.16425,0.150275,0.178575,0.0283,0
+vertebrae_L4,Mean Hounsfield Unit Intensity (mean_HU),548,331.545,283.835,383.765,99.93,0
+vertebrae_L4,Median Hounsfield Unit Intensity (median_HU),548,259.5,219.75,304.0,84.25,0
+vertebrae_L4,Hounsfield Unit Intensity Standard Deviation (std_HU),548,241.82,207.6675,278.4625,70.795,0
+vertebrae_L4,5th Percentile Hounsfield Unit Intensity (p05_HU),548,77.0,38.0,121.25,83.25,0
+vertebrae_L4,95th Percentile Hounsfield Unit Intensity (p95_HU),548,848.875,725.3,976.8375,251.5375,0
+vertebrae_L5,Number of Voxels (num_voxels),536,9.825283,9.675316,9.952849,0.277533,1
+vertebrae_L5,Volume in Cubic Millimeters (volume_mm3),536,11.04164,10.891667,11.169211,0.277544,1
+vertebrae_L5,Relative Centroid X Position (centroid_x_rel),536,0.499,0.485575,0.513025,0.02745,0
+vertebrae_L5,Relative Centroid Y Position (centroid_y_rel),536,0.3964,0.360275,0.4336,0.073325,0
+vertebrae_L5,Relative Centroid Z Position (centroid_z_rel),536,0.33985,0.30585,0.46535,0.1595,0
+vertebrae_L5,Relative Bounding Box Width (bbox_x_rel),536,0.23975,0.213925,0.2694,0.055475,0
+vertebrae_L5,Relative Bounding Box Height (bbox_y_rel),536,0.22285,0.197575,0.261825,0.06425,0
+vertebrae_L5,Relative Bounding Box Depth (bbox_z_rel),536,0.09385,0.075875,0.1251,0.049225,0
+vertebrae_L5,Bounding Box Volume in Cubic Millimeters (bbox_volume_mm3),536,12.916109,12.732279,13.056798,0.324518,1
+vertebrae_L5,Mask-to-Bounding-Box Fill Ratio (mask_to_bbox_ratio),536,0.15545,0.139525,0.17065,0.031125,0
+vertebrae_L5,Mean Hounsfield Unit Intensity (mean_HU),536,340.765,283.42,392.11,108.69,0
+vertebrae_L5,Median Hounsfield Unit Intensity (median_HU),536,265.0,223.0,313.25,90.25,0
+vertebrae_L5,Hounsfield Unit Intensity Standard Deviation (std_HU),536,238.39,204.8925,276.8825,71.99,0
+vertebrae_L5,5th Percentile Hounsfield Unit Intensity (p05_HU),536,77.0,39.75,118.25,78.5,0
+vertebrae_L5,95th Percentile Hounsfield Unit Intensity (p95_HU),536,842.5,728.5,972.25,243.75,0
+vertebrae_S1,Number of Voxels (num_voxels),515,9.545812,9.422787,9.672438,0.249651,1
+vertebrae_S1,Volume in Cubic Millimeters (volume_mm3),515,10.762157,10.639125,10.888789,0.249663,1
+vertebrae_S1,Relative Centroid X Position (centroid_x_rel),515,0.4992,0.4855,0.5142,0.0287,0
+vertebrae_S1,Relative Centroid Y Position (centroid_y_rel),515,0.368,0.32775,0.40245,0.0747,0
+vertebrae_S1,Relative Centroid Z Position (centroid_z_rel),515,0.3052,0.2706,0.41055,0.13995,0
+vertebrae_S1,Relative Bounding Box Width (bbox_x_rel),515,0.1619,0.1434,0.1797,0.0363,0
+vertebrae_S1,Relative Bounding Box Height (bbox_y_rel),515,0.1767,0.1526,0.20835,0.05575,0
+vertebrae_S1,Relative Bounding Box Depth (bbox_z_rel),515,0.0874,0.0722,0.11315,0.04095,0
+vertebrae_S1,Bounding Box Volume in Cubic Millimeters (bbox_volume_mm3),515,12.21583,12.056766,12.386933,0.330167,1
+vertebrae_S1,Mask-to-Bounding-Box Fill Ratio (mask_to_bbox_ratio),515,0.2343,0.21385,0.25425,0.0404,0
+vertebrae_S1,Mean Hounsfield Unit Intensity (mean_HU),515,320.44,268.05,377.045,108.995,0
+vertebrae_S1,Median Hounsfield Unit Intensity (median_HU),515,262.0,212.0,316.0,104.0,0
+vertebrae_S1,Hounsfield Unit Intensity Standard Deviation (std_HU),515,221.05,194.57,259.235,64.665,0
+vertebrae_S1,5th Percentile Hounsfield Unit Intensity (p05_HU),515,63.0,24.0,105.0,81.0,0
+vertebrae_S1,95th Percentile Hounsfield Unit Intensity (p95_HU),515,797.0,688.0,934.825,246.825,0
+vertebrae_T1,Number of Voxels (num_voxels),627,8.782169,8.584104,8.957639,0.373535,1
+vertebrae_T1,Volume in Cubic Millimeters (volume_mm3),627,9.998457,9.800367,10.173944,0.373576,1
+vertebrae_T1,Relative Centroid X Position (centroid_x_rel),627,0.4946,0.48005,0.5127,0.03265,0
+vertebrae_T1,Relative Centroid Y Position (centroid_y_rel),627,0.4107,0.36835,0.45205,0.0837,0
+vertebrae_T1,Relative Centroid Z Position (centroid_z_rel),627,0.9412,0.66565,0.9677,0.30205,0
+vertebrae_T1,Relative Bounding Box Width (bbox_x_rel),627,0.2131,0.1875,0.2487,0.0612,0
+vertebrae_T1,Relative Bounding Box Height (bbox_y_rel),627,0.192,0.1664,0.2459,0.0795,0
+vertebrae_T1,Relative Bounding Box Depth (bbox_z_rel),627,0.0872,0.0563,0.12345,0.06715,0
+vertebrae_T1,Bounding Box Volume in Cubic Millimeters (bbox_volume_mm3),627,12.132943,11.912633,12.341602,0.428969,1
+vertebrae_T1,Mask-to-Bounding-Box Fill Ratio (mask_to_bbox_ratio),627,0.1188,0.10955,0.1309,0.02135,0
+vertebrae_T1,Mean Hounsfield Unit Intensity (mean_HU),627,351.44,300.0,410.74,110.74,0
+vertebrae_T1,Median Hounsfield Unit Intensity (median_HU),627,297.0,254.0,347.0,93.0,0
+vertebrae_T1,Hounsfield Unit Intensity Standard Deviation (std_HU),627,213.12,182.165,256.58,74.415,0
+vertebrae_T1,5th Percentile Hounsfield Unit Intensity (p05_HU),627,93.0,50.0,131.375,81.375,0
+vertebrae_T1,95th Percentile Hounsfield Unit Intensity (p95_HU),627,781.1,676.975,923.9,246.925,0
+vertebrae_T10,Number of Voxels (num_voxels),769,9.322418,9.098179,9.473627,0.375448,1
+vertebrae_T10,Volume in Cubic Millimeters (volume_mm3),769,10.538751,10.314496,10.689968,0.375473,1
+vertebrae_T10,Relative Centroid X Position (centroid_x_rel),769,0.4993,0.4853,0.5163,0.031,0
+vertebrae_T10,Relative Centroid Y Position (centroid_y_rel),769,0.2937,0.247,0.3307,0.0837,0
+vertebrae_T10,Relative Centroid Z Position (centroid_z_rel),769,0.6228,0.3322,0.7283,0.3961,0
+vertebrae_T10,Relative Bounding Box Width (bbox_x_rel),769,0.16,0.1429,0.1822,0.0393,0
+vertebrae_T10,Relative Bounding Box Height (bbox_y_rel),769,0.2024,0.1798,0.2353,0.0555,0
+vertebrae_T10,Relative Bounding Box Depth (bbox_z_rel),769,0.1138,0.0788,0.1674,0.0886,0
+vertebrae_T10,Bounding Box Volume in Cubic Millimeters (bbox_volume_mm3),769,12.305228,12.076937,12.492133,0.415195,1
+vertebrae_T10,Mask-to-Bounding-Box Fill Ratio (mask_to_bbox_ratio),769,0.1672,0.1521,0.1861,0.034,0
+vertebrae_T10,Mean Hounsfield Unit Intensity (mean_HU),769,318.42,273.2,370.33,97.13,0
+vertebrae_T10,Median Hounsfield Unit Intensity (median_HU),769,252.0,214.0,299.0,85.0,0
+vertebrae_T10,Hounsfield Unit Intensity Standard Deviation (std_HU),769,218.91,180.98,263.44,82.46,0
+vertebrae_T10,5th Percentile Hounsfield Unit Intensity (p05_HU),769,89.0,50.0,132.0,82.0,0
+vertebrae_T10,95th Percentile Hounsfield Unit Intensity (p95_HU),769,792.0,661.45,934.0,272.55,0
+vertebrae_T11,Number of Voxels (num_voxels),780,9.406893,9.202963,9.564337,0.361374,1
+vertebrae_T11,Volume in Cubic Millimeters (volume_mm3),780,10.623231,10.419288,10.780683,0.361395,1
+vertebrae_T11,Relative Centroid X Position (centroid_x_rel),780,0.49855,0.484875,0.515925,0.03105,0
+vertebrae_T11,Relative Centroid Y Position (centroid_y_rel),780,0.3065,0.2656,0.346775,0.081175,0
+vertebrae_T11,Relative Centroid Z Position (centroid_z_rel),780,0.5869,0.253,0.703125,0.450125,0
+vertebrae_T11,Relative Bounding Box Width (bbox_x_rel),780,0.1452,0.12955,0.16515,0.0356,0
+vertebrae_T11,Relative Bounding Box Height (bbox_y_rel),780,0.2024,0.180275,0.2353,0.055025,0
+vertebrae_T11,Relative Bounding Box Depth (bbox_z_rel),780,0.10925,0.0756,0.15475,0.07915,0
+vertebrae_T11,Bounding Box Volume in Cubic Millimeters (bbox_volume_mm3),780,12.159741,11.966637,12.343622,0.376985,1
+vertebrae_T11,Mask-to-Bounding-Box Fill Ratio (mask_to_bbox_ratio),780,0.21155,0.193,0.23045,0.03745,0
+vertebrae_T11,Mean Hounsfield Unit Intensity (mean_HU),780,313.005,267.2275,364.1575,96.93,0
+vertebrae_T11,Median Hounsfield Unit Intensity (median_HU),780,243.5,208.0,289.0,81.0,0
+vertebrae_T11,Hounsfield Unit Intensity Standard Deviation (std_HU),780,219.435,183.605,261.55,77.945,0
+vertebrae_T11,5th Percentile Hounsfield Unit Intensity (p05_HU),780,89.0,47.7875,127.0,79.2125,0
+vertebrae_T11,95th Percentile Hounsfield Unit Intensity (p95_HU),780,790.975,667.0,930.625,263.625,0
+vertebrae_T12,Number of Voxels (num_voxels),760,9.490658,9.281404,9.636441,0.355037,1
+vertebrae_T12,Volume in Cubic Millimeters (volume_mm3),760,10.707,10.497734,10.85279,0.355056,1
+vertebrae_T12,Relative Centroid X Position (centroid_x_rel),760,0.49825,0.48385,0.51415,0.0303,0
+vertebrae_T12,Relative Centroid Y Position (centroid_y_rel),760,0.32565,0.287775,0.364525,0.07675,0
+vertebrae_T12,Relative Centroid Z Position (centroid_z_rel),760,0.5428,0.171975,0.660225,0.48825,0
+vertebrae_T12,Relative Bounding Box Width (bbox_x_rel),760,0.13555,0.121275,0.15285,0.031575,0
+vertebrae_T12,Relative Bounding Box Height (bbox_y_rel),760,0.20725,0.185575,0.2398,0.054225,0
+vertebrae_T12,Relative Bounding Box Depth (bbox_z_rel),760,0.1095,0.0795,0.147225,0.067725,0
+vertebrae_T12,Bounding Box Volume in Cubic Millimeters (bbox_volume_mm3),760,12.167628,11.965253,12.339322,0.37407,1
+vertebrae_T12,Mask-to-Bounding-Box Fill Ratio (mask_to_bbox_ratio),760,0.2327,0.2132,0.252075,0.038875,0
+vertebrae_T12,Mean Hounsfield Unit Intensity (mean_HU),760,295.43,253.63,345.6425,92.0125,0
+vertebrae_T12,Median Hounsfield Unit Intensity (median_HU),760,232.0,196.0,272.0,76.0,0
+vertebrae_T12,Hounsfield Unit Intensity Standard Deviation (std_HU),760,211.95,180.5025,254.505,74.0025,0
+vertebrae_T12,5th Percentile Hounsfield Unit Intensity (p05_HU),760,79.0,40.0,118.0,78.0,0
+vertebrae_T12,95th Percentile Hounsfield Unit Intensity (p95_HU),760,756.0,644.7375,894.0,249.2625,0
+vertebrae_T2,Number of Voxels (num_voxels),645,8.827908,8.630343,8.971956,0.341613,1
+vertebrae_T2,Volume in Cubic Millimeters (volume_mm3),645,10.0442,9.846613,10.188262,0.341649,1
+vertebrae_T2,Relative Centroid X Position (centroid_x_rel),645,0.4946,0.4789,0.5125,0.0336,0
+vertebrae_T2,Relative Centroid Y Position (centroid_y_rel),645,0.3762,0.3313,0.4157,0.0844,0
+vertebrae_T2,Relative Centroid Z Position (centroid_z_rel),645,0.894,0.6482,0.9399,0.2917,0
+vertebrae_T2,Relative Bounding Box Width (bbox_x_rel),645,0.1977,0.1754,0.2308,0.0554,0
+vertebrae_T2,Relative Bounding Box Height (bbox_y_rel),645,0.1992,0.1729,0.2473,0.0744,0
+vertebrae_T2,Relative Bounding Box Depth (bbox_z_rel),645,0.1084,0.0661,0.1447,0.0786,0
+vertebrae_T2,Bounding Box Volume in Cubic Millimeters (bbox_volume_mm3),645,12.254205,12.05657,12.424103,0.367533,1
+vertebrae_T2,Mask-to-Bounding-Box Fill Ratio (mask_to_bbox_ratio),645,0.1093,0.1012,0.1198,0.0186,0
+vertebrae_T2,Mean Hounsfield Unit Intensity (mean_HU),645,337.06,292.26,398.02,105.76,0
+vertebrae_T2,Median Hounsfield Unit Intensity (median_HU),645,283.0,246.0,335.0,89.0,0
+vertebrae_T2,Hounsfield Unit Intensity Standard Deviation (std_HU),645,211.1,177.64,259.12,81.48,0
+vertebrae_T2,5th Percentile Hounsfield Unit Intensity (p05_HU),645,84.0,37.0,121.0,84.0,0
+vertebrae_T2,95th Percentile Hounsfield Unit Intensity (p95_HU),645,775.3,658.0,919.75,261.75,0
+vertebrae_T3,Number of Voxels (num_voxels),660,8.770905,8.592068,8.931915,0.339846,1
+vertebrae_T3,Volume in Cubic Millimeters (volume_mm3),660,9.987191,9.808333,10.148217,0.339884,1
+vertebrae_T3,Relative Centroid X Position (centroid_x_rel),660,0.49565,0.479475,0.513475,0.034,0
+vertebrae_T3,Relative Centroid Y Position (centroid_y_rel),660,0.34265,0.293875,0.3803,0.086425,0
+vertebrae_T3,Relative Centroid Z Position (centroid_z_rel),660,0.842,0.6545,0.911525,0.257025,0
+vertebrae_T3,Relative Bounding Box Width (bbox_x_rel),660,0.1818,0.161675,0.214375,0.0527,0
+vertebrae_T3,Relative Bounding Box Height (bbox_y_rel),660,0.206,0.177275,0.254275,0.077,0
+vertebrae_T3,Relative Bounding Box Depth (bbox_z_rel),660,0.10745,0.0654,0.14125,0.07585,0
+vertebrae_T3,Bounding Box Volume in Cubic Millimeters (bbox_volume_mm3),660,12.167523,11.943503,12.349151,0.405648,1
+vertebrae_T3,Mask-to-Bounding-Box Fill Ratio (mask_to_bbox_ratio),660,0.11445,0.10475,0.12705,0.0223,0
+vertebrae_T3,Mean Hounsfield Unit Intensity (mean_HU),660,334.91,286.1675,396.9575,110.79,0
+vertebrae_T3,Median Hounsfield Unit Intensity (median_HU),660,280.0,240.75,332.0,91.25,0
+vertebrae_T3,Hounsfield Unit Intensity Standard Deviation (std_HU),660,213.68,179.65,257.8025,78.1525,0
+vertebrae_T3,5th Percentile Hounsfield Unit Intensity (p05_HU),660,80.0,31.75,119.0,87.25,0
+vertebrae_T3,95th Percentile Hounsfield Unit Intensity (p95_HU),660,773.575,654.6,917.9625,263.3625,0
+vertebrae_T4,Number of Voxels (num_voxels),659,8.827468,8.64215,8.980801,0.338651,1
+vertebrae_T4,Volume in Cubic Millimeters (volume_mm3),659,10.04376,9.858421,10.197108,0.338687,1
+vertebrae_T4,Relative Centroid X Position (centroid_x_rel),659,0.4975,0.48085,0.51545,0.0346,0
+vertebrae_T4,Relative Centroid Y Position (centroid_y_rel),659,0.3123,0.26355,0.35385,0.0903,0
+vertebrae_T4,Relative Centroid Z Position (centroid_z_rel),659,0.7863,0.64935,0.8795,0.23015,0
+vertebrae_T4,Relative Bounding Box Width (bbox_x_rel),659,0.1803,0.15895,0.21195,0.053,0
+vertebrae_T4,Relative Bounding Box Height (bbox_y_rel),659,0.2118,0.18405,0.25385,0.0698,0
+vertebrae_T4,Relative Bounding Box Depth (bbox_z_rel),659,0.1092,0.06735,0.14565,0.0783,0
+vertebrae_T4,Bounding Box Volume in Cubic Millimeters (bbox_volume_mm3),659,12.180279,11.959222,12.367723,0.408501,1
+vertebrae_T4,Mask-to-Bounding-Box Fill Ratio (mask_to_bbox_ratio),659,0.1185,0.1072,0.1314,0.0242,0
+vertebrae_T4,Mean Hounsfield Unit Intensity (mean_HU),659,329.21,280.55,387.415,106.865,0
+vertebrae_T4,Median Hounsfield Unit Intensity (median_HU),659,270.0,231.5,321.5,90.0,0
+vertebrae_T4,Hounsfield Unit Intensity Standard Deviation (std_HU),659,212.67,176.985,256.68,79.695,0
+vertebrae_T4,5th Percentile Hounsfield Unit Intensity (p05_HU),659,82.0,36.85,120.0,83.15,0
+vertebrae_T4,95th Percentile Hounsfield Unit Intensity (p95_HU),659,771.35,644.0,908.2,264.2,0
+vertebrae_T5,Number of Voxels (num_voxels),647,8.884333,8.674282,9.056138,0.381856,1
+vertebrae_T5,Volume in Cubic Millimeters (volume_mm3),647,10.100631,9.890558,10.272452,0.381894,1
+vertebrae_T5,Relative Centroid X Position (centroid_x_rel),647,0.5008,0.48375,0.518,0.03425,0
+vertebrae_T5,Relative Centroid Y Position (centroid_y_rel),647,0.2891,0.23985,0.3317,0.09185,0
+vertebrae_T5,Relative Centroid Z Position (centroid_z_rel),647,0.7293,0.63265,0.84265,0.21,0
+vertebrae_T5,Relative Bounding Box Width (bbox_x_rel),647,0.1784,0.1597,0.2081,0.0484,0
+vertebrae_T5,Relative Bounding Box Height (bbox_y_rel),647,0.2041,0.1772,0.24145,0.06425,0
+vertebrae_T5,Relative Bounding Box Depth (bbox_z_rel),647,0.1106,0.07735,0.1597,0.08235,0
+vertebrae_T5,Bounding Box Volume in Cubic Millimeters (bbox_volume_mm3),647,12.332602,12.058762,12.514223,0.455462,1
+vertebrae_T5,Mask-to-Bounding-Box Fill Ratio (mask_to_bbox_ratio),647,0.1103,0.0997,0.1236,0.0239,0
+vertebrae_T5,Mean Hounsfield Unit Intensity (mean_HU),647,323.61,275.38,384.91,109.53,0
+vertebrae_T5,Median Hounsfield Unit Intensity (median_HU),647,267.0,225.0,322.0,97.0,0
+vertebrae_T5,Hounsfield Unit Intensity Standard Deviation (std_HU),647,212.17,174.44,259.97,85.53,0
+vertebrae_T5,5th Percentile Hounsfield Unit Intensity (p05_HU),647,83.0,36.275,122.55,86.275,0
+vertebrae_T5,95th Percentile Hounsfield Unit Intensity (p95_HU),647,765.0,638.5,920.2,281.7,0
+vertebrae_T6,Number of Voxels (num_voxels),637,8.920122,8.687105,9.118225,0.43112,1
+vertebrae_T6,Volume in Cubic Millimeters (volume_mm3),637,10.136423,9.903382,10.334543,0.431162,1
+vertebrae_T6,Relative Centroid X Position (centroid_x_rel),637,0.502,0.4855,0.5196,0.0341,0
+vertebrae_T6,Relative Centroid Y Position (centroid_y_rel),637,0.279,0.2242,0.3201,0.0959,0
+vertebrae_T6,Relative Centroid Z Position (centroid_z_rel),637,0.6857,0.5965,0.812,0.2155,0
+vertebrae_T6,Relative Bounding Box Width (bbox_x_rel),637,0.1765,0.1579,0.2009,0.043,0
+vertebrae_T6,Relative Bounding Box Height (bbox_y_rel),637,0.1966,0.1691,0.2302,0.0611,0
+vertebrae_T6,Relative Bounding Box Depth (bbox_z_rel),637,0.1111,0.0835,0.1768,0.0933,0
+vertebrae_T6,Bounding Box Volume in Cubic Millimeters (bbox_volume_mm3),637,12.408293,12.119895,12.635892,0.515997,1
+vertebrae_T6,Mask-to-Bounding-Box Fill Ratio (mask_to_bbox_ratio),637,0.1041,0.0945,0.1175,0.023,0
+vertebrae_T6,Mean Hounsfield Unit Intensity (mean_HU),637,325.83,274.3,383.36,109.06,0
+vertebrae_T6,Median Hounsfield Unit Intensity (median_HU),637,266.0,223.0,314.0,91.0,0
+vertebrae_T6,Hounsfield Unit Intensity Standard Deviation (std_HU),637,212.77,176.43,257.2,80.77,0
+vertebrae_T6,5th Percentile Hounsfield Unit Intensity (p05_HU),637,88.0,45.0,131.0,86.0,0
+vertebrae_T6,95th Percentile Hounsfield Unit Intensity (p95_HU),637,771.3,643.0,909.0,266.0,0
+vertebrae_T7,Number of Voxels (num_voxels),638,9.033662,8.790916,9.206834,0.415918,1
+vertebrae_T7,Volume in Cubic Millimeters (volume_mm3),638,10.249973,10.007204,10.423159,0.415955,1
+vertebrae_T7,Relative Centroid X Position (centroid_x_rel),638,0.50255,0.4853,0.521025,0.035725,0
+vertebrae_T7,Relative Centroid Y Position (centroid_y_rel),638,0.27345,0.224725,0.314475,0.08975,0
+vertebrae_T7,Relative Centroid Z Position (centroid_z_rel),638,0.65155,0.540175,0.781225,0.24105,0
+vertebrae_T7,Relative Bounding Box Width (bbox_x_rel),638,0.1723,0.15365,0.196675,0.043025,0
+vertebrae_T7,Relative Bounding Box Height (bbox_y_rel),638,0.19425,0.1684,0.22555,0.05715,0
+vertebrae_T7,Relative Bounding Box Depth (bbox_z_rel),638,0.11995,0.08775,0.190275,0.102525,0
+vertebrae_T7,Bounding Box Volume in Cubic Millimeters (bbox_volume_mm3),638,12.474226,12.231107,12.690547,0.45944,1
+vertebrae_T7,Mask-to-Bounding-Box Fill Ratio (mask_to_bbox_ratio),638,0.1082,0.09845,0.1187,0.02025,0
+vertebrae_T7,Mean Hounsfield Unit Intensity (mean_HU),638,323.035,273.2625,381.8075,108.545,0
+vertebrae_T7,Median Hounsfield Unit Intensity (median_HU),638,258.0,221.0,313.875,92.875,0
+vertebrae_T7,Hounsfield Unit Intensity Standard Deviation (std_HU),638,214.965,174.2775,259.355,85.0775,0
+vertebrae_T7,5th Percentile Hounsfield Unit Intensity (p05_HU),638,90.975,49.0,134.0,85.0,0
+vertebrae_T7,95th Percentile Hounsfield Unit Intensity (p95_HU),638,776.625,643.0,911.0,268.0,0
+vertebrae_T8,Number of Voxels (num_voxels),687,9.096724,8.85915,9.276361,0.417211,1
+vertebrae_T8,Volume in Cubic Millimeters (volume_mm3),687,10.31304,10.075446,10.492691,0.417245,1
+vertebrae_T8,Relative Centroid X Position (centroid_x_rel),687,0.5013,0.48455,0.51905,0.0345,0
+vertebrae_T8,Relative Centroid Y Position (centroid_y_rel),687,0.2726,0.2203,0.3142,0.0939,0
+vertebrae_T8,Relative Centroid Z Position (centroid_z_rel),687,0.6658,0.47865,0.75035,0.2717,0
+vertebrae_T8,Relative Bounding Box Width (bbox_x_rel),687,0.168,0.1468,0.1946,0.0478,0
+vertebrae_T8,Relative Bounding Box Height (bbox_y_rel),687,0.1946,0.1676,0.22855,0.06095,0
+vertebrae_T8,Relative Bounding Box Depth (bbox_z_rel),687,0.1219,0.0854,0.1818,0.0964,0
+vertebrae_T8,Bounding Box Volume in Cubic Millimeters (bbox_volume_mm3),687,12.438759,12.165836,12.656849,0.491013,1
+vertebrae_T8,Mask-to-Bounding-Box Fill Ratio (mask_to_bbox_ratio),687,0.1194,0.10895,0.13305,0.0241,0
+vertebrae_T8,Mean Hounsfield Unit Intensity (mean_HU),687,322.94,271.685,380.32,108.635,0
+vertebrae_T8,Median Hounsfield Unit Intensity (median_HU),687,258.0,217.0,313.5,96.5,0
+vertebrae_T8,Hounsfield Unit Intensity Standard Deviation (std_HU),687,212.03,173.79,255.47,81.68,0
+vertebrae_T8,5th Percentile Hounsfield Unit Intensity (p05_HU),687,91.0,52.975,136.0,83.025,0
+vertebrae_T8,95th Percentile Hounsfield Unit Intensity (p95_HU),687,774.0,636.0,914.35,278.35,0
+vertebrae_T9,Number of Voxels (num_voxels),739,9.188299,8.9559,9.367344,0.411444,1
+vertebrae_T9,Volume in Cubic Millimeters (volume_mm3),739,10.404623,10.172204,10.583679,0.411475,1
+vertebrae_T9,Relative Centroid X Position (centroid_x_rel),739,0.4997,0.4846,0.51725,0.03265,0
+vertebrae_T9,Relative Centroid Y Position (centroid_y_rel),739,0.2785,0.2332,0.3176,0.0844,0
+vertebrae_T9,Relative Centroid Z Position (centroid_z_rel),739,0.6605,0.40985,0.729,0.31915,0
+vertebrae_T9,Relative Bounding Box Width (bbox_x_rel),739,0.1661,0.1462,0.1908,0.0446,0
+vertebrae_T9,Relative Bounding Box Height (bbox_y_rel),739,0.1983,0.17195,0.2314,0.05945,0
+vertebrae_T9,Relative Bounding Box Depth (bbox_z_rel),739,0.1168,0.08235,0.1752,0.09285,0
+vertebrae_T9,Bounding Box Volume in Cubic Millimeters (bbox_volume_mm3),739,12.388748,12.128465,12.590171,0.461706,1
+vertebrae_T9,Mask-to-Bounding-Box Fill Ratio (mask_to_bbox_ratio),739,0.1373,0.12565,0.1519,0.02625,0
+vertebrae_T9,Mean Hounsfield Unit Intensity (mean_HU),739,320.08,271.235,379.355,108.12,0
+vertebrae_T9,Median Hounsfield Unit Intensity (median_HU),739,257.0,214.0,310.0,96.0,0
+vertebrae_T9,Hounsfield Unit Intensity Standard Deviation (std_HU),739,213.71,175.74,257.635,81.895,0
+vertebrae_T9,5th Percentile Hounsfield Unit Intensity (p05_HU),739,88.0,49.0,132.0,83.0,0
+vertebrae_T9,95th Percentile Hounsfield Unit Intensity (p95_HU),739,781.0,644.325,917.625,273.3,0

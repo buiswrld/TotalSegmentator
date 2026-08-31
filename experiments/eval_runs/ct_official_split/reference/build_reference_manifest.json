@@ -1,0 +1,14 @@
+{
+  "created_at": "2026-08-31T08:56:14.361102+00:00",
+  "git_commit": "8ecd520",
+  "command": "experiments/pipeline/build_reference_table.py --dataset-dir /Volumes/Datasets/Totalsegmentator_dataset_v201 --modality ct --split train --output-csv experiments/eval_runs/ct_official_split/reference/reference_stats.csv",
+  "stage": "build_reference_table",
+  "dataset_dir": "/Volumes/Datasets/Totalsegmentator_dataset_v201",
+  "modality": "ct",
+  "split": "train",
+  "limit": null,
+  "workers": 10,
+  "min_voxels": 20,
+  "n_structures": 117,
+  "n_rows": 1755
+}
