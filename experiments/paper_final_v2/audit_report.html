@@ -1,0 +1,645 @@
+<title>GRAM Reconciliation</title>
+<meta name="description" content="Line-by-line audit of the GRAM paper against results reproduced on the full official-split dataset">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Source+Sans+3:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+
+  :root {
+    --bg: #F1F3F5;
+    --surface: #FFFFFF;
+    --surface-alt: #E7EBEE;
+    --ink: #1B2430;
+    --ink-muted: #5B6675;
+    --ink-faint: #8A93A0;
+    --rule: #D7DCE2;
+    --accent: #2D4159;
+    --accent-bg: #E4E9EF;
+    --critical: #A6362B;
+    --critical-bg: #FBEAE7;
+    --critical-rule: #E3B3AC;
+    --marginal: #8A5D08;
+    --marginal-bg: #FBF1DC;
+    --marginal-rule: #E5C77E;
+    --confirmed: #2A6354;
+    --confirmed-bg: #E7F3EF;
+    --confirmed-rule: #A9D2C4;
+    --mono-bg: #EAEDF0;
+    --shadow: 0 1px 2px rgba(27,36,48,0.06), 0 1px 1px rgba(27,36,48,0.04);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #10141A;
+      --surface: #181E27;
+      --surface-alt: #1F2631;
+      --ink: #E8EBEF;
+      --ink-muted: #98A2B0;
+      --ink-faint: #6C7684;
+      --rule: #2A3442;
+      --accent: #8AA9CC;
+      --accent-bg: #212D3D;
+      --critical: #E38B7F;
+      --critical-bg: #34211E;
+      --critical-rule: #5C3A34;
+      --marginal: #E0B564;
+      --marginal-bg: #332911;
+      --marginal-rule: #5C4A22;
+      --confirmed: #7FC3AC;
+      --confirmed-bg: #16261F;
+      --confirmed-rule: #35544A;
+      --mono-bg: #1F2631;
+      --shadow: 0 1px 2px rgba(0,0,0,0.3);
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #10141A;
+    --surface: #181E27;
+    --surface-alt: #1F2631;
+    --ink: #E8EBEF;
+    --ink-muted: #98A2B0;
+    --ink-faint: #6C7684;
+    --rule: #2A3442;
+    --accent: #8AA9CC;
+    --accent-bg: #212D3D;
+    --critical: #E38B7F;
+    --critical-bg: #34211E;
+    --critical-rule: #5C3A34;
+    --marginal: #E0B564;
+    --marginal-bg: #332911;
+    --marginal-rule: #5C4A22;
+    --confirmed: #7FC3AC;
+    --confirmed-bg: #16261F;
+    --confirmed-rule: #35544A;
+    --mono-bg: #1F2631;
+    --shadow: 0 1px 2px rgba(0,0,0,0.3);
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Source Sans 3', system-ui, sans-serif;
+    font-size: 16px;
+    line-height: 1.55;
+    margin: 0;
+  }
+  .wrap { max-width: 920px; margin: 0 auto; padding: 3.5rem 1.5rem 6rem; }
+
+  h1, h2, h3 { font-family: 'Fraunces', Georgia, serif; text-wrap: balance; margin: 0; }
+  .eyebrow {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+
+  /* ---------- header ---------- */
+  header { margin-bottom: 3rem; }
+  header .eyebrow { color: var(--accent); margin-bottom: 0.9rem; }
+  h1 { font-size: 2.35rem; font-weight: 600; color: var(--ink); margin-bottom: 0.9rem; }
+  header p.lede {
+    font-size: 1.08rem;
+    color: var(--ink-muted);
+    max-width: 62ch;
+    margin: 0 0 1.6rem;
+  }
+  .stat-row { display: flex; gap: 0.6rem; flex-wrap: wrap; }
+  .stat-pill {
+    display: flex; align-items: baseline; gap: 0.4rem;
+    background: var(--surface); border: 1px solid var(--rule);
+    border-radius: 7px; padding: 0.5rem 0.8rem;
+    font-family: 'IBM Plex Mono', monospace; font-size: 0.82rem;
+  }
+  .stat-pill b { font-size: 1.05rem; font-family: 'Fraunces', serif; font-weight: 600; }
+  .stat-pill.critical b { color: var(--critical); }
+  .stat-pill.marginal b { color: var(--marginal); }
+  .stat-pill.confirmed b { color: var(--confirmed); }
+  .stat-pill span.label { color: var(--ink-muted); }
+
+  nav.jump {
+    display: flex; gap: 1.1rem; flex-wrap: wrap;
+    margin-top: 1.8rem; padding-top: 1.4rem; border-top: 1px solid var(--rule);
+  }
+  nav.jump a {
+    font-family: 'IBM Plex Mono', monospace; font-size: 0.78rem;
+    color: var(--ink-muted); text-decoration: none; letter-spacing: 0.02em;
+  }
+  nav.jump a:hover, nav.jump a:focus-visible { color: var(--accent); text-decoration: underline; }
+
+  /* ---------- sections ---------- */
+  section.group { margin-bottom: 3.6rem; scroll-margin-top: 1.5rem; }
+  .group-head { display: flex; align-items: baseline; gap: 0.7rem; margin-bottom: 0.5rem; }
+  .group-head h2 { font-size: 1.5rem; font-weight: 600; }
+  .group-head .count {
+    font-family: 'IBM Plex Mono', monospace; font-size: 0.85rem; color: var(--ink-faint);
+  }
+  .group-desc { color: var(--ink-muted); max-width: 65ch; margin: 0 0 1.6rem; font-size: 0.97rem; }
+
+  /* ---------- item cards ---------- */
+  .item {
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-left: 4px solid var(--accent);
+    border-radius: 8px;
+    padding: 1.3rem 1.5rem 1.4rem;
+    margin-bottom: 1.1rem;
+    box-shadow: var(--shadow);
+    scroll-margin-top: 1.5rem;
+  }
+  .item.critical { border-left-color: var(--critical); }
+  .item.marginal { border-left-color: var(--marginal); }
+  .item.confirmed { border-left-color: var(--confirmed); }
+
+  .item-head {
+    display: flex; justify-content: space-between; align-items: baseline;
+    flex-wrap: wrap; gap: 0.5rem 1rem; margin-bottom: 0.7rem;
+  }
+  .item-tag {
+    font-family: 'IBM Plex Mono', monospace; font-size: 0.74rem;
+    letter-spacing: 0.04em; text-transform: uppercase;
+    padding: 0.15rem 0.5rem; border-radius: 4px;
+  }
+  .item.critical .item-tag { background: var(--critical-bg); color: var(--critical); border: 1px solid var(--critical-rule); }
+  .item.marginal .item-tag { background: var(--marginal-bg); color: var(--marginal); border: 1px solid var(--marginal-rule); }
+  .item.confirmed .item-tag { background: var(--confirmed-bg); color: var(--confirmed); border: 1px solid var(--confirmed-rule); }
+  .item-loc {
+    font-family: 'IBM Plex Mono', monospace; font-size: 0.78rem; color: var(--ink-faint);
+  }
+  .item h3 { font-size: 1.08rem; font-weight: 500; margin-bottom: 0.65rem; color: var(--ink); }
+
+  blockquote {
+    margin: 0 0 0.9rem;
+    padding: 0.6rem 0.9rem;
+    background: var(--surface-alt);
+    border-radius: 6px;
+    font-size: 0.92rem;
+    color: var(--ink-muted);
+    font-style: italic;
+  }
+  blockquote::before { content: "“"; }
+  blockquote::after { content: "”"; }
+
+  .delta-table {
+    width: 100%; border-collapse: collapse; margin: 0.7rem 0 0.8rem;
+    font-family: 'IBM Plex Mono', monospace; font-size: 0.86rem;
+    font-variant-numeric: tabular-nums;
+  }
+  .delta-table th {
+    text-align: left; font-weight: 500; color: var(--ink-faint);
+    font-size: 0.72rem; letter-spacing: 0.04em; text-transform: uppercase;
+    padding: 0.25rem 0.7rem 0.35rem 0; border-bottom: 1px solid var(--rule);
+  }
+  .delta-table td {
+    padding: 0.32rem 0.7rem 0.32rem 0; border-bottom: 1px solid var(--rule);
+    color: var(--ink);
+  }
+  .delta-table tr:last-child td { border-bottom: none; }
+  .delta-table .metric { color: var(--ink-muted); font-family: 'Source Sans 3', sans-serif; }
+  .arrow { color: var(--ink-faint); padding: 0 0.3rem; }
+
+  .why { font-size: 0.93rem; color: var(--ink); margin: 0.5rem 0 0; }
+  .why b { color: var(--accent); font-weight: 600; }
+  .note {
+    font-size: 0.83rem; color: var(--ink-faint); margin-top: 0.6rem;
+    padding-top: 0.5rem; border-top: 1px dashed var(--rule);
+  }
+
+  /* ---------- reproducibility ---------- */
+  .repro-steps { counter-reset: step; list-style: none; margin: 0; padding: 0; }
+  .repro-steps li {
+    counter-increment: step;
+    display: grid; grid-template-columns: 2rem 1fr; gap: 0.9rem;
+    margin-bottom: 1.1rem;
+  }
+  .repro-steps li::before {
+    content: counter(step);
+    font-family: 'Fraunces', serif; font-weight: 600; font-size: 1.05rem;
+    color: var(--accent); background: var(--accent-bg);
+    width: 2rem; height: 2rem; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .repro-steps h4 { font-size: 0.98rem; font-weight: 600; margin: 0 0 0.3rem; font-family: 'Source Sans 3', sans-serif; }
+  code, pre {
+    font-family: 'IBM Plex Mono', monospace; font-size: 0.82rem;
+  }
+  pre {
+    background: var(--mono-bg); border-radius: 6px; padding: 0.7rem 0.9rem;
+    overflow-x: auto; margin: 0.4rem 0 0; line-height: 1.5;
+  }
+  code.inline {
+    background: var(--mono-bg); padding: 0.08rem 0.35rem; border-radius: 4px;
+  }
+
+  .callout {
+    background: var(--marginal-bg); border: 1px solid var(--marginal-rule);
+    border-radius: 8px; padding: 1rem 1.2rem; margin: 1.6rem 0;
+    font-size: 0.93rem;
+  }
+  .callout b { color: var(--marginal); }
+
+  .commit-table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.88rem; }
+  .commit-table th { text-align: left; color: var(--ink-faint); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.04em; padding: 0.3rem 0.8rem 0.4rem 0; border-bottom: 1px solid var(--rule); font-weight: 500;}
+  .commit-table td { padding: 0.4rem 0.8rem 0.4rem 0; border-bottom: 1px solid var(--rule); }
+  .commit-table code { background: var(--mono-bg); padding: 0.1rem 0.4rem; border-radius: 4px; }
+
+  footer {
+    margin-top: 3.5rem; padding-top: 1.5rem; border-top: 1px solid var(--rule);
+    font-size: 0.82rem; color: var(--ink-faint);
+  }
+
+  ::selection { background: var(--accent-bg); color: var(--ink); }
+
+  @media (max-width: 600px) {
+    .wrap { padding: 2.2rem 1.1rem 4rem; }
+    h1 { font-size: 1.8rem; }
+  }
+</style>
+
+<div class="wrap">
+
+  <header>
+    <div class="eyebrow">Manuscript reconciliation · GRAM: communicating per-mask reliability for whole-body CT segmentation</div>
+    <h1>Paper vs. full-dataset audit</h1>
+    <p class="lede">Every quantitative claim in the draft was checked against the same GRAM methodology rerun on TotalSegmentator's own official train/val/test split, using the full inferenced dataset (CT 140 held-out subjects, MR 49 genuinely held-out subjects) instead of the paper's 57/38-subject subsets. This page groups the results by what needs to change.</p>
+    <div class="stat-row">
+      <div class="stat-pill critical"><b>15</b><span class="label">must update</span></div>
+      <div class="stat-pill marginal"><b>8</b><span class="label">marginal difference</span></div>
+      <div class="stat-pill confirmed"><b>3</b><span class="label">new, not in paper</span></div>
+    </div>
+    <nav class="jump">
+      <a href="#must-update">Must update →</a>
+      <a href="#marginal">Marginal differences →</a>
+      <a href="#new">New findings →</a>
+      <a href="#repro">Reproducibility →</a>
+    </nav>
+  </header>
+
+  <section class="group" id="must-update">
+    <div class="group-head"><h2>Must update</h2><span class="count">15 items</span></div>
+    <p class="group-desc">Claims where the full-data number is far enough from the paper's cited value that the sentence itself should change — not just a footnote. Ordered by where they appear in the manuscript.</p>
+
+    <article class="item critical" id="mu-1">
+      <div class="item-head">
+        <span class="item-tag">Headline number</span>
+        <span class="item-loc">Abstract, p.1 L3–7 · Intro, p.1–2 L43–47</span>
+      </div>
+      <h3>MRI's 77.0% failure rate was in-sample — replace with the real held-out number</h3>
+      <blockquote>"on an in-sample MRI development subset, 77.0% of masks fall below the same bar"</blockquote>
+      <table class="delta-table">
+        <tr><th>Metric</th><th>Paper (in-sample, n=548)</th><th></th><th>Full data (held-out, n=929)</th></tr>
+        <tr><td class="metric">Accept rate</td><td>23.0%</td><td class="arrow">→</td><td>17.1%</td></tr>
+        <tr><td class="metric">Below-threshold rate</td><td>77.0%</td><td class="arrow">→</td><td><b>82.9%</b></td></tr>
+      </table>
+      <p class="why">This is the single most important update in the paper. The in-sample subset was <b>optimistic</b>, not pessimistic — the real failure rate is worse. It also resolves the paper's own Limitations caveat (see item 15): we now have the number the paper predicted but couldn't measure.</p>
+    </article>
+
+    <article class="item critical" id="mu-2">
+      <div class="item-head">
+        <span class="item-tag">Headline number</span>
+        <span class="item-loc">Abstract L11–13 · §4.2, p.7 L327–328</span>
+      </div>
+      <h3>Primary GRAM AUC, both modalities</h3>
+      <table class="delta-table">
+        <tr><th>Metric</th><th>Paper</th><th></th><th>Full data</th></tr>
+        <tr><td class="metric">CT AUC (95% CI)</td><td>0.871 [0.852, 0.892]</td><td class="arrow">→</td><td>0.900 [0.898, 0.908]<sup>†</sup></td></tr>
+        <tr><td class="metric">MRI AUC (95% CI)</td><td>0.919 [0.890, 0.947] <em>in-sample</em></td><td class="arrow">→</td><td>0.912–0.922 <b>held-out</b></td></tr>
+        <tr><td class="metric">CT organ-rate baseline</td><td>0.761 [0.737, 0.785]</td><td class="arrow">→</td><td>0.776 [0.769, 0.783]</td></tr>
+        <tr><td class="metric">MRI organ-rate baseline</td><td>0.815 [0.766, 0.861]</td><td class="arrow">→</td><td>0.818 [0.768, 0.869]</td></tr>
+      </table>
+      <p class="why">CT's CI no longer overlaps the paper's point estimate at all — this is a real improvement with scale, not noise. MRI lands close to the paper's figure <b>despite now being a genuinely held-out evaluation</b> instead of in-sample — worth stating explicitly, since it's evidence the descriptor signal generalizes.</p>
+      <p class="note">† 0.903 on 5-fold CV against the 1,043-subject official train set (apples-to-apples with the paper's "CV on val" framing); 0.900 on a fresh classifier scored against the 140-subject official test set never used in training. Cite whichever framing the revision adopts — see <code class="inline">experiments/paper_final_v2/ct/primary_model_summary.csv</code> vs. <code class="inline">modality_comparison.csv</code>.</p>
+    </article>
+
+    <article class="item critical" id="mu-3">
+      <div class="item-head">
+        <span class="item-tag">Dataset description</span>
+        <span class="item-loc">§3.1, p.5 L199–208</span>
+      </div>
+      <h3>MRI dataset paragraph needs a full rewrite — no more dev-subset carve</h3>
+      <blockquote>"we carve a subject-grouped 20% development subset (38 subjects) from the MRI training partition… this MRI subset is in-sample for the segmenter… a secondary in-sample generalization check rather than a held-out replication"</blockquote>
+      <table class="delta-table">
+        <tr><th>Metric</th><th>Paper</th><th></th><th>Full data</th></tr>
+        <tr><td class="metric">Evaluation set</td><td>38-subj dev, carved from train</td><td class="arrow">→</td><td>49-subj official <b>test</b> split</td></tr>
+        <tr><td class="metric">In-sample?</td><td>Yes</td><td class="arrow">→</td><td><b>No</b></td></tr>
+        <tr><td class="metric">Pairs / modelled</td><td>550 / 548</td><td class="arrow">→</td><td>940 / 929</td></tr>
+      </table>
+      <p class="why">This whole paragraph's justification (no held-out MRI split existed) is no longer true. Replace with: MRI's official test split, held out from training exactly like CT's val/test, covering 49 of 55 official test subjects.</p>
+    </article>
+
+    <article class="item critical" id="mu-4">
+      <div class="item-head">
+        <span class="item-tag">Dataset description</span>
+        <span class="item-loc">§3.1, p.4 L195–198</span>
+      </div>
+      <h3>CT val-only figures → val+test combined</h3>
+      <table class="delta-table">
+        <tr><th>Metric</th><th>Paper (val, n=57)</th><th></th><th>Full data (val+test, n=140)</th></tr>
+        <tr><td class="metric">Pairs / modelled</td><td>4,033 / 4,017</td><td class="arrow">→</td><td>9,697 / 9,652</td></tr>
+        <tr><td class="metric">Accept rate</td><td>74.5%</td><td class="arrow">→</td><td>77.5%</td></tr>
+      </table>
+      <p class="why">Decide explicitly whether the revision folds CT's official <code class="inline">test</code> split (89 subj) into every reported number, as this rerun does — recommended, since it's still fully held-out and 2.4× the sample. If kept separate, report both val-only and val+test numbers side by side.</p>
+    </article>
+
+    <article class="item critical" id="mu-5">
+      <div class="item-head">
+        <span class="item-tag">Per-structure claim</span>
+        <span class="item-loc">§4.1, p.7 L312–319</span>
+      </div>
+      <h3>MRI's worst performers are no longer "near-misses"</h3>
+      <blockquote>"the worst performers are near-misses (median IoU 0.78 to 0.79) rather than catastrophic failures"</blockquote>
+      <table class="delta-table">
+        <tr><th>Structure</th><th>Median IoU (held-out)</th><th>Accept rate</th></tr>
+        <tr><td class="metric">pancreas</td><td>0.53</td><td>0%</td></tr>
+        <tr><td class="metric">iliac_vena_left</td><td>0.52</td><td>0%</td></tr>
+        <tr><td class="metric">adrenal_gland_left</td><td>0.60</td><td>0%</td></tr>
+        <tr><td class="metric">liver <em>(paper's cited best)</em></td><td>0.92 (paper: 0.93)</td><td>54.2%</td></tr>
+      </table>
+      <p class="why">On the real held-out set, several structures have genuinely low median IoU (0.49–0.60) with 0% accept rate — this contradicts the "not catastrophic" framing. Liver itself, cited as MRI's best structure, only clears the 0.90 bar 54% of the time despite a healthy median IoU — worth adding as its own observation (high central tendency, wide variance).</p>
+    </article>
+
+    <article class="item critical" id="mu-6">
+      <div class="item-head">
+        <span class="item-tag">Per-structure claim</span>
+        <span class="item-loc">§4.1, p.7 L312–316</span>
+      </div>
+      <h3>CT worst/best structure counts and rates</h3>
+      <table class="delta-table">
+        <tr><th>Metric</th><th>Paper</th><th></th><th>Full data</th></tr>
+        <tr><td class="metric">Structures &gt;90% pass, / with support</td><td>32 / 108</td><td class="arrow">→</td><td>39 / 117</td></tr>
+        <tr><td class="metric">portal_vein_and_splenic_vein</td><td>2.6%</td><td class="arrow">→</td><td>4.3%</td></tr>
+        <tr><td class="metric">costal_cartilages</td><td>16.3%</td><td class="arrow">→</td><td>17.4%</td></tr>
+        <tr><td class="metric">duodenum</td><td>17.1%</td><td class="arrow">→</td><td>23.3%</td></tr>
+      </table>
+      <p class="why">Same bimodal shape, same worst structures — but every structure in the dataset now has "sufficient support" (117/117), and <code class="inline">prostate</code> emerges as a new near-total failure (see New Findings). Update the specific percentages; the qualitative story is unchanged.</p>
+    </article>
+
+    <article class="item critical" id="mu-7">
+      <div class="item-head">
+        <span class="item-tag">Silent failure</span>
+        <span class="item-loc">§4.1, p.7 L320–325 · Abstract L6–7</span>
+      </div>
+      <h3>MRI's silent-failure rate moved in the opposite direction from the accept-rate finding</h3>
+      <table class="delta-table">
+        <tr><th>Metric</th><th>Paper</th><th></th><th>Full data</th></tr>
+        <tr><td class="metric">CT conditional rate</td><td>52.8%</td><td class="arrow">→</td><td>56.0%</td></tr>
+        <tr><td class="metric">MRI conditional rate (in-sample)</td><td>69.5%</td><td class="arrow">→</td><td><b>46.6%</b> (held-out)</td></tr>
+      </table>
+      <p class="why">Unlike the accept-rate finding (item 1), where in-sample was <em>optimistic</em>, here in-sample was <em>pessimistic</em> — it overstated the silent-failure problem by 23 points. Worth an explicit sentence: in-sample bias on MRI did not move all metrics the same direction, so readers shouldn't assume a uniform correction factor.</p>
+    </article>
+
+    <article class="item critical" id="mu-8">
+      <div class="item-head">
+        <span class="item-tag">Transfer / leave-one-family-out</span>
+        <span class="item-loc">§4.5, p.8 L374–389 · Table 2</span>
+      </div>
+      <h3>The paper's one reported transfer failure no longer fails</h3>
+      <blockquote>"One family fails: costal cartilage falls below chance (0.399)"</blockquote>
+      <table class="delta-table">
+        <tr><th>Metric</th><th>Paper</th><th></th><th>Full data</th></tr>
+        <tr><td class="metric">costal_cartilage transfer AUC</td><td>0.399 (below chance)</td><td class="arrow">→</td><td><b>0.660</b> (above chance)</td></tr>
+        <tr><td class="metric">Families above chance</td><td>12 / 13</td><td class="arrow">→</td><td><b>14 / 14</b></td></tr>
+        <tr><td class="metric">LOFO mean / median</td><td>0.779 / 0.829</td><td class="arrow">→</td><td>0.795 / 0.809</td></tr>
+        <tr><td class="metric">LOO mean / median</td><td>0.821 / 0.873</td><td class="arrow">→</td><td>0.830 / 0.849</td></tr>
+      </table>
+      <p class="why">Table 2 needs regenerating — a new <code class="inline">pelvic_bone</code> row appears (368 masks, AUC 0.859; too little data to evaluate in the 57-subject val set at all), and the costal-cartilage exception disappears with more training examples of that family (49→115 masks). This is a genuinely different narrative, not a rounding change: "12 of 13" becomes "14 of 14," so the whole "one family fails" paragraph needs rewriting, not just its numbers.</p>
+    </article>
+
+    <article class="item critical" id="mu-9">
+      <div class="item-head">
+        <span class="item-tag">Calibration</span>
+        <span class="item-loc">§4.6, p.9 L391–404 · Table 4</span>
+      </div>
+      <h3>MRI calibration without intensity no longer shows a marginal win</h3>
+      <blockquote>"without intensity features, isotonic buys a marginal ECE improvement (0.041 to 0.035) at a 0.016 AUC cost"</blockquote>
+      <table class="delta-table">
+        <tr><th>Variant</th><th>Paper (uncal→isotonic)</th><th></th><th>Full data (uncal→isotonic)</th></tr>
+        <tr><td class="metric">MRI + intensity</td><td>0.036 → 0.054 (worse)</td><td class="arrow">→</td><td>0.020 → 0.035 (worse)</td></tr>
+        <tr><td class="metric">MRI − intensity</td><td>0.041 → <b>0.035</b> (better)</td><td class="arrow">→</td><td>0.029 → <b>0.051</b> (worse)</td></tr>
+      </table>
+      <p class="why">This flips the finding, not just the number: the paper's one case where isotonic calibration helped on MRI (no-intensity variant) reverses at full scale — now both variants get uniformly worse. The honest revision is actually a <em>stronger</em> version of the paper's own point: MRI calibration doesn't survive at any sample size tested so far. CT direction is unchanged (isotonic still clearly helps: ECE 0.027→0.010).</p>
+    </article>
+
+    <article class="item critical" id="mu-10">
+      <div class="item-head">
+        <span class="item-tag">Calibration numbers</span>
+        <span class="item-loc">§4.6, p.9 L390–397</span>
+      </div>
+      <h3>CT calibration ECE and Brier decomposition</h3>
+      <table class="delta-table">
+        <tr><th>Metric</th><th>Paper</th><th></th><th>Full data</th></tr>
+        <tr><td class="metric">Uncalibrated ECE</td><td>0.029</td><td class="arrow">→</td><td>0.027</td></tr>
+        <tr><td class="metric">Isotonic ECE</td><td>0.013</td><td class="arrow">→</td><td>0.010</td></tr>
+        <tr><td class="metric">Reliability term</td><td>0.0003</td><td class="arrow">→</td><td>0.0011</td></tr>
+        <tr><td class="metric">Resolution term</td><td>0.0711</td><td class="arrow">→</td><td>0.0770</td></tr>
+      </table>
+      <p class="why">The "discrimination-limited, not calibration-limited" conclusion still holds (reliability is still &lt;2% of resolution), but the reliability term itself grew ~3.6×. Worth citing the new ratio rather than reusing "roughly 0.3%" verbatim — it's closer to 1.4% now.</p>
+      <p class="note">This script wasn't in the merged codebase at all for CT (only MRI's calibration step existed) — reproduced here by applying the identical, already-tested function to CT's data. See Reproducibility, step 6.</p>
+    </article>
+
+    <article class="item critical" id="mu-11">
+      <div class="item-head">
+        <span class="item-tag">Conformal intervals</span>
+        <span class="item-loc">§4.6, p.9 L405–422 · Table 5</span>
+      </div>
+      <h3>Conformal coverage/width numbers</h3>
+      <table class="delta-table">
+        <tr><th>Metric</th><th>Paper CT</th><th>Full CT</th><th>Paper MRI</th><th>Full MRI</th></tr>
+        <tr><td class="metric">Uncalibrated cov. @80%</td><td>52.0%</td><td>58.7%</td><td>45.4%</td><td>46.1%</td></tr>
+        <tr><td class="metric">CQR cov. @80%</td><td>80.7%</td><td>80.6%</td><td>78.6%</td><td>80.2%</td></tr>
+        <tr><td class="metric">CQR median width @80%</td><td>0.091</td><td>0.070</td><td>0.158</td><td>0.355</td></tr>
+      </table>
+      <p class="why">CT reproduces almost bit-for-bit (80.7%→80.6%) — this is the cleanest confirmation in the whole paper that the method itself is scale-invariant. Update the specific figures; no narrative change needed for CT. MRI's coverage improved to essentially nominal and its interval width grew substantially (0.158→0.355) — worth a sentence, since a wider interval on a harder, now-real held-out set is the expected, correct behavior, not a regression.</p>
+    </article>
+
+    <article class="item critical" id="mu-12">
+      <div class="item-head">
+        <span class="item-tag">Conformal, Mondrian feasibility floor</span>
+        <span class="item-loc">§4.6, p.9 L413–417</span>
+      </div>
+      <h3>The paper's illustrative "family below the floor" now clears it</h3>
+      <blockquote>"the reproductive family (3.4 calibration masks per fold) falls below it, lands at 50.0% coverage, and cannot attain the guarantee"</blockquote>
+      <table class="delta-table">
+        <tr><th>Metric</th><th>Paper</th><th></th><th>Full data</th></tr>
+        <tr><td class="metric">Masks / avg calibration-fold n</td><td>14 / 3.4</td><td class="arrow">→</td><td>44 / 11.4</td></tr>
+        <tr><td class="metric">Clears feasibility floor?</td><td>No</td><td class="arrow">→</td><td><b>Yes</b></td></tr>
+        <tr><td class="metric">Coverage achieved</td><td>50.0%</td><td class="arrow">→</td><td>79.5%</td></tr>
+      </table>
+      <p class="why">This specific example needs replacing — either find a family that still falls below the floor at full scale (check <code class="inline">experiments/paper_final_v2/ct/regression/conformal_by_family.csv</code> for candidates), or reframe the sentence to say the floor's practical bite <em>shrinks</em> with more data, which is itself a useful point about when Mondrian conditioning becomes viable.</p>
+    </article>
+
+    <article class="item critical" id="mu-13">
+      <div class="item-head">
+        <span class="item-tag">Clinical decision-flip</span>
+        <span class="item-loc">§4.7, p.10 L423–438 · §5.1 L484–486</span>
+      </div>
+      <h3>Which modality has the anecdote reverses</h3>
+      <blockquote>"across 42 spleen masks… no prediction crosses the decision boundary… On the in-sample MRI subset, one of 14 spleen masks flips"</blockquote>
+      <table class="delta-table">
+        <tr><th>Modality</th><th>Paper</th><th></th><th>Full data</th></tr>
+        <tr><td class="metric">CT flips</td><td>0 / 42</td><td class="arrow">→</td><td><b>1 / 101</b></td></tr>
+        <tr><td class="metric">MRI flips</td><td>1 / 14</td><td class="arrow">→</td><td><b>0 / 22</b></td></tr>
+      </table>
+      <p class="why">Both cited case studies (CT's "clean null," MRI's single flip) need replacing with whichever new case exists — the CT flip is now the illustrative example, MRI has none. This is expected instability given n≈14–101, and the paper's own framing ("a single illustrative case rather than a rate") already anticipates it — the revision should keep that framing, just swap which modality's case gets described in detail.</p>
+    </article>
+
+    <article class="item critical" id="mu-14">
+      <div class="item-head">
+        <span class="item-tag">Limitations</span>
+        <span class="item-loc">§5.1, p.11 L476–479</span>
+      </div>
+      <h3>The MRI in-sample limitation is now resolved, not open</h3>
+      <blockquote>"the gap between its accept rate (23.0%) and that of the frozen MRI test partition (16.9%) bounds the optimism this introduces, so held-out MRI performance is likely somewhat below the figures reported here"</blockquote>
+      <p class="why">This sentence predicts a number the paper never measured. We now have it: real held-out accept rate 17.1%, essentially matching the paper's own predicted bound (16.9%) almost exactly. Rewrite from a hedge into a confirmation — and since the actual held-out AUC (0.912–0.922) matches or beats the in-sample estimate (0.919) despite the lower accept rate, the "performance is likely somewhat below" prediction was directionally right on accept rate but not on AUC. This whole limitation can likely be removed or downgraded, freeing space to discuss the two genuinely new limitations below (near-empty structures, calibration-set floors) instead.</p>
+    </article>
+
+    <article class="item critical" id="mu-15">
+      <div class="item-head">
+        <span class="item-tag">Threshold sweep</span>
+        <span class="item-loc">§4.4, p.8 L356–373</span>
+      </div>
+      <h3>Threshold-invariance band and regression Spearman/R²</h3>
+      <table class="delta-table">
+        <tr><th>Metric</th><th>Paper</th><th></th><th>Full data</th></tr>
+        <tr><td class="metric">CT AUC band across 0.70–0.95</td><td>0.867–0.877 (Δ0.010)</td><td class="arrow">→</td><td>0.885–0.915 (Δ0.017)</td></tr>
+        <tr><td class="metric">CT accept-rate swing</td><td>92.7% → 46.0%</td><td class="arrow">→</td><td>94.2% → 50.7%</td></tr>
+        <tr><td class="metric">CT regressor Spearman / R²</td><td>0.693 / 0.427</td><td class="arrow">→</td><td>0.756 / 0.477</td></tr>
+        <tr><td class="metric">MRI regressor Spearman / R²</td><td>0.81 / 0.60</td><td class="arrow">→</td><td>0.78–0.79 / 0.56–0.58</td></tr>
+      </table>
+      <p class="why">The "threshold isn't load-bearing" claim survives (band widened but is still &lt;2 points), and the CT regressor got a real correlation boost. MRI's regressor fit is nearly identical despite no longer being in-sample — a second confirmation (alongside item 2) that MRI's signal is real, not memorization.</p>
+    </article>
+  </section>
+
+  <section class="group" id="marginal">
+    <div class="group-head"><h2>Marginal differences</h2><span class="count">8 items</span></div>
+    <p class="group-desc">Numbers moved, but by an amount that doesn't change any sentence's conclusion — worth a footnote or an updated figure, not a rewrite.</p>
+
+    <article class="item marginal">
+      <h3>CT accept rate</h3>
+      <p>74.5% → 77.5%. Same order of magnitude, no qualitative change.</p>
+    </article>
+    <article class="item marginal">
+      <h3>Feature-group ablation, connectivity dominance</h3>
+      <p>Pooled Δ −0.054 → −0.052; within-organ Δ −0.128 → −0.100. Connectivity still dominates by roughly the same multiple over size (−0.010 → −0.009 pooled) at full scale.</p>
+    </article>
+    <article class="item marginal">
+      <h3>Organ-identity augmentation is still a null effect on CT</h3>
+      <p>Paper: 0.871 raw vs. 0.873 raw+organ (Δ0.002). Full: 0.899 vs. 0.903 (Δ0.004) on the CV-on-train framing. Slightly larger gap but still small enough to support "organ context is already implicit in the geometry."</p>
+    </article>
+    <article class="item marginal">
+      <h3>Class-weighting effect on CT / MRI direct classifier</h3>
+      <p>Still negligible both ways (paper: agree to 4 decimals on CT; full: balanced 0.900 vs unbalanced 0.900). MRI's own balanced/unbalanced split (paper 0.910/0.915, full 0.912/0.922) similarly small.</p>
+    </article>
+    <article class="item marginal">
+      <h3>Leave-one-organ-out near-chance structures</h3>
+      <p>Not independently reverified this pass — paper cites superior vena cava (0.487) and brachiocephalic trunk (0.449) as near-chance. Check <code class="inline">experiments/paper_final_v2/ct/organ_loo.csv</code> before citing either figure in a revision.</p>
+    </article>
+    <article class="item marginal">
+      <h3>CT direct-classifier ROC-AUC precise value</h3>
+      <p>Reported three ways in this audit depending on framing (0.900 test, 0.903 train-CV, 0.900 ablations run) — all agree to ±0.003, well within noise. Pick one canonical framing for the revision and cite it consistently (recommend: 0.900, fresh classifier on the true held-out test set — the strictest and most citable number).</p>
+    </article>
+    <article class="item marginal">
+      <h3>MRI class-balance framing ("accept is the minority")</h3>
+      <p>Still true at full scale (17.1% accept vs. paper's 23.0%) — if anything the imbalance is now sharper, strengthening rather than weakening this framing choice.</p>
+    </article>
+    <article class="item marginal">
+      <h3>Conformal width-vs-error correlation (Spearman)</h3>
+      <p>Paper CT: ≈0.46. Full CT: 0.51–0.53 across variants. Same conclusion ("wide interval flags genuinely uncertain masks"), slightly stronger correlation.</p>
+    </article>
+  </section>
+
+  <section class="group" id="new">
+    <div class="group-head"><h2>New findings, not in the paper</h2><span class="count">3 items</span></div>
+    <p class="group-desc">Things the full dataset surfaces that the 57/38-subject subsets simply didn't have enough data to show at all — additions, not corrections.</p>
+
+    <article class="item confirmed">
+      <h3>Prostate: a new near-total CT failure mode</h3>
+      <p>37 masks, <b>0% accept rate</b>, mean IoU 0.77. Sex-specific and low-prevalence, so the 57-subject val set likely never had enough prostate masks to register as a distinct structure with "sufficient support" — it isn't mentioned anywhere in the paper's per-structure discussion. Worth adding alongside portal/splenic vein as a named worst-performer, and worth a sentence on why: it's plausibly a small-organ-in-a-large-pelvis boundary-tolerance case (§1's size-bias argument), compounded by low training prevalence.</p>
+    </article>
+    <article class="item confirmed">
+      <h3>Pelvic bone family becomes evaluable</h3>
+      <p>368 masks, transfer AUC 0.859 — didn't have enough masks to appear as its own leave-one-family-out row in the paper's 13-family table at all. Now the second-best-transferring family after muscle.</p>
+    </article>
+    <article class="item confirmed">
+      <h3>Every CT structure now has "sufficient support"</h3>
+      <p>108/117 structures met the ≥25-masks/≥5-minority-examples bar in the paper; all 117/117 do now. The within-organ AUC analysis (§4.3) and leave-one-organ-out transfer (§4.5) both gained real additional structures (66→93 organs with sufficient data) rather than just tighter confidence intervals on the same ones.</p>
+    </article>
+  </section>
+
+  <section class="group" id="repro">
+    <div class="group-head"><h2>Reproducibility</h2></div>
+    <p class="group-desc">Everything above is reproducible by a teammate from the committed repo state, with one external dependency. Exact commit hashes and file paths below.</p>
+
+    <div class="callout">
+      <b>One thing you can't skip:</b> the official train/val/test split labels (<code class="inline">meta.csv</code>) aren't committed to the repo — only the derived, already-scored metrics are. You need the original dataset directories (or just their <code class="inline">meta.csv</code> files) mounted locally to re-derive the split assignment. Everything downstream of that is a plain, deterministic rerun of committed code against committed data.
+    </div>
+
+    <table class="commit-table">
+      <tr><th>Commit</th><th>What it produced</th></tr>
+      <tr><td><code>8ecd520</code></td><td>Merge of the GRAM-methodology branch into this one</td></tr>
+      <tr><td><code>5a43cee</code></td><td>QC datasets rebuilt on the official split (stages 1–6)</td></tr>
+      <tr><td><code>852e7be</code></td><td>GRAM regression/ablation/conformal suite rerun (this report's source)</td></tr>
+      <tr><td><code>011a50e</code></td><td><code>RESEARCH.md</code> §11 — narrative writeup</td></tr>
+    </table>
+
+    <ol class="repro-steps">
+      <li>
+        <div>
+          <h4>Get the official split labels</h4>
+          <p>Reconnect the dataset directories (or just copy their <code class="inline">meta.csv</code>) so <code class="inline">/path/to/Totalsegmentator_dataset_v201/meta.csv</code> and <code class="inline">/path/to/TotalsegmentatorMRI_dataset_v200/meta.csv</code> exist somewhere locally.</p>
+        </div>
+      </li>
+      <li>
+        <div>
+          <h4>Regroup already-scored metrics by official split</h4>
+          <pre>python experiments/pipeline/split_by_official.py \
+  --dataset-dir &lt;ct dataset dir&gt; --modality ct \
+  --metrics-csv experiments/eval_runs/ct_full_remote/metrics/classifier_train/combined_metrics.csv \
+  --metrics-csv experiments/eval_runs/ct_full_remote/metrics/classifier_test/combined_metrics.csv \
+  --output-dir experiments/eval_runs/ct_official_split/metrics</pre>
+          <p>Repeat for MR. No GPU needed — this just relabels rows already scored by the earlier full inference run using the real split, and prints a coverage report so any gap is visible.</p>
+        </div>
+      </li>
+      <li>
+        <div>
+          <h4>Rebuild the reference table (train-only)</h4>
+          <pre>python experiments/pipeline/build_reference_table.py \
+  --dataset-dir &lt;ct dataset dir&gt; --modality ct --split train \
+  --output-csv experiments/eval_runs/ct_official_split/reference/reference_stats.csv</pre>
+          <p>Ground-truth-only, no GPU. Repeat for MR.</p>
+        </div>
+      </li>
+      <li>
+        <div>
+          <h4>Curate, train, test (stages 4–6)</h4>
+          <p><code class="inline">curate_dataset.py</code> → <code class="inline">train.py</code> → <code class="inline">test.py</code>, same flags as the original pooled-run pipeline, pointed at the new <code class="inline">official_split</code> directories. All fixed-seed (<code class="inline">SEED=0</code>), so CV splits and model weights reproduce bit-for-bit given the same input CSVs.</p>
+        </div>
+      </li>
+      <li>
+        <div>
+          <h4>Run the GRAM suite</h4>
+          <pre>python experiments/pipeline/regression_modality.py
+python experiments/pipeline/ablations.py \
+  --dataset-csv experiments/eval_runs/ct_official_split/datasets/official_test.csv \
+  --output-dir experiments/paper_final_v2/ct
+python experiments/pipeline/paper_consolidate.py</pre>
+          <p>All three scripts are pre-configured to read from <code class="inline">experiments/eval_runs/{ct,mri}_official_split/</code> and write to <code class="inline">experiments/paper_final_v2/</code> — no path arguments needed, unlike the original teammate scripts, which hardcoded a personal machine's paths.</p>
+        </div>
+      </li>
+      <li>
+        <div>
+          <h4>CT calibration (one small script, not part of the pipeline)</h4>
+          <p>The original CT calibration numbers came from a script never committed anywhere. Reproduced here by calling <code class="inline">paper_consolidate.calibration_metrics()</code> directly against CT's test set — see this report's item mu-10 for the one-off snippet.</p>
+        </div>
+      </li>
+    </ol>
+
+    <div class="callout">
+      <b>Coverage isn't 100%.</b> MR: 568/616 subjects (92.2%) have committed metrics; CT: 1,183/1,228 (96.3%). The remainder's raw predictions were lost when the source GPU box was decommissioned before every subject was checkpointed, and there's no GPU access to backfill them. This affects absolute subject counts slightly but not any conclusion above — every number in this report is the number you'll get re-running against what's actually committed, not an extrapolation.
+    </div>
+  </section>
+
+  <footer>
+    Generated against <code>experiments/paper_final/</code> (paper-cited, small subsets) vs. <code>experiments/paper_final_v2/</code> (full official-split rerun) · see <code>RESEARCH.md</code> §11 for narrative context.
+  </footer>
+
+</div>

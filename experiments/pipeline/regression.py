@@ -544,7 +544,16 @@ def _volume_feature_ablation(d, cols, full_auc):
     print(f"\n  --- feature-group ablation on the VOLUME label (full AUC {full_auc:.3f}) ---")
     print("  (IoU-label ablation: dropping size cost only 0.010 AUC. Does it flip here?)")
     g = d["subject"].to_numpy()
-    groups_present = {gr: [c for c in cs if c in cols] for gr, cs in FEATURE_GROUPS.items()}
+    # FEATURE_GROUPS (from ablations.py) uses qc_columns.py's long descriptive names
+    # ("Number of Voxels (num_voxels)"), but `cols` here has already been through
+    # normalize_columns() and is short ("num_voxels") - match on normalized names on
+    # both sides instead of comparing long against short (which silently matches
+    # nothing and previously produced an empty volume_label_ablation.csv).
+    def _short(c):
+        import re
+        m = re.search(r"\(([^)]+)\)\s*$", c)
+        return m.group(1) if m else c
+    groups_present = {gr: [s for s in (_short(c) for c in cs) if s in cols] for gr, cs in FEATURE_GROUPS.items()}
     rows = []
     print(f"  {'config':22s} {'AUC':>7s} {'delta':>8s}")
     print("  leave-one-group-out (marginal loss when this group is removed):")
