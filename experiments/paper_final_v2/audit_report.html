@@ -165,6 +165,16 @@
   .item-loc {
     font-family: 'IBM Plex Mono', monospace; font-size: 0.78rem; color: var(--ink-faint);
   }
+  .kind-badge {
+    font-family: 'IBM Plex Mono', monospace; font-size: 0.68rem;
+    letter-spacing: 0.03em; text-transform: uppercase; font-weight: 600;
+    padding: 0.12rem 0.5rem; border-radius: 3px; white-space: nowrap;
+  }
+  .kind-badge.number { background: var(--accent-bg); color: var(--accent); border: 1px solid var(--accent); }
+  .kind-badge.reversal { background: var(--critical); color: var(--surface); }
+  .subgroup-head { margin: 0 0 0.9rem; padding-top: 0.4rem; }
+  .subgroup-head h3 { font-size: 1.15rem; font-weight: 600; margin-bottom: 0.3rem; }
+  .subgroup-head p { color: var(--ink-muted); font-size: 0.92rem; max-width: 65ch; margin: 0; }
   .item h3 { font-size: 1.08rem; font-weight: 500; margin-bottom: 0.65rem; color: var(--ink); }
 
   blockquote {
@@ -265,7 +275,8 @@
     <h1>Paper vs. full-dataset audit</h1>
     <p class="lede">Every quantitative claim in the draft was checked against the same GRAM methodology rerun on TotalSegmentator's own official train/val/test split, using the full inferenced dataset (CT 140 held-out subjects, MR 49 genuinely held-out subjects) instead of the paper's 57/38-subject subsets. This page groups the results by what needs to change.</p>
     <div class="stat-row">
-      <div class="stat-pill critical"><b>16</b><span class="label">must update</span></div>
+      <div class="stat-pill critical"><b>10</b><span class="label">number updates</span></div>
+      <div class="stat-pill critical"><b>6</b><span class="label">claim reverses</span></div>
       <div class="stat-pill marginal"><b>8</b><span class="label">marginal difference</span></div>
       <div class="stat-pill confirmed"><b>6</b><span class="label">new research observation</span></div>
     </div>
@@ -280,11 +291,17 @@
 
   <section class="group" id="must-update">
     <div class="group-head"><h2>Must update</h2><span class="count">16 items</span></div>
-    <p class="group-desc">Claims where the full-data number is far enough from the paper's cited value that the sentence itself should change — not just a footnote. Ordered by where they appear in the manuscript.</p>
+    <p class="group-desc">Splits into two kinds, and they need different edits: ten where the full-data number moved but the paper's underlying claim still holds as written — swap the figure, keep the sentence. Six where the full-data result actually contradicts or reverses what the paper currently says — those need the argument itself rewritten, not just the number.</p>
+
+    <div class="subgroup-head">
+      <h3>A. Numbers change, conclusion holds — 10</h3>
+      <p>Update the figure; the claim built on it stays true.</p>
+    </div>
 
     <article class="item critical" id="mu-1">
       <div class="item-head">
         <span class="item-tag">Headline number</span>
+        <span class="kind-badge number">Number update</span>
         <span class="item-loc">Abstract, p.1 L3–7 · Intro, p.1–2 L43–47</span>
       </div>
       <h3>MRI's 77.0% failure rate was in-sample — replace with the real held-out number</h3>
@@ -300,6 +317,7 @@
     <article class="item critical" id="mu-2">
       <div class="item-head">
         <span class="item-tag">Headline number</span>
+        <span class="kind-badge number">Number update</span>
         <span class="item-loc">Abstract L11–13 · §4.2, p.7 L327–328</span>
       </div>
       <h3>Primary GRAM AUC, both modalities</h3>
@@ -317,6 +335,7 @@
     <article class="item critical" id="mu-3">
       <div class="item-head">
         <span class="item-tag">Dataset description</span>
+        <span class="kind-badge number">Number update</span>
         <span class="item-loc">§3.1, p.5 L199–208</span>
       </div>
       <h3>MRI dataset paragraph needs a full rewrite — no more dev-subset carve</h3>
@@ -333,6 +352,7 @@
     <article class="item critical" id="mu-4">
       <div class="item-head">
         <span class="item-tag">Dataset description</span>
+        <span class="kind-badge number">Number update</span>
         <span class="item-loc">§3.1, p.4 L195–198</span>
       </div>
       <h3>CT val-only figures → val+test combined</h3>
@@ -344,26 +364,10 @@
       <p class="why">Decide explicitly whether the revision folds CT's official <code class="inline">test</code> split (89 subj) into every reported number, as this rerun does — recommended, since it's still fully held-out and 2.4× the sample. If kept separate, report both val-only and val+test numbers side by side.</p>
     </article>
 
-    <article class="item critical" id="mu-5">
-      <div class="item-head">
-        <span class="item-tag">Per-structure claim</span>
-        <span class="item-loc">§4.1, p.7 L312–319</span>
-      </div>
-      <h3>MRI's worst performers are no longer "near-misses"</h3>
-      <blockquote>"the worst performers are near-misses (median IoU 0.78 to 0.79) rather than catastrophic failures"</blockquote>
-      <table class="delta-table">
-        <tr><th>Structure</th><th>Median IoU (held-out)</th><th>Accept rate</th></tr>
-        <tr><td class="metric">pancreas</td><td>0.53</td><td>0%</td></tr>
-        <tr><td class="metric">iliac_vena_left</td><td>0.52</td><td>0%</td></tr>
-        <tr><td class="metric">adrenal_gland_left</td><td>0.60</td><td>0%</td></tr>
-        <tr><td class="metric">liver <em>(paper's cited best)</em></td><td>0.92 (paper: 0.93)</td><td>54.2%</td></tr>
-      </table>
-      <p class="why">On the real held-out set, several structures have genuinely low median IoU (0.49–0.60) with 0% accept rate — this contradicts the "not catastrophic" framing. Liver itself, cited as MRI's best structure, only clears the 0.90 bar 54% of the time despite a healthy median IoU — worth adding as its own observation (high central tendency, wide variance).</p>
-    </article>
-
     <article class="item critical" id="mu-6">
       <div class="item-head">
         <span class="item-tag">Per-structure claim</span>
+        <span class="kind-badge number">Number update</span>
         <span class="item-loc">§4.1, p.7 L312–316</span>
       </div>
       <h3>CT worst/best structure counts and rates</h3>
@@ -377,55 +381,10 @@
       <p class="why">Same bimodal shape, same worst structures — but every structure in the dataset now has "sufficient support" (117/117), and <code class="inline">prostate</code> emerges as a new near-total failure (see New Findings). Update the specific percentages; the qualitative story is unchanged.</p>
     </article>
 
-    <article class="item critical" id="mu-7">
-      <div class="item-head">
-        <span class="item-tag">Silent failure</span>
-        <span class="item-loc">§4.1, p.7 L320–325 · Abstract L6–7</span>
-      </div>
-      <h3>MRI's silent-failure rate moved in the opposite direction from the accept-rate finding</h3>
-      <table class="delta-table">
-        <tr><th>Metric</th><th>Paper</th><th></th><th>Full data</th></tr>
-        <tr><td class="metric">CT conditional rate</td><td>52.8%</td><td class="arrow">→</td><td>56.0%</td></tr>
-        <tr><td class="metric">MRI conditional rate (in-sample)</td><td>69.5%</td><td class="arrow">→</td><td><b>46.6%</b> (held-out)</td></tr>
-      </table>
-      <p class="why">Unlike the accept-rate finding (item 1), where in-sample was <em>optimistic</em>, here in-sample was <em>pessimistic</em> — it overstated the silent-failure problem by 23 points. Worth an explicit sentence: in-sample bias on MRI did not move all metrics the same direction, so readers shouldn't assume a uniform correction factor.</p>
-    </article>
-
-    <article class="item critical" id="mu-8">
-      <div class="item-head">
-        <span class="item-tag">Transfer / leave-one-family-out</span>
-        <span class="item-loc">§4.5, p.8 L374–389 · Table 2</span>
-      </div>
-      <h3>The paper's one reported transfer failure no longer fails</h3>
-      <blockquote>"One family fails: costal cartilage falls below chance (0.399)"</blockquote>
-      <table class="delta-table">
-        <tr><th>Metric</th><th>Paper</th><th></th><th>Full data</th></tr>
-        <tr><td class="metric">costal_cartilage transfer AUC</td><td>0.399 (below chance)</td><td class="arrow">→</td><td><b>0.660</b> (above chance)</td></tr>
-        <tr><td class="metric">Families above chance</td><td>12 / 13</td><td class="arrow">→</td><td><b>14 / 14</b></td></tr>
-        <tr><td class="metric">LOFO mean / median</td><td>0.779 / 0.829</td><td class="arrow">→</td><td>0.795 / 0.809</td></tr>
-        <tr><td class="metric">LOO mean / median</td><td>0.821 / 0.873</td><td class="arrow">→</td><td>0.830 / 0.849</td></tr>
-      </table>
-      <p class="why">Table 2 needs regenerating — a new <code class="inline">pelvic_bone</code> row appears (368 masks, AUC 0.859; too little data to evaluate in the 57-subject val set at all), and the costal-cartilage exception disappears with more training examples of that family (49→115 masks). This is a genuinely different narrative, not a rounding change: "12 of 13" becomes "14 of 14," so the whole "one family fails" paragraph needs rewriting, not just its numbers.</p>
-    </article>
-
-    <article class="item critical" id="mu-9">
-      <div class="item-head">
-        <span class="item-tag">Calibration</span>
-        <span class="item-loc">§4.6, p.9 L391–404 · Table 4</span>
-      </div>
-      <h3>MRI calibration without intensity no longer shows a marginal win</h3>
-      <blockquote>"without intensity features, isotonic buys a marginal ECE improvement (0.041 to 0.035) at a 0.016 AUC cost"</blockquote>
-      <table class="delta-table">
-        <tr><th>Variant</th><th>Paper (uncal→isotonic)</th><th></th><th>Full data (uncal→isotonic)</th></tr>
-        <tr><td class="metric">MRI + intensity</td><td>0.036 → 0.054 (worse)</td><td class="arrow">→</td><td>0.020 → 0.035 (worse)</td></tr>
-        <tr><td class="metric">MRI − intensity</td><td>0.041 → <b>0.035</b> (better)</td><td class="arrow">→</td><td>0.029 → <b>0.051</b> (worse)</td></tr>
-      </table>
-      <p class="why">This flips the finding, not just the number: the paper's one case where isotonic calibration helped on MRI (no-intensity variant) reverses at full scale — now both variants get uniformly worse. The honest revision is actually a <em>stronger</em> version of the paper's own point: MRI calibration doesn't survive at any sample size tested so far. CT direction is unchanged (isotonic still clearly helps: ECE 0.027→0.010).</p>
-    </article>
-
     <article class="item critical" id="mu-10">
       <div class="item-head">
         <span class="item-tag">Calibration numbers</span>
+        <span class="kind-badge number">Number update</span>
         <span class="item-loc">§4.6, p.9 L390–397</span>
       </div>
       <h3>CT calibration ECE and Brier decomposition</h3>
@@ -443,6 +402,7 @@
     <article class="item critical" id="mu-11">
       <div class="item-head">
         <span class="item-tag">Conformal intervals</span>
+        <span class="kind-badge number">Number update</span>
         <span class="item-loc">§4.6, p.9 L405–422 · Table 5</span>
       </div>
       <h3>Conformal coverage/width numbers</h3>
@@ -455,40 +415,10 @@
       <p class="why">CT reproduces almost bit-for-bit (80.7%→80.6%) — this is the cleanest confirmation in the whole paper that the method itself is scale-invariant. Update the specific figures; no narrative change needed for CT. MRI's coverage improved to essentially nominal and its interval width grew substantially (0.158→0.355) — worth a sentence, since a wider interval on a harder, now-real held-out set is the expected, correct behavior, not a regression.</p>
     </article>
 
-    <article class="item critical" id="mu-12">
-      <div class="item-head">
-        <span class="item-tag">Conformal, Mondrian feasibility floor</span>
-        <span class="item-loc">§4.6, p.9 L413–417</span>
-      </div>
-      <h3>The paper's illustrative "family below the floor" now clears it</h3>
-      <blockquote>"the reproductive family (3.4 calibration masks per fold) falls below it, lands at 50.0% coverage, and cannot attain the guarantee"</blockquote>
-      <table class="delta-table">
-        <tr><th>Metric</th><th>Paper</th><th></th><th>Full data</th></tr>
-        <tr><td class="metric">Masks / avg calibration-fold n</td><td>14 / 3.4</td><td class="arrow">→</td><td>44 / 11.4</td></tr>
-        <tr><td class="metric">Clears feasibility floor?</td><td>No</td><td class="arrow">→</td><td><b>Yes</b></td></tr>
-        <tr><td class="metric">Coverage achieved</td><td>50.0%</td><td class="arrow">→</td><td>79.5%</td></tr>
-      </table>
-      <p class="why">This specific example needs replacing — either find a family that still falls below the floor at full scale (check <code class="inline">experiments/paper_final_v2/ct/regression/conformal_by_family.csv</code> for candidates), or reframe the sentence to say the floor's practical bite <em>shrinks</em> with more data, which is itself a useful point about when Mondrian conditioning becomes viable.</p>
-    </article>
-
-    <article class="item critical" id="mu-13">
-      <div class="item-head">
-        <span class="item-tag">Clinical decision-flip</span>
-        <span class="item-loc">§4.7, p.10 L423–438 · §5.1 L484–486</span>
-      </div>
-      <h3>Which modality has the anecdote reverses</h3>
-      <blockquote>"across 42 spleen masks… no prediction crosses the decision boundary… On the in-sample MRI subset, one of 14 spleen masks flips"</blockquote>
-      <table class="delta-table">
-        <tr><th>Modality</th><th>Paper</th><th></th><th>Full data</th></tr>
-        <tr><td class="metric">CT flips</td><td>0 / 42</td><td class="arrow">→</td><td><b>1 / 101</b></td></tr>
-        <tr><td class="metric">MRI flips</td><td>1 / 14</td><td class="arrow">→</td><td><b>0 / 22</b></td></tr>
-      </table>
-      <p class="why">Both cited case studies (CT's "clean null," MRI's single flip) need replacing with whichever new case exists — the CT flip is now the illustrative example, MRI has none. This is expected instability given n≈14–101, and the paper's own framing ("a single illustrative case rather than a rate") already anticipates it — the revision should keep that framing, just swap which modality's case gets described in detail.</p>
-    </article>
-
     <article class="item critical" id="mu-14">
       <div class="item-head">
         <span class="item-tag">Limitations</span>
+        <span class="kind-badge number">Number update</span>
         <span class="item-loc">§5.1, p.11 L476–479</span>
       </div>
       <h3>The MRI in-sample limitation is now resolved, not open</h3>
@@ -499,6 +429,7 @@
     <article class="item critical" id="mu-15">
       <div class="item-head">
         <span class="item-tag">Threshold sweep</span>
+        <span class="kind-badge number">Number update</span>
         <span class="item-loc">§4.4, p.8 L356–373</span>
       </div>
       <h3>Threshold-invariance band and regression Spearman/R²</h3>
@@ -515,6 +446,7 @@
     <article class="item critical" id="mu-16">
       <div class="item-head">
         <span class="item-tag">Headline claim · code bug found during this audit</span>
+        <span class="kind-badge number">Number update</span>
         <span class="item-loc">Contributions bullet, p.2 L88–91 · §4.3, p.7 L349–350</span>
       </div>
       <h3>MRI's "size becomes load-bearing" claim is directionally right but ~2.5× overstated</h3>
@@ -528,6 +460,112 @@
       </table>
       <p class="why">Rerunning this produced an <em>empty</em> output file at first — a genuine bug, not just a data difference: <code class="inline">_volume_feature_ablation()</code> in <code class="inline">regression.py</code> compared <code class="inline">FEATURE_GROUPS</code>'s long descriptive column names against a dataframe already renamed to short names by <code class="inline">normalize_columns()</code>, so every group lookup silently matched zero columns. Fixed in commit <code class="inline">0f6449c</code> (normalize both sides before comparing). With the fix, the direction of the paper's claim holds (size costs more than connectivity under the volume-error label, the reverse of the IoU-label story) — but the effect is roughly 2.5× smaller with more, genuinely held-out data. This is exactly the kind of number that should be re-verified from the underlying CSV before quoting in a revision, not copied from the original in-sample run.</p>
     </article>
+
+    <div class="subgroup-head">
+      <h3>B. Claim reverses — genuinely different result — 6</h3>
+      <p>These aren't refinements. The paper currently asserts something the full-data run contradicts; the argument itself needs rewriting.</p>
+    </div>
+
+    <article class="item critical" id="mu-5">
+      <div class="item-head">
+        <span class="item-tag">Per-structure claim</span>
+        <span class="kind-badge reversal">Claim reverses</span>
+        <span class="item-loc">§4.1, p.7 L312–319</span>
+      </div>
+      <h3>MRI's worst performers are no longer "near-misses"</h3>
+      <blockquote>"the worst performers are near-misses (median IoU 0.78 to 0.79) rather than catastrophic failures"</blockquote>
+      <table class="delta-table">
+        <tr><th>Structure</th><th>Median IoU (held-out)</th><th>Accept rate</th></tr>
+        <tr><td class="metric">pancreas</td><td>0.53</td><td>0%</td></tr>
+        <tr><td class="metric">iliac_vena_left</td><td>0.52</td><td>0%</td></tr>
+        <tr><td class="metric">adrenal_gland_left</td><td>0.60</td><td>0%</td></tr>
+        <tr><td class="metric">liver <em>(paper's cited best)</em></td><td>0.92 (paper: 0.93)</td><td>54.2%</td></tr>
+      </table>
+      <p class="why">On the real held-out set, several structures have genuinely low median IoU (0.49–0.60) with 0% accept rate — this contradicts the "not catastrophic" framing. Liver itself, cited as MRI's best structure, only clears the 0.90 bar 54% of the time despite a healthy median IoU — worth adding as its own observation (high central tendency, wide variance).</p>
+    </article>
+
+    <article class="item critical" id="mu-7">
+      <div class="item-head">
+        <span class="item-tag">Silent failure</span>
+        <span class="kind-badge reversal">Claim reverses</span>
+        <span class="item-loc">§4.1, p.7 L320–325 · Abstract L6–7</span>
+      </div>
+      <h3>MRI's silent-failure rate moved in the opposite direction from the accept-rate finding</h3>
+      <table class="delta-table">
+        <tr><th>Metric</th><th>Paper</th><th></th><th>Full data</th></tr>
+        <tr><td class="metric">CT conditional rate</td><td>52.8%</td><td class="arrow">→</td><td>56.0%</td></tr>
+        <tr><td class="metric">MRI conditional rate (in-sample)</td><td>69.5%</td><td class="arrow">→</td><td><b>46.6%</b> (held-out)</td></tr>
+      </table>
+      <p class="why">Unlike the accept-rate finding (item 1), where in-sample was <em>optimistic</em>, here in-sample was <em>pessimistic</em> — it overstated the silent-failure problem by 23 points. Worth an explicit sentence: in-sample bias on MRI did not move all metrics the same direction, so readers shouldn't assume a uniform correction factor.</p>
+    </article>
+
+    <article class="item critical" id="mu-8">
+      <div class="item-head">
+        <span class="item-tag">Transfer / leave-one-family-out</span>
+        <span class="kind-badge reversal">Claim reverses</span>
+        <span class="item-loc">§4.5, p.8 L374–389 · Table 2</span>
+      </div>
+      <h3>The paper's one reported transfer failure no longer fails</h3>
+      <blockquote>"One family fails: costal cartilage falls below chance (0.399)"</blockquote>
+      <table class="delta-table">
+        <tr><th>Metric</th><th>Paper</th><th></th><th>Full data</th></tr>
+        <tr><td class="metric">costal_cartilage transfer AUC</td><td>0.399 (below chance)</td><td class="arrow">→</td><td><b>0.660</b> (above chance)</td></tr>
+        <tr><td class="metric">Families above chance</td><td>12 / 13</td><td class="arrow">→</td><td><b>14 / 14</b></td></tr>
+        <tr><td class="metric">LOFO mean / median</td><td>0.779 / 0.829</td><td class="arrow">→</td><td>0.795 / 0.809</td></tr>
+        <tr><td class="metric">LOO mean / median</td><td>0.821 / 0.873</td><td class="arrow">→</td><td>0.830 / 0.849</td></tr>
+      </table>
+      <p class="why">Table 2 needs regenerating — a new <code class="inline">pelvic_bone</code> row appears (368 masks, AUC 0.859; too little data to evaluate in the 57-subject val set at all), and the costal-cartilage exception disappears with more training examples of that family (49→115 masks). This is a genuinely different narrative, not a rounding change: "12 of 13" becomes "14 of 14," so the whole "one family fails" paragraph needs rewriting, not just its numbers.</p>
+    </article>
+
+    <article class="item critical" id="mu-9">
+      <div class="item-head">
+        <span class="item-tag">Calibration</span>
+        <span class="kind-badge reversal">Claim reverses</span>
+        <span class="item-loc">§4.6, p.9 L391–404 · Table 4</span>
+      </div>
+      <h3>MRI calibration without intensity no longer shows a marginal win</h3>
+      <blockquote>"without intensity features, isotonic buys a marginal ECE improvement (0.041 to 0.035) at a 0.016 AUC cost"</blockquote>
+      <table class="delta-table">
+        <tr><th>Variant</th><th>Paper (uncal→isotonic)</th><th></th><th>Full data (uncal→isotonic)</th></tr>
+        <tr><td class="metric">MRI + intensity</td><td>0.036 → 0.054 (worse)</td><td class="arrow">→</td><td>0.020 → 0.035 (worse)</td></tr>
+        <tr><td class="metric">MRI − intensity</td><td>0.041 → <b>0.035</b> (better)</td><td class="arrow">→</td><td>0.029 → <b>0.051</b> (worse)</td></tr>
+      </table>
+      <p class="why">This flips the finding, not just the number: the paper's one case where isotonic calibration helped on MRI (no-intensity variant) reverses at full scale — now both variants get uniformly worse. The honest revision is actually a <em>stronger</em> version of the paper's own point: MRI calibration doesn't survive at any sample size tested so far. CT direction is unchanged (isotonic still clearly helps: ECE 0.027→0.010).</p>
+    </article>
+
+    <article class="item critical" id="mu-12">
+      <div class="item-head">
+        <span class="item-tag">Conformal, Mondrian feasibility floor</span>
+        <span class="kind-badge reversal">Claim reverses</span>
+        <span class="item-loc">§4.6, p.9 L413–417</span>
+      </div>
+      <h3>The paper's illustrative "family below the floor" now clears it</h3>
+      <blockquote>"the reproductive family (3.4 calibration masks per fold) falls below it, lands at 50.0% coverage, and cannot attain the guarantee"</blockquote>
+      <table class="delta-table">
+        <tr><th>Metric</th><th>Paper</th><th></th><th>Full data</th></tr>
+        <tr><td class="metric">Masks / avg calibration-fold n</td><td>14 / 3.4</td><td class="arrow">→</td><td>44 / 11.4</td></tr>
+        <tr><td class="metric">Clears feasibility floor?</td><td>No</td><td class="arrow">→</td><td><b>Yes</b></td></tr>
+        <tr><td class="metric">Coverage achieved</td><td>50.0%</td><td class="arrow">→</td><td>79.5%</td></tr>
+      </table>
+      <p class="why">This specific example needs replacing — either find a family that still falls below the floor at full scale (check <code class="inline">experiments/paper_final_v2/ct/regression/conformal_by_family.csv</code> for candidates), or reframe the sentence to say the floor's practical bite <em>shrinks</em> with more data, which is itself a useful point about when Mondrian conditioning becomes viable.</p>
+    </article>
+
+    <article class="item critical" id="mu-13">
+      <div class="item-head">
+        <span class="item-tag">Clinical decision-flip</span>
+        <span class="kind-badge reversal">Claim reverses</span>
+        <span class="item-loc">§4.7, p.10 L423–438 · §5.1 L484–486</span>
+      </div>
+      <h3>Which modality has the anecdote reverses</h3>
+      <blockquote>"across 42 spleen masks… no prediction crosses the decision boundary… On the in-sample MRI subset, one of 14 spleen masks flips"</blockquote>
+      <table class="delta-table">
+        <tr><th>Modality</th><th>Paper</th><th></th><th>Full data</th></tr>
+        <tr><td class="metric">CT flips</td><td>0 / 42</td><td class="arrow">→</td><td><b>1 / 101</b></td></tr>
+        <tr><td class="metric">MRI flips</td><td>1 / 14</td><td class="arrow">→</td><td><b>0 / 22</b></td></tr>
+      </table>
+      <p class="why">Both cited case studies (CT's "clean null," MRI's single flip) need replacing with whichever new case exists — the CT flip is now the illustrative example, MRI has none. This is expected instability given n≈14–101, and the paper's own framing ("a single illustrative case rather than a rate") already anticipates it — the revision should keep that framing, just swap which modality's case gets described in detail.</p>
+    </article>
+
   </section>
 
   <section class="group" id="marginal">
