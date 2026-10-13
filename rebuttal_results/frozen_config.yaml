@@ -1,0 +1,216 @@
+# =============================================================================
+# FROZEN REBUTTAL CONFIG  -  MaskGuard (reference-free per-mask reliability QC)
+# =============================================================================
+# This file fixes EVERY modelling, feature, calibration, threshold, population,
+# and analysis choice for the ML4H rebuttal test-set evaluation. It is committed
+# BEFORE any held-out test label (IoU / Dice / NSD / accept) is read. Nothing in
+# this file may be changed after a test label has been read; a genuine bug found
+# later is fixed in a separate, documented commit with before/after numbers.
+#
+# Reading reference-free descriptors on test (num_voxels, volume, shape, HU, ...)
+# and running TotalSegmentator on test images is allowed before this freeze.
+# Reading anything derived from test REFERENCE masks is not.
+# =============================================================================
+
+meta:
+  paper: "MaskGuard: reference-free per-mask reliability for TotalSegmentator (CT + MRI)"
+  prior_name: "GRAM"
+  branch: rebuttal-test-eval
+  base_commit: 73f8779                 # HEAD the branch was cut from (paper_final + pipeline)
+  frozen_date_utc: "2026-10-13"
+  code_frozen_from:                    # the exact scripts whose constants are frozen here
+    - experiments/pipeline/train.py
+    - experiments/pipeline/regression.py
+    - experiments/pipeline/paper_consolidate.py
+    - experiments/pipeline/compute_metrics.py
+  new_code_dir: experiments/rebuttal/
+  outputs_dir: rebuttal_results/        # {ct,mri}/ subdirs for per-table CSVs
+
+# -----------------------------------------------------------------------------
+# DATA: official splits (reference-free, read from each dataset's meta.csv)
+# -----------------------------------------------------------------------------
+data:
+  ct:
+    dataset: Totalsegmentator_dataset_v201
+    dataset_path: "C:/Users/ansar/Downloads/Totalsegmentator_dataset_v201"
+    task: total                        # TotalSegmentator v2, 117 structures
+    n_structures: 117
+    splits_from_meta: {train: 1082, val: 57, test: 89}   # total 1228
+    dev_split: val                     # 57 subjects, genuinely held out from training
+    test_split: test                   # 89 subjects, PRIMARY held-out evaluation
+  mri:
+    dataset: TotalsegmentatorMRI_dataset_v200
+    dataset_path: "C:/Users/ansar/Downloads/TotalsegmentatorMRI_dataset_v200"
+    task: total_mr                     # TotalSegmentator v2, 50 structures
+    n_structures: 50
+    splits_from_meta: {train: 561, test: 55}             # total 616; NO validation split
+    official_validation_split: none    # confirmed: meta.csv has only train/test
+    dev_set: "subject-grouped 20% carve of the 190-subject mr_full_run train subset = 38 subjects"
+    dev_n_subjects: 38
+    test_split: test                   # 55 official subjects, PREVIOUSLY EXPOSED (see audit)
+    paper_190_49_note: >
+      The paper's '190 train / 49 test' refers to the mr_full_run processed subset
+      (190 of 561 official train scored; 49 of 55 official test produced rows), NOT the
+      full dataset. See CONTAMINATION_AUDIT.md sections A1/A2.
+
+# -----------------------------------------------------------------------------
+# LABEL + MASK RULES (identical CT and MRI)
+# -----------------------------------------------------------------------------
+label:
+  accept_definition: "accept = (IoU >= 0.90)"
+  iou_accept_threshold: 0.90
+  min_voxels_present: 20               # a mask with < 20 voxels is ABSENT (empty-mask rule)
+  canonical_space: RAS                 # all images/masks loaded canonical (load_canonical)
+  empty_mask_rule: >
+    A (subject, organ) row is dropped only if BOTH predicted and reference voxel counts
+    are 0 (after the 20-voxel threshold). A subject whose predictions are all empty while
+    references exist is NOT excluded; its masks are scored as empty predictions.
+
+# -----------------------------------------------------------------------------
+# FEATURES (reference-free descriptors). Leak + id columns never enter X.
+# -----------------------------------------------------------------------------
+features:
+  leak_cols: [dice, iou, tp, fp, fn, gt_vox, status, accept]       # excluded, assert-enforced
+  id_cols:   [subject, organ, orig_axcodes, pred_vox, family, label, vol_err, vol_bad, iou_reject]
+  # IMPLEMENTATION ASYMMETRY (frozen exactly as it produced the paper numbers):
+  ct_feature_set:
+    n_features: 20
+    includes_constant_is_empty: true   # train.py keeps the zero-variance is_empty column
+    note: "19 descriptors + the constant is_empty column = 20 raw columns"
+  mri_feature_set:
+    n_features: 19
+    includes_constant_is_empty: false  # regression.py drops nunique<=1 columns
+    note: "is_empty is constant on MRI dev and dropped, leaving 19 features"
+  documented_in_results: >
+    The paper Methods states 19 descriptors and 400 trees for both modalities. In code the
+    CT classifier trains on 20 raw columns (constant is_empty kept) and the MRI regressor on
+    19; the constant column changes CT OOF AUC by < 0.001. Recorded as an implementation fact.
+
+# -----------------------------------------------------------------------------
+# MODELS (frozen configs; seed 0 everywhere)
+# -----------------------------------------------------------------------------
+models:
+  seed: 0
+  ct_primary:
+    kind: RandomForestClassifier
+    target: "accept = (IoU >= 0.90)"
+    params: {n_estimators: 400, min_samples_leaf: 2, class_weight: balanced_subsample, random_state: 0, n_jobs: -1}
+    preprocessing: "SimpleImputer(strategy=median) -> RF"
+    feature_set: ct_feature_set        # 20 columns
+    source: experiments/pipeline/train.py:105
+  mri_primary:
+    kind: RandomForestRegressor        # predict IoU; score = predicted IoU
+    target: "IoU (continuous); binarised at 0.90 for AUC"
+    params: {n_estimators: 300, min_samples_leaf: 2, random_state: 0, n_jobs: -1}
+    preprocessing: "SimpleImputer(strategy=median) -> RF"
+    feature_set: mri_feature_set       # 19 columns
+    intensity: "with-intensity variant is primary; no-intensity reported as secondary"
+    source: experiments/pipeline/regression.py:62,132
+  organ_rate_baseline:
+    kind: per-structure accept-rate
+    definition: "score(mask) = mean accept rate of its organ on the training fold; OOF via GroupKFold"
+    applies_to: [ct, mri]
+
+# -----------------------------------------------------------------------------
+# EVALUATION PROTOCOL
+# -----------------------------------------------------------------------------
+evaluation:
+  dev_cv: {scheme: GroupKFold, n_splits: 5, group: subject}       # OOF on dev
+  bootstrap_ci: {n_boot: 1000, method: percentile, level: 0.95, unit: subject, seed: 0}
+  test_scoring: >
+    Dev-fit model refit on the FULL dev set (CT val; MRI 38-subject dev) once, then applied
+    to the held-out test set. Test AUC/PR-AUC reported with the same subject-level bootstrap CI.
+  calibration:
+    ct: "isotonic and Platt(sigmoid) both evaluated vs uncalibrated; nested subject-grouped"
+    mri: "report UNCALIBRATED (isotonic and Platt both failed on dev); recorded in audit"
+  conformal_not_a_rebuttal_request: >
+    Conformal/CQR (regression.py CONF_ALPHAS=[0.2,0.1], CONF_CAL_FRAC=0.30,
+    MONDRIAN_FLOOR_MODE=fixed/50) is frozen as-is but is NOT one of the 5 rebuttal requests
+    and is not re-run on test. Paper conformal numbers are the phase2 feasibility-floor run.
+
+# -----------------------------------------------------------------------------
+# TEST POPULATIONS (config B2)
+# -----------------------------------------------------------------------------
+test_population:
+  ct: {attempt: 89, partition: "official test"}
+  mri: {attempt: 55, partition: "official test"}
+  exclusion_rule: >
+    Only DOCUMENTED technical failures (reproducible pipeline crash, unreadable input) are
+    excluded, each listed with its reason. A subject whose predictions are all empty where
+    references exist is NOT excluded; its masks count under the 20-voxel empty-mask rule.
+  mri_6_zero_row_subjects_in_mr_full_run: [s0078, s0150, s0458, s0480, s0523, s0580]
+  mri_6_status: >
+    All 6 have a present, readable image and all 50 reference masks on the v200 dataset.
+    They produced zero rows in mr_full_run only because stage-1 inference wrote no predicted
+    masks for them (predictions + inference log never committed). They are re-attempted in
+    Phase 2; kept unless a reproducible crash/unreadable input is observed.
+
+# -----------------------------------------------------------------------------
+# INFERENCE / TABLE PROVENANCE (configs B3, B4)
+# -----------------------------------------------------------------------------
+inference:
+  totalsegmentator_version_installed: "2.15.0"
+  weights_present:
+    ct_total:   [Dataset291, Dataset292, Dataset293, Dataset294, Dataset295]
+    mri_total_mr: [Dataset850, Dataset851]
+  ct_test_generation:                  # config B4
+    version: "TotalSegmentator 2.15.0, task total"
+    parity_check: >
+      predictions_ct_val (the dev run) has 57 subjects x 117 structure files and no committed
+      run manifest; the version that produced it is not independently recorded. CT test is
+      generated with the installed 2.15.0 `total` task and verified to yield the same 117-structure
+      file set per subject. Record the exact command + version in the Phase 2 manifest.
+  mri_table_source_rule:               # config B3 (fixed now)
+    regenerate: "all MRI dev (38) and test (55) subjects with TotalSegmentator 2.15.0 task total_mr"
+    mr_full_run_reference_commit: 9e9f643     # teammate's repo commit recorded in its manifests
+    compare_columns: [num_voxels, volume_mm3, num_components]
+    match_rule: >
+      Compare the regenerated reference-free columns against the existing dev/test tables on
+      overlapping (subject, organ) masks. If >= 99% of masks match EXACTLY, use the regenerated
+      tables for Requests 1-4 covering all test subjects. Otherwise: keep the existing dev/test
+      tables for Requests 1-3, use regenerated masks for NSD (Request 4) only on masks that match,
+      and report the mismatch rate and the unscored subjects separately.
+
+# -----------------------------------------------------------------------------
+# REPORTING STANCE (config B5)
+# -----------------------------------------------------------------------------
+reporting:
+  ct_test: "PRIMARY held-out result (first-time, clean evaluation)."
+  mri_test: >
+    PREVIOUSLY EXPOSED split (scored by teammate 2026-08-03 before final MRI choices 2026-08-24)
+    AND in-sample for the segmenter. CONTAMINATION_AUDIT.md is cited beside every MRI test number.
+  no_em_dashes_in_results: true
+
+# -----------------------------------------------------------------------------
+# THE FIVE REBUTTAL REQUESTS (priority order; settings frozen)
+# -----------------------------------------------------------------------------
+requests:
+  1_test_set_evaluation:
+    what: "Refit frozen primary + organ-rate baseline on dev; score on held-out test."
+    metrics: [ROC-AUC, "PR-AUC(accept)", "PR-AUC(reject)"]
+    ci: "subject bootstrap 1000 draws, 95% percentile"
+  2_review_budget_triage:
+    what: "At review budgets 10/20/30% of masks (ranked by model risk), report caught reject rate etc."
+    budgets: [0.10, 0.20, 0.30]
+    baseline: organ_rate_baseline
+  3_absolute_within_structure_performance:
+    what: "Per-structure accept rate and model discrimination within each structure on test."
+  4_surface_dice_nsd:
+    what: "Normalized Surface Dice at tolerances 1/2/3 mm (Nikolov 2021), in mm."
+    tolerances_mm: [1, 2, 3]
+    implementation: "DeepMind surface-distance OR MONAI compute_surface_dice; mm units"
+    depends_on: "regenerated predicted masks (see mri_table_source_rule); CT masks from Phase 2"
+  5_cnn_baseline:
+    what: "Go/no-go. Only if a sound, honestly-comparable CNN baseline is feasible under the freeze."
+    status: "decision pending feasibility review; not committed to run"
+
+# -----------------------------------------------------------------------------
+# REPRODUCTION CHECK (dev only, Phase 0 - PASSED to 3 decimals)
+# -----------------------------------------------------------------------------
+reproduction_check:
+  script: experiments/rebuttal/reproduce_dev.py
+  ct_primary_rf_auc:  {target: 0.871, reproduced: 0.8707}   # 20 feat incl is_empty, 400 trees
+  ct_organ_rate_auc:  {target: 0.761, reproduced: 0.7608}
+  mri_primary_rf_auc: {target: 0.919, reproduced: 0.9187}   # 19 feat, 300 trees
+  mri_organ_rate_auc: {target: 0.815, reproduced: 0.8150}
+  verdict: "all four dev numbers reproduce to 3 decimals from the frozen code"
