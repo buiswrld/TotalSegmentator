@@ -1,0 +1,13 @@
+split,budget_pct,ranker,n_reviewed,n_total,n_rejects_total,rejects_caught,caught_reject_rate,precision_in_budget
+CT_dev_OOF,10,model,402,4017,1024,336.0,0.3281,0.8358
+CT_dev_OOF,10,organ_rate_baseline,402,4017,1024,279.7,0.2731,0.6957
+CT_dev_OOF,10,random_reference,402,4017,1024,102.5,0.1001,0.2549
+CT_dev_OOF,10,oracle_reference,402,4017,1024,402.0,0.3926,1.0
+CT_dev_OOF,20,model,803,4017,1024,582.0,0.5684,0.7248
+CT_dev_OOF,20,organ_rate_baseline,803,4017,1024,462.9,0.4521,0.5765
+CT_dev_OOF,20,random_reference,803,4017,1024,204.7,0.1999,0.2549
+CT_dev_OOF,20,oracle_reference,803,4017,1024,803.0,0.7842,1.0
+CT_dev_OOF,30,model,1205,4017,1024,751.0,0.7334,0.6232
+CT_dev_OOF,30,organ_rate_baseline,1205,4017,1024,586.2,0.5725,0.4865
+CT_dev_OOF,30,random_reference,1205,4017,1024,307.2,0.3,0.2549
+CT_dev_OOF,30,oracle_reference,1205,4017,1024,1024.0,1.0,0.8498

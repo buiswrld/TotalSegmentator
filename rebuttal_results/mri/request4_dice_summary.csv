@@ -1,0 +1,4 @@
+split,n_masks,n_subjects,dice_mean,dice_median,dice_std,dice_p05,dice_p95,frac_dice_ge_0.90
+CT_dev,4017,57,0.9297,0.972,0.1515,0.732,0.9932,0.8763
+MRI_dev,548,38,0.8415,0.9098,0.2266,0.0,0.9723,0.5511
+MRI_test_exposed,929,49,0.7454,0.869,0.2865,0.0,0.9697,0.394

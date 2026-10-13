@@ -1,0 +1,4 @@
+model,metric,point,ci_lo,ci_hi
+RF_IoU_regressor_no_intensity,ROC_AUC,0.9235,0.9042,0.9415
+RF_IoU_regressor_no_intensity,PR_AUC_accept,0.7535,0.6864,0.8167
+RF_IoU_regressor_no_intensity,PR_AUC_reject,0.9821,0.9729,0.9891

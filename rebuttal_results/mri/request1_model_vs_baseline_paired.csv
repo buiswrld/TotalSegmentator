@@ -1,0 +1,3 @@
+split,model_auc,baseline_auc,paired_diff,diff_ci_lo,diff_ci_hi
+MRI_dev,0.9187,0.815,0.1037,0.0544,0.1597
+MRI_test_exposed,0.9228,0.8666,0.0562,0.0267,0.0832
