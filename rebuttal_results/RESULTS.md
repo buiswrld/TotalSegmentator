@@ -289,26 +289,90 @@ spacing). The only difference from the named libraries is a voxel surface rather
 marching-cubes surface. Predicted and reference masks share an identical 1.5 mm isotropic
 grid, so no resampling is involved.
 
+Boundary-voxel connectivity: scipy `binary_erosion`'s default structuring element,
+`generate_binary_structure(3, 1)`, which is 6-connectivity (face-connected, 6 neighbours). A
+surface voxel is a mask voxel with at least one face-neighbour outside the mask.
+
+ANALYTIC VALIDATION (no installs), next to the substitution above. Two concentric solid
+spheres, radii 20 mm and 22 mm, on a 1.5 mm isotropic grid, so their surfaces are nominally
+2 mm apart. Run through the identical `surf()`/`nsd()` code (`experiments/rebuttal/_nsd.py`,
+`request4c_sphere_validation.py`):
+
+- NSD @ 1 mm = **0.0000** (expected near 0: the 2 mm gap exceeds a 1 mm tolerance).
+- NSD @ 2 mm = 0.3943 (borderline, as expected when the gap equals the tolerance).
+- NSD @ 3 mm = **1.0000** (expected near 1: the 2 mm gap is inside a 3 mm tolerance).
+- Measured inner-to-outer surface distance: mean 1.88 mm, median 2.12 mm, max 3.00 mm. This
+  equals the geometric 2 mm gap, which confirms distances are in millimetres derived from the
+  voxel spacing (a voxel-unit computation would have read about 1.33). 
+- Identical-mask control (outer vs outer): NSD = 1.0000 at all three tolerances.
+
+The implementation behaves exactly as the NSD definition requires.
+
 Computed over all 4017 CT dev modelled masks (3979 both-present pairs plus 38 pred-only
 false positives scored NSD = 0) in 14 minutes. Source:
-`rebuttal_results/ct/request4_nsd_summary_dev.csv`, per-mask in `request4_nsd_permask_dev.csv`.
+`rebuttal_results/ct/request4_nsd_*_dev.csv`, per-mask in `request4_nsd_permask_dev.csv`.
 
-| Tolerance | NSD mean | NSD median | Frac NSD >= 0.95 | Mean NSD accepted | Mean NSD rejected | Spearman(IoU, NSD) | Spearman(model score, NSD) | Model AUC for NSD >= 0.95 |
+Overall distribution:
+
+| Tolerance | Mean | Median | Std | p05 | p25 | p75 | p95 | Frac >= 0.95 |
 |---|---|---|---|---|---|---|---|---|
-| 1 mm | 0.805 | 0.860 | 0.117 | 0.872 | 0.611 | 0.746 | 0.419 | 0.664 |
-| 2 mm | 0.944 | 0.992 | 0.805 | 0.989 | 0.812 | 0.724 | 0.355 | 0.751 |
-| 3 mm | 0.959 | 0.999 | 0.884 | 0.996 | 0.853 | 0.610 | 0.280 | 0.778 |
+| 1 mm | 0.805 | 0.860 | 0.182 | 0.430 | 0.757 | 0.928 | 0.961 | 0.117 |
+| 2 mm | 0.944 | 0.992 | 0.153 | 0.720 | 0.965 | 0.999 | 1.000 | 0.805 |
+| 3 mm | 0.959 | 0.999 | 0.144 | 0.794 | 0.987 | 1.000 | 1.000 | 0.884 |
 
-Reading, against the frozen CT dev out-of-fold scores:
-- Surface agreement is high at clinical tolerances (median NSD 0.992 at 2 mm, 0.999 at 3 mm).
-- The accept = IoU >= 0.90 label separates cleanly on NSD at every tolerance (for example at
-  2 mm, accepted masks average NSD 0.989 versus 0.812 for rejected), confirming the IoU
-  label is a reasonable surface-quality proxy.
-- The frozen reliability model, trained only on the IoU label, still ranks surface quality:
-  its score predicts NSD >= 0.95 with AUC 0.66 to 0.78 across tolerances and is positively
-  correlated with NSD (Spearman 0.28 to 0.42). As expected, IoU itself correlates with NSD
-  more strongly (0.61 to 0.75), since both measure overlap directly. The reliability signal
-  therefore generalizes beyond the single IoU cutoff to a surface-distance metric.
+Surface agreement is high at clinical tolerances (median NSD 0.992 at 2 mm, 0.999 at 3 mm).
+
+Highlighted structures (mean NSD@2mm). Worst are small or deformable: kidney_cyst (n=1,2,
+NSD 0.00), prostate 0.67, duodenum 0.81, brain 0.81, urinary_bladder 0.83, portal/splenic
+vein 0.84, small_bowel 0.84. Cross-referencing the Request 3 below-chance structures: duodenum
+(0.81) and gallbladder (0.87) are genuinely low on surface agreement too, but
+brachiocephalic_trunk (0.97), vertebrae_T1 (0.97), superior_vena_cava (0.98) and
+common_carotid_artery_left (0.98) have HIGH surface agreement despite below-chance
+within-structure AUC. For those great vessels the masks are surface-good and uniform, so there
+is little quality variation for the model to rank, not a surface failure.
+
+IoU-vs-NSD confusion (accept = IoU >= 0.90 vs surface-accept = NSD >= 0.95):
+
+| Tolerance | IoU-acc / NSD-acc | IoU-acc / NSD-rej | IoU-rej / NSD-acc | IoU-rej / NSD-rej | Agreement |
+|---|---|---|---|---|---|
+| 1 mm | 471 | 2522 | 0 | 1024 | 0.372 |
+| 2 mm | 2849 | 144 | 383 | 641 | **0.869** |
+| 3 mm | 2965 | 28 | 586 | 438 | 0.847 |
+
+NSD >= 0.95 at 2 mm agrees with the IoU >= 0.90 label on 86.9 percent of masks, the best of
+the three. At 1 mm the surface cut is far stricter than IoU (no mask is surface-perfect yet
+IoU-bad, so the off-diagonal is one-sided); at 3 mm the tolerance starts accepting surfaces
+that IoU still rejects (586 masks).
+
+Disagreement (IoU-accept not equal to NSD@2mm-accept) by reference-volume quartile:
+
+| Volume quartile | n | Median ref volume (mm3) | Mean NSD@2mm | Disagreement rate |
+|---|---|---|---|---|
+| Q1 smallest | 995 | 5,835 | 0.936 | **0.242** |
+| Q2 | 995 | 18,205 | 0.947 | 0.079 |
+| Q3 | 994 | 42,010 | 0.966 | 0.064 |
+| Q4 largest | 995 | 297,469 | 0.962 | 0.144 |
+
+Disagreement is U-shaped and highest for the smallest structures (24 percent): on small
+masks a 2 mm surface tolerance and a 0.90 IoU cut diverge most, because a couple of voxels of
+boundary error move IoU far more than NSD. The largest structures show a secondary rise (14
+percent): their surfaces are almost always within 2 mm (high NSD), yet volume offsets can
+still drop IoU below 0.90.
+
+OOF score vs NSD (frozen 400-tree dev out-of-fold randomforest_[raw]):
+
+| Tolerance | Spearman(model, NSD) | Spearman(IoU, NSD) | Model AUC for NSD >= 0.95 | Mean NSD accepted | Mean NSD rejected |
+|---|---|---|---|---|---|
+| 1 mm | 0.419 | 0.746 | 0.664 | 0.872 | 0.611 |
+| 2 mm | 0.355 | 0.724 | 0.751 | 0.989 | 0.812 |
+| 3 mm | 0.280 | 0.610 | 0.778 | 0.996 | 0.853 |
+
+The frozen reliability model, trained only on the IoU label, still ranks surface quality: its
+score predicts NSD >= 0.95 with AUC 0.66 to 0.78 and is positively correlated with NSD
+(Spearman 0.28 to 0.42). IoU itself correlates with NSD more strongly (0.61 to 0.75), as
+expected since both measure overlap directly. The accept label separates cleanly on NSD at
+every tolerance (at 2 mm, accepted masks average 0.989 vs 0.812 for rejected). The reliability
+signal therefore generalizes beyond the single IoU cutoff to a surface-distance metric.
 
 MRI NSD is not computed: it requires the regenerated MRI predicted masks, which the
 time-forced plan did not produce (the `mr_full_run` predicted masks were never committed).

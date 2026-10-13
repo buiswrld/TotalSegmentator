@@ -1,0 +1,4 @@
+tolerance_mm,n,iouACC_nsdACC,iouACC_nsdREJ,iouREJ_nsdACC,iouREJ_nsdREJ,agreement
+1,4017,471,2522,0,1024,0.3722
+2,4017,2849,144,383,641,0.8688
+3,4017,2965,28,586,438,0.8471
