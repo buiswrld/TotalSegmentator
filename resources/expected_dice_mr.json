@@ -1,0 +1,22 @@
+{
+  "_source": "wasserth/TotalSegmentator, resources/results_all_classes_mr.json (paper: Akinci D'Antonoli et al., Radiology 2025, doi:10.1148/radiol.241613, arXiv:2405.19492 - overall mean Dice 0.839 on 55-subject internal test set)",
+  "spleen": 0.927, "kidney_right": 0.932, "kidney_left": 0.944,
+  "gallbladder": 0.903, "liver": 0.960, "stomach": 0.913,
+  "pancreas": 0.700, "adrenal_gland_right": 0.721, "adrenal_gland_left": 0.733,
+  "lung_left": 0.968, "lung_right": 0.979, "esophagus": 0.830,
+  "small_bowel": 0.852, "duodenum": 0.772, "colon": 0.875,
+  "urinary_bladder": 0.802, "prostate": 0.743, "sacrum": 0.870,
+  "vertebrae": 0.918, "intervertebral_discs": 0.871, "spinal_cord": 0.937,
+  "heart": 0.933, "aorta": 0.932, "inferior_vena_cava": 0.901,
+  "portal_vein_and_splenic_vein": 0.766, "iliac_artery_left": 0.804,
+  "iliac_artery_right": 0.716, "iliac_vena_left": 0.694,
+  "iliac_vena_right": 0.598, "humerus_left": 0.874, "humerus_right": 0.827,
+  "scapula_left": 0.761, "scapula_right": 0.728, "clavicula_left": 0.733,
+  "clavicula_right": 0.803, "femur_left": 0.936, "femur_right": 0.960,
+  "hip_left": 0.905, "hip_right": 0.906, "gluteus_maximus_left": 0.884,
+  "gluteus_maximus_right": 0.924, "gluteus_medius_left": 0.879,
+  "gluteus_medius_right": 0.935, "gluteus_minimus_left": 0.915,
+  "gluteus_minimus_right": 0.868, "autochthon_left": 0.962,
+  "autochthon_right": 0.952, "iliopsoas_left": 0.916, "iliopsoas_right": 0.906,
+  "brain": 0.984
+}

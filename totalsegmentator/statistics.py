@@ -116,6 +116,52 @@ def _add_extra_metrics(target, data, ct):
     target["bbox_vox"] = [[int(idx[:, a].min()), int(idx[:, a].max())] for a in range(idx.shape[1])]
 
 
+def calculate_mask_volumes(mask_path: Union[str, Path], task: str = "total", class_map: dict = None) -> dict:
+    """
+    Compute the physical volume (in mL) of segmented structures directly from mask files on disk.
+
+    mask_path: either
+        - a directory of per-structure binary mask files (one .nii.gz per structure, as produced
+          by a non-multilabel TotalSegmentator run), or
+        - a single multilabel .nii.gz file (as produced by --ml), where each structure is a
+          distinct integer label.
+
+    task, class_map: only used for a multilabel file, to map label index -> structure name.
+        class_map (e.g. {1: "spleen", ...}) takes precedence if given; otherwise it is looked up
+        from the task registry for `task` (default "total").
+
+    Returns: {structure_name: volume_ml}
+    """
+    mask_path = Path(mask_path)
+
+    if mask_path.is_dir():
+        mask_files = sorted(mask_path.glob("*.nii.gz"))
+        volumes = {}
+        for mask_file in mask_files:
+            img = nib.load(mask_file)
+            spacing = img.header.get_zooms()
+            vox_vol = spacing[0] * spacing[1] * spacing[2]
+            n_voxels = (img.get_fdata() > 0).sum()
+            structure_name = mask_file.name[:-len(".nii.gz")]
+            volumes[structure_name] = round(float(n_voxels * vox_vol / 1000), 2)
+        return volumes
+
+    img = nib.load(mask_path)
+    spacing = img.header.get_zooms()
+    vox_vol = spacing[0] * spacing[1] * spacing[2]
+    data = img.get_fdata()
+
+    if class_map is None:
+        from totalsegmentator.registry import get_task_classes
+        class_map = get_task_classes(task)
+
+    volumes = {}
+    for label_idx, structure_name in class_map.items():
+        n_voxels = (data == label_idx).sum()
+        volumes[structure_name] = round(float(n_voxels * vox_vol / 1000), 2)
+    return volumes
+
+
 def get_basic_statistics(seg: np.array,
                          ct_file: Union[Path, Nifti1Image],
                          file_out: Union[Path, None]=None,

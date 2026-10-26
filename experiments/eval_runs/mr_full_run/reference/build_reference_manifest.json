@@ -1,0 +1,14 @@
+{
+  "created_at": "2026-08-03T17:07:50.998550+00:00",
+  "git_commit": "9e9f643",
+  "command": "/Users/sohamlokhande/dev/TotalSegmentator/experiments/pipeline/build_reference_table.py --dataset-dir /Volumes/Datasets/TotalsegmentatorMRI_dataset_v200 --split train --output-csv experiments/eval_runs/mr_full_run/reference/reference_stats.csv --workers 10 --min-voxels 20 --limit 600 --modality mr",
+  "stage": "build_reference_table",
+  "dataset_dir": "/Volumes/Datasets/TotalsegmentatorMRI_dataset_v200",
+  "modality": "mr",
+  "split": "train",
+  "limit": 600,
+  "workers": 10,
+  "min_voxels": 20,
+  "n_structures": 50,
+  "n_rows": 750
+}

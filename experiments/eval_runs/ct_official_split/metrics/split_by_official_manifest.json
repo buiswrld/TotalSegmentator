@@ -1,0 +1,18 @@
+{
+  "created_at": "2026-08-31T05:18:47.064289+00:00",
+  "git_commit": "8ecd520",
+  "command": "experiments/pipeline/split_by_official.py --dataset-dir /Volumes/Datasets/Totalsegmentator_dataset_v201 --metrics-csv experiments/eval_runs/ct_full_remote/metrics/classifier_train/combined_metrics.csv --metrics-csv experiments/eval_runs/ct_full_remote/metrics/classifier_test/combined_metrics.csv --output-dir experiments/eval_runs/ct_official_split/metrics --ct-val-into test",
+  "dataset_dir": "/Volumes/Datasets/Totalsegmentator_dataset_v201",
+  "metrics_csv": [
+    "experiments/eval_runs/ct_full_remote/metrics/classifier_train/combined_metrics.csv",
+    "experiments/eval_runs/ct_full_remote/metrics/classifier_test/combined_metrics.csv"
+  ],
+  "ct_val_into": "test",
+  "rows_in": 82935,
+  "expected_by_split": {
+    "train": 1082,
+    "val": 57,
+    "test": 89
+  },
+  "unmatched_subjects": []
+}

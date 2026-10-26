@@ -1,0 +1,3 @@
+modality,in_sample,n_masks_gt_present,n_low_iou,n_silent_failure,raw_rate,conditional_rate_of_low_iou
+"CT (val, held out)",False,3979,986,521,0.1309,0.5284
+"MRI (dev, IN-SAMPLE)",True,516,390,271,0.5252,0.6949

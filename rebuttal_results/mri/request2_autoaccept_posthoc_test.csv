@@ -1,0 +1,5 @@
+split,auto_accept_pct,ranker,n_auto_accepted,expected_failures,failure_rate_pct
+MRI_test_exposed,10,model,93,16.0,17.2
+MRI_test_exposed,10,organ_rate_baseline,93,34.1,36.67
+MRI_test_exposed,20,model,186,74.0,39.78
+MRI_test_exposed,20,organ_rate_baseline,186,86.0,46.24

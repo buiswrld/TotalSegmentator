@@ -1,0 +1,4 @@
+model,n,accept_rate,auc,auc_ci_lo,auc_ci_hi,pr_auc_accept,pr_auc_reject,minority_class,pr_auc_minority
+pred_iou_RandomForest,548,0.2299,0.9187,0.8902,0.9472,0.7816,0.9733,accept,0.7816
+pred_iou_HistGB,548,0.2299,0.884,0.8488,0.9168,0.6601,0.9617,accept,0.6601
+organ-rate_baseline,548,0.2299,0.815,0.7657,0.8613,0.5415,0.9273,accept,0.5415

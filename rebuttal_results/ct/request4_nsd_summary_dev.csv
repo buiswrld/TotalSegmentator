@@ -1,0 +1,4 @@
+tolerance_mm,n,nsd_mean,nsd_median,frac_nsd_ge_0.95,spearman_model_vs_nsd,spearman_iou_vs_nsd,mean_nsd_accepted,mean_nsd_rejected,model_auc_for_nsd_ge_0.95
+1,4017,0.8052,0.8597,0.1173,0.4189,0.7455,0.8717,0.6109,0.6643
+2,4017,0.9438,0.9923,0.8046,0.3554,0.7243,0.989,0.8119,0.7508
+3,4017,0.9594,0.9989,0.884,0.2801,0.6099,0.9958,0.8529,0.7788

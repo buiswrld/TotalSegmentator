@@ -1,0 +1,12 @@
+{
+  "created_at": "2026-08-31T10:56:12.249288+00:00",
+  "git_commit": "8ecd520",
+  "command": "experiments/pipeline/test.py --test-csv experiments/eval_runs/ct_official_split/datasets/official_test.csv --models-dir experiments/eval_runs/ct_official_split/models --output-dir experiments/eval_runs/ct_official_split/results/test",
+  "stage": "test",
+  "test_csv": "experiments/eval_runs/ct_official_split/datasets/official_test.csv",
+  "models_dir": "experiments/eval_runs/ct_official_split/models",
+  "model_name": null,
+  "n_test_rows": 9652,
+  "n_models_scored": 16,
+  "train_csv": "experiments/eval_runs/ct_official_split/datasets/official_train.csv"
+}
