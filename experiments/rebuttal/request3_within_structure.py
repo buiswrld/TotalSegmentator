@@ -53,9 +53,14 @@ def per_structure(df, split_label, out_csv):
     return pooled, mean_within, len(elig)
 
 
-os.makedirs("rebuttal_results/ct", exist_ok=True)
-os.makedirs("rebuttal_results/mri", exist_ok=True)
-per_structure(ct_dev_frame(), "CT (DEV OOF, 400-tree randomforest_[raw])",
-              "rebuttal_results/ct/request3_within_structure_dev_oof.csv")
-per_structure(mri_test_frame(), "MRI (held-out TEST, 49 subj, PREVIOUSLY EXPOSED; see audit)",
-              "rebuttal_results/mri/request3_within_structure_test.csv")
+def main():
+    os.makedirs("ssat_outputs/rebuttal/ct", exist_ok=True)
+    os.makedirs("ssat_outputs/rebuttal/mri", exist_ok=True)
+    per_structure(ct_dev_frame(), "CT (DEV OOF, 400-tree randomforest_[raw])",
+                  "ssat_outputs/rebuttal/ct/request3_within_structure_dev_oof.csv")
+    per_structure(mri_test_frame(), "MRI (held-out TEST, 49 subj, PREVIOUSLY EXPOSED; see audit)",
+                  "ssat_outputs/rebuttal/mri/request3_within_structure_test.csv")
+
+
+if __name__ == "__main__":
+    main()

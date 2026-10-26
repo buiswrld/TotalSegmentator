@@ -35,3 +35,5 @@ experiments/eval_runs/**/overlays/
 *.pem
 *.log
 *.ipynb
+# Regenerated SSAT analysis outputs; preserve committed evidence.
+ssat_outputs/

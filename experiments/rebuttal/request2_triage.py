@@ -83,19 +83,24 @@ def auto_accept(df, split_label, fracs=(0.10, 0.20)):
     return pd.DataFrame(rows)
 
 
-os.makedirs("rebuttal_results/ct", exist_ok=True)
-os.makedirs("rebuttal_results/mri", exist_ok=True)
-ct_df, mri_df = ct_dev_frame(), mri_test_frame()
+def main():
+    os.makedirs("ssat_outputs/rebuttal/ct", exist_ok=True)
+    os.makedirs("ssat_outputs/rebuttal/mri", exist_ok=True)
+    ct_df, mri_df = ct_dev_frame(), mri_test_frame()
 
-ct = triage(ct_df, "CT_dev_OOF"); mri = triage(mri_df, "MRI_test_exposed")
-ct.to_csv("rebuttal_results/ct/request2_triage_dev_oof.csv", index=False)
-mri.to_csv("rebuttal_results/mri/request2_triage_test.csv", index=False)
-aa = auto_accept(mri_df, "MRI_test_exposed")
-aa.to_csv("rebuttal_results/mri/request2_autoaccept_posthoc_test.csv", index=False)
+    ct = triage(ct_df, "CT_dev_OOF"); mri = triage(mri_df, "MRI_test_exposed")
+    ct.to_csv("ssat_outputs/rebuttal/ct/request2_triage_dev_oof.csv", index=False)
+    mri.to_csv("ssat_outputs/rebuttal/mri/request2_triage_test.csv", index=False)
+    aa = auto_accept(mri_df, "MRI_test_exposed")
+    aa.to_csv("ssat_outputs/rebuttal/mri/request2_autoaccept_posthoc_test.csv", index=False)
 
-for title, d in [("CT  (DEV OOF, 400-tree randomforest_[raw])", ct),
-                 ("MRI (held-out TEST, 49 subj, PREVIOUSLY EXPOSED; see audit)", mri)]:
-    print(f"\n=== Request 2 triage (fractional ties): {title} ===")
-    print(d.to_string(index=False))
-print("\n=== Request 2 POST HOC auto-accept (MRI test, exposed) ===")
-print(aa.to_string(index=False))
+    for title, d in [("CT  (DEV OOF, 400-tree randomforest_[raw])", ct),
+                     ("MRI (held-out TEST, 49 subj, PREVIOUSLY EXPOSED; see audit)", mri)]:
+        print(f"\n=== Request 2 triage (fractional ties): {title} ===")
+        print(d.to_string(index=False))
+    print("\n=== Request 2 POST HOC auto-accept (MRI test, exposed) ===")
+    print(aa.to_string(index=False))
+
+
+if __name__ == "__main__":
+    main()

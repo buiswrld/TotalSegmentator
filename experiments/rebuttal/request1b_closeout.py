@@ -18,7 +18,8 @@ from experiments.pipeline.regression import normalize_columns, feature_columns, 
 from experiments.pipeline.paper_consolidate import INTENSITY_COLS
 
 PF = "experiments/paper_final"
-OUT = "rebuttal_results/mri"
+OUT = "ssat_outputs/rebuttal/mri"
+os.makedirs(OUT, exist_ok=True)
 
 dev = pd.read_csv(f"{PF}/mri/dataset_combined_metrics.csv"); dev = dev[dev.is_empty == 0].reset_index(drop=True)
 test = normalize_columns(pd.read_csv("experiments/eval_runs/mr_full_run/metrics/test/combined_metrics.csv"))

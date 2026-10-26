@@ -22,8 +22,8 @@ from experiments.pipeline.regression import normalize_columns, feature_columns, 
 
 PF = "experiments/paper_final"
 TEST_CSV = "experiments/eval_runs/mr_full_run/metrics/test/combined_metrics.csv"
-MRI_DS = "C:/Users/ansar/Downloads/TotalsegmentatorMRI_dataset_v200"
-OUT = "rebuttal_results/mri"
+MRI_DS = os.environ["SSAT_MRI_DATASET"]
+OUT = "ssat_outputs/rebuttal/mri"
 os.makedirs(OUT, exist_ok=True)
 UNSCORED6 = ["s0078", "s0150", "s0458", "s0480", "s0523", "s0580"]
 MIN_VOX = 20

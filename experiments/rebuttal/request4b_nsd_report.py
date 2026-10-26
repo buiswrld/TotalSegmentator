@@ -13,8 +13,9 @@ from scipy.stats import spearmanr
 from sklearn.metrics import roc_auc_score
 from experiments.pipeline.ablations import family_of
 
-OUT = "rebuttal_results/ct"
-perm = pd.read_csv(f"{OUT}/request4_nsd_permask_dev.csv")
+OUT = "ssat_outputs/rebuttal/ct"
+os.makedirs(OUT, exist_ok=True)
+perm = pd.read_csv(os.environ.get("SSAT_NSD_CSV", "rebuttal_results/ct/request4_nsd_permask_dev.csv"))
 oof = pd.read_csv("experiments/paper_final/ct/primary_model_oof.csv")[["subject", "organ", "randomforest_[raw]"]]
 m = perm.merge(oof, on=["subject", "organ"], how="left").rename(columns={"randomforest_[raw]": "model_score"})
 m["family"] = [family_of(o) for o in m["organ"]]

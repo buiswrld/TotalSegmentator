@@ -25,9 +25,9 @@ from scipy.ndimage import binary_erosion, distance_transform_edt
 from scipy.stats import spearmanr
 from sklearn.metrics import roc_auc_score
 
-PRED = "C:/Users/ansar/Algoverse/predictions_ct_val"
-DS = "C:/Users/ansar/Downloads/Totalsegmentator_dataset_v201"
-OUT = "rebuttal_results/ct"
+PRED = os.environ["SSAT_CT_PREDICTIONS"]
+DS = os.environ["SSAT_CT_DATASET"]
+OUT = "ssat_outputs/rebuttal/ct"
 TAUS = (1.0, 2.0, 3.0)
 MARGIN = 5
 os.makedirs(OUT, exist_ok=True)
@@ -36,26 +36,7 @@ dev = pd.read_csv("experiments/paper_final/ct/dataset_combined_metrics.csv")
 nm = dev[dev.is_empty == 0].reset_index(drop=True)
 
 
-def surf(m):
-    return m & ~binary_erosion(m, border_value=0)
-
-
-def nsd(pred, ref, spacing):
-    both = pred | ref
-    if not both.any():
-        return {t: np.nan for t in TAUS}
-    idx = np.argwhere(both)
-    lo = np.maximum(idx.min(0) - MARGIN, 0)
-    hi = np.minimum(idx.max(0) + 1 + MARGIN, pred.shape)
-    sl = tuple(slice(a, b) for a, b in zip(lo, hi))
-    sp, sr = surf(pred[sl]), surf(ref[sl])
-    nsp, nsr = int(sp.sum()), int(sr.sum())
-    if nsp == 0 or nsr == 0:
-        return {t: (1.0 if (nsp == 0 and nsr == 0) else 0.0) for t in TAUS}
-    dr = distance_transform_edt(~sr, sampling=spacing)
-    dp = distance_transform_edt(~sp, sampling=spacing)
-    a, b = dr[sp], dp[sr]
-    return {t: (float((a <= t).sum()) + float((b <= t).sum())) / (nsp + nsr) for t in TAUS}
+from experiments.rebuttal._nsd import surf, nsd
 
 
 rows = []

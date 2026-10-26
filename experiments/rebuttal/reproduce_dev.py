@@ -15,7 +15,7 @@ from sklearn.impute import SimpleImputer
 from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor
 from sklearn.metrics import roc_auc_score
 
-PF = r"C:/Users/ansar/TotalSegmentator/experiments/paper_final"
+PF = "experiments/paper_final"
 LEAK = ["dice","iou","tp","fp","fn","gt_vox","status","accept"]
 IDC  = ["subject","organ","orig_axcodes","pred_vox","family","label","vol_err","vol_bad","iou_reject"]
 
@@ -55,7 +55,7 @@ print("="*64, "\nCT (dev = 57 val subjects)")
 ct = pd.read_csv(PF+"/ct/dataset_combined_metrics.csv")
 ct = ct[ct.is_empty==0].reset_index(drop=True)
 y = (ct["iou"].to_numpy() >= 0.90).astype(int); g = ct["subject"].to_numpy()
-cols = feats(ct); print(f"  features used: {len(cols)}")
+cols = feats(ct, drop_empty_const=False); print(f"  features used: {len(cols)}")
 # stored OOF (sanity)
 oof = pd.read_csv(PF+"/ct/primary_model_oof.csv")
 print(f"  stored-OOF  RF[raw] AUC = {roc_auc_score((oof['iou']>=0.9).astype(int), oof['randomforest_[raw]']):.4f}"

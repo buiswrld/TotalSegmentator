@@ -1,0 +1,3 @@
+modality,in_sample,n_masks_gt_present,n_low_iou,n_silent_failure,raw_rate,conditional_rate_of_low_iou
+"CT (official val+test, held out)",False,9563,2086,1169,0.1222,0.5604
+"MRI (official test, held out)",False,859,700,326,0.3795,0.4657

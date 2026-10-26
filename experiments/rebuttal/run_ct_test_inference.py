@@ -15,8 +15,8 @@ import os, sys, glob, json, subprocess, datetime
 sys.path.insert(0, ".")
 from experiments.pipeline.common import get_subjects
 
-DATASET = "C:/Users/ansar/Downloads/Totalsegmentator_dataset_v201"
-PRED_DIR = "C:/Users/ansar/Algoverse/predictions_ct_test"
+DATASET = os.environ["SSAT_CT_DATASET"]
+PRED_DIR = os.environ["SSAT_CT_TEST_PREDICTIONS"]
 TASK = "total"
 os.makedirs(PRED_DIR, exist_ok=True)
 

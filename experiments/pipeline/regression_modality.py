@@ -43,9 +43,9 @@ import regression as R
 from ablations import FAMILY_PATTERNS
 
 # ---------------------------------------------------------------- paths / config
-CT_CSV   = r"C:\Users\ansar\Algoverse\report_ct_val\combined_metrics.csv"
+CT_CSV   = "experiments/paper_final/ct/dataset_combined_metrics.csv"
 MRI_CSV  = r"experiments/eval_runs/mr_full_run/metrics/train/combined_metrics.csv"  # MRI train (carve dev)
-OUT_ROOT = r"C:\Users\ansar\Algoverse"
+OUT_ROOT = "ssat_outputs"
 CT_OUT   = os.path.join(OUT_ROOT, "report_ct_val", "regression_phase2")
 MRI_OUT_INT   = os.path.join(OUT_ROOT, "report_mri_dev", "regression_intensity")
 MRI_OUT_NOINT = os.path.join(OUT_ROOT, "report_mri_dev", "regression_no_intensity")

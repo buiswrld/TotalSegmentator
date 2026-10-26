@@ -8,8 +8,8 @@ sys.path.insert(0, ".")
 import numpy as np, pandas as pd
 from experiments.pipeline.regression import normalize_columns
 
-os.makedirs("rebuttal_results/ct", exist_ok=True)
-os.makedirs("rebuttal_results/mri", exist_ok=True)
+os.makedirs("ssat_outputs/rebuttal/ct", exist_ok=True)
+os.makedirs("ssat_outputs/rebuttal/mri", exist_ok=True)
 
 srcs = {
     "CT_dev": "experiments/paper_final/ct/dataset_combined_metrics.csv",
@@ -27,7 +27,7 @@ for name, path in srcs.items():
                  "dice_p95": round(float(np.percentile(d, 95)), 4),
                  "frac_dice_ge_0.90": round(float((d >= 0.90).mean()), 4)})
 tab = pd.DataFrame(rows)
-tab.to_csv("rebuttal_results/ct/request4_dice_summary.csv", index=False)
-tab.to_csv("rebuttal_results/mri/request4_dice_summary.csv", index=False)
+tab.to_csv("ssat_outputs/rebuttal/ct/request4_dice_summary.csv", index=False)
+tab.to_csv("ssat_outputs/rebuttal/mri/request4_dice_summary.csv", index=False)
 print("=== Request 4: Dice summary (non-empty modelled masks) ===")
 print(tab.to_string(index=False))

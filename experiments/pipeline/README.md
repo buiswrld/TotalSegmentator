@@ -1,7 +1,9 @@
+> Release navigation and protocol caveats: [SSAT_README.md](../../SSAT_README.md). This staged classifier workflow is distinct from the paper-specific regression/development protocol. Later curated-table ablations use `ablations_staged.py`.
+
 # QC pipeline
 
 Ground-truth-free quality-control classifier pipeline for TotalSegmentator predictions:
-train a model that looks at a **predicted mask alone** (no ground truth) and predicts
+train a model that looks at a **predicted mask and corresponding image** (no ground truth at scoring time) and predicts
 whether it's actually good. Six independent, resumable, CLI-driven stages — no
 hardcoded paths, every parameter is a flag. Each stage is a standalone script; a thin
 orchestrator (`run_pipeline.py`) runs all six with one consistent directory layout.
@@ -15,7 +17,7 @@ reasoning behind each design choice. This file is the quick developer reference.
 |---|---|---|---|---|
 | 1 | `run_inference.py` | dataset dir, split | `predictions/<subject>/*.nii.gz` | Runs TotalSegmentator on each subject. The only stage that touches the model. |
 | 2 | `compute_metrics.py` | dataset dir + stage 1 predictions | `combined_metrics.csv`, `summary_by_organ.csv` (+ optional overlays/L-R audit/accept-analysis) | Scores predictions vs. ground truth (Dice/IoU/labels) and computes `totalsegmentator/mask_metrics.py`'s ground-truth-free features on the predicted mask. One row per (subject, organ) — this is the raw training data. CT and MR both go through this one script via `--modality {ct,mr}`. |
-| 3 | `build_reference_table.py` | dataset dir (ground truth only, `train` split) | `reference_stats.csv` | Per-organ median/IQR of every feature, so "volume=50000" becomes "3 SD smaller than typical." No inference, no dependency on stage 1/2. |
+| 3 | `build_reference_table.py` | dataset dir (ground truth only, `train` split) | `reference_stats.csv` | Per-organ median/IQR of every feature, so "volume=50000" becomes "smaller than the reference median in IQR units." No inference, no dependency on stage 1/2. |
 | 4 | `curate_dataset.py` | one split's `combined_metrics.csv` + `reference_stats.csv` | one classifier-ready CSV (e.g. `classifier_train.csv`) | Joins organ-relative z-scores, drops empty-prediction rows, assigns the accept/reject label. Run once per split. |
 | 5 | `train.py` | a curated dataset CSV | `cv_summary.csv`, `oof_predictions.csv`, `loo_by_organ.csv`, `models/*.joblib` + `training_manifest.json` | Cross-validated comparison across 4 model families × 4 feature sets + baselines, then refits every combination on the full training set and persists it to disk. |
 | 6 | `test.py` | persisted models + a curated held-out test CSV | `test_results.csv`, `test_summary.csv` | Scores every persisted model against data never used in reference-building or training/CV. Reports ROC-AUC/PR-AUC plus calibration (ECE/MCE/Brier). |
@@ -41,7 +43,7 @@ has `train`/`test` — see `RESEARCH.md` section 2 for how each maps onto stages
 ## Resumability
 
 Stage 1 checks per-subject whether prediction files already exist before running
-TotalSegmentator — safe to kill and re-run. Stages 2–6 each write their output file
+TotalSegmentator — check completeness before reusing an interrupted subject; any existing mask currently triggers a skip. Stages 2–6 each write their output file
 atomically at the very end of a full run, so the orchestrator's "skip if output exists"
 check is always either fully-done-skip-it or not-done-run-it, never a partial state.
 

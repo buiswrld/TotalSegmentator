@@ -34,7 +34,8 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import regression as R
 from common import ece_mce, brier_decomposition
 
-A = r"C:\Users\ansar\Algoverse"
+A = "ssat_outputs"
+SOURCE_FINAL = "experiments/paper_final"
 FINAL = os.path.join(A, "paper_final"); CT = os.path.join(FINAL, "ct"); MRI = os.path.join(FINAL, "mri")
 MRI_TRAIN_CSV = os.path.abspath("experiments/eval_runs/mr_full_run/metrics/train/combined_metrics.csv")
 INTENSITY_COLS = ["mean_HU", "median_HU", "std_HU", "p05_HU", "p95_HU"]
@@ -202,12 +203,13 @@ def silent_failure_row(modality, oof_csv, in_sample):
 # ---------------------------------------------------------------- main
 
 def main():
+    os.makedirs(CT, exist_ok=True); os.makedirs(MRI, exist_ok=True)
     print("G7: primary-model AUC + 95% subject-bootstrap CI (no retraining)")
-    ct_oof = pd.read_csv(os.path.join(CT, "primary_model_oof.csv"))
+    ct_oof = pd.read_csv(os.path.join(SOURCE_FINAL, "ct", "primary_model_oof.csv"))
     ct_models = [c for c in ct_oof.columns if c not in ("subject", "organ", "iou", "label")]
     primary_summary(ct_oof, ct_models, os.path.join(CT, "primary_model_summary.csv"), "CT")
 
-    mri_oof = pd.read_csv(os.path.join(MRI, "iou_regression_oof.csv"))
+    mri_oof = pd.read_csv(os.path.join(SOURCE_FINAL, "mri", "iou_regression_oof.csv"))
     mri_oof["organ-rate_baseline"] = organ_rate_oof(mri_oof)   # G2: the 'beats organ identity' anchor
     primary_summary(mri_oof, ["pred_iou_RandomForest", "pred_iou_HistGB", "organ-rate_baseline"],
                     os.path.join(MRI, "primary_model_summary.csv"), "MRI-dev")
@@ -229,8 +231,8 @@ def main():
     calibration_metrics(ne, cols_noint, os.path.join(MRI, "calibration_metrics_no_intensity.csv"), "MRI -intensity")
 
     print("\nSilent-failure rates (raw + conditional), like-for-like")
-    rows = [silent_failure_row("CT (val, held out)", os.path.join(CT, "volume_label_oof.csv"), False),
-            silent_failure_row("MRI (dev, IN-SAMPLE)", os.path.join(MRI, "volume_label_oof.csv"), True)]
+    rows = [silent_failure_row("CT (val, held out)", os.path.join(SOURCE_FINAL, "ct", "volume_label_oof.csv"), False),
+            silent_failure_row("MRI (dev, IN-SAMPLE)", os.path.join(SOURCE_FINAL, "mri", "volume_label_oof.csv"), True)]
     sf = pd.DataFrame(rows)
     sf.to_csv(os.path.join(FINAL, "silent_failure_summary.csv"), index=False)
     print(sf.to_string(index=False))

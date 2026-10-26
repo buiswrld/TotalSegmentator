@@ -54,8 +54,8 @@ from ablations import family_of, FEATURE_GROUPS
 from common import ece_mce
 
 # ============================ CONFIG ============================
-CSV        = r"C:\Users\ansar\Algoverse\report_ct_val\combined_metrics.csv"
-OUT_DIR    = r"C:\Users\ansar\Algoverse\report_ct_val\regression"
+CSV        = "experiments/paper_final/ct/dataset_combined_metrics.csv"
+OUT_DIR    = "ssat_outputs/regression"
 
 IOU_ACCEPT = 0.90
 N_SPLITS   = 5
@@ -617,8 +617,9 @@ def task4_clinical_flips(df, pred_iou):
             print(f"\n  {organ}: no rows in data, skipping")
             continue
         cut = spec["cutoff_ml"]
-        o["gt_disease"] = o.gt_ml > cut
-        o["pred_disease"] = o.pred_ml > cut
+        above_is_disease = spec.get("direction", "greater") == "greater"
+        o["gt_disease"] = (o.gt_ml > cut) if above_is_disease else (o.gt_ml < cut)
+        o["pred_disease"] = (o.pred_ml > cut) if above_is_disease else (o.pred_ml < cut)
         o["flip"] = o.gt_disease != o.pred_disease
         n, nflip = len(o), int(o.flip.sum())
         print(f"\n  --- {organ} ({spec['condition']}, cutoff {cut} mL; {spec['cite']}) ---")
@@ -681,6 +682,11 @@ def main():
     cols = feature_columns(df)
     print(f"{len(cols)} ground-truth-free features (leak guard passed)\n")
     groups = df["subject"].to_numpy()
+
+    global DIRECT_CLASSIFIER_AUC
+    y_direct = (df["iou"].to_numpy() >= IOU_ACCEPT).astype(int)
+    p_direct = oof_proba(df.assign(_direct_label=y_direct), cols, "_direct_label", groups)
+    DIRECT_CLASSIFIER_AUC = roc_auc_score(y_direct, p_direct)
 
     pred_iou = None
     if RUN_IOU_REG:

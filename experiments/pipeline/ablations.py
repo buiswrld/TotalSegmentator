@@ -40,9 +40,9 @@ except Exception:
     HAVE_REF = False
 
 # ============================ CONFIG ============================
-CSV           = r"C:\Users\ansar\Algoverse\report_ct_val\combined_metrics.csv"
-REFERENCE_CSV = r"C:\Users\ansar\Algoverse\report_ct\reference_stats.csv"
-OUT_DIR       = r"C:\Users\ansar\Algoverse\report_ct_val\ablations"
+CSV           = "experiments/paper_final/ct/dataset_combined_metrics.csv"
+REFERENCE_CSV = "ssat_outputs/reference/reference_stats.csv"
+OUT_DIR       = "ssat_outputs/ablations"
 
 IOU_ACCEPT = 0.90
 N_SPLITS   = 5

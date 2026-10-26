@@ -190,13 +190,14 @@ def main():
     parser.add_argument("--workers", type=int, default=10, help="Parallel subjects; 1 disables multiprocessing.")
     parser.add_argument("--min-voxels", type=int, default=20, help="Ignore FOV slivers when building the reference.")
     parser.add_argument("--min-n", type=int, default=10, help="Warn about organs with fewer than this many observations.")
+    parser.set_defaults(split="train")
     args = parser.parse_args()
-    if args.split == "test":
-        parser.error("Refusing to build the reference table from the test split - it must "
+    if args.split in ("test", "all") or not args.split:
+        parser.error("Refusing to build the reference table from a test or pooled split - it must "
                      "stay held out. Use --split train (default) or another non-test split.")
 
     image_name, _ = resolve_modality(args)
-    subjects = get_subjects(args.dataset_dir, args.split, args.limit)
+    subjects = get_subjects(args.dataset_dir, args.split, args.limit, args.offset)
     print(f"Building reference from {len(subjects)} subject(s), split={args.split}")
     print("(ground-truth masks only, no segmentation, no GPU)\n")
 
