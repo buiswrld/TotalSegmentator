@@ -5,7 +5,7 @@ TotalSegmentator installation, inference, licensing, and citations are documente
 in [README.md](README.md). Its upstream code and license are preserved.
 
 **Release status: review candidate.** Saved paper/rebuttal tables pass the checks
-below. Exact refits differ in the available environment. The cross-branch history
+below. Stable fold ordering recovers the original baselines exactly; forest refits are very close but not bitwise identical. The cross-branch history
 also contradicts the October claim that CT test had never been evaluated. Read
 [the audit](docs/ssat/REPOSITORY_AUDIT.md) before describing test isolation or using
 full-dataset results in the manuscript. The camera-ready paper is not in this
@@ -45,8 +45,10 @@ To attempt the original development refits:
 python experiments/rebuttal/reproduce_dev.py
 ```
 
-This prints saved and refitted scores. It is a diagnostic and currently does not
-reproduce all historical values in the review environment; see the audit.
+This prints saved and refitted scores. It explicitly uses stable ordering of equally sized subject groups. This matches
+all saved CT baseline predictions and the MRI baseline AUC. Forest refits remain
+slightly different; see the audit. Other historical scripts retain their original
+GroupKFold behavior, which can differ across environments.
 
 ## Code entry points
 

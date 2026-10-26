@@ -71,7 +71,7 @@ segmenter training overlap of each MRI population is not independently verified
 by this code export; preserve the paper's conservative caveats rather than
 making stronger claims from the split name.
 
-## Finding 2: saved evidence verifies; fresh refits drift
+## Finding 2: fold tie ordering explains the large refit drift
 
 Saved evidence checks pass:
 
@@ -94,14 +94,27 @@ Fresh five-fold development fits in the review environment yield:
 
 Environment: Python 3.12.14, NumPy 2.3.5, pandas 2.2.3, scikit-learn 1.8.0,
 SciPy 1.17.0. Historical exact analysis dependency versions and explicit fold
-assignments were not found in the exported manifests. The baseline discrepancy
-shows that matching a forest seed alone cannot resolve this. Dependency/fold
-differences are a hypothesis, not an established explanation. Recover the
-original environment/folds before advertising exact refit reproduction.
+assignments were not found in the exported manifests. A follow-up diagnostic
+identified the major source: stable sorting of equally sized subject groups.
+With stable tie ordering, **all 4,017 saved CT organ-rate predictions match
+exactly**, and the MRI organ-rate AUC is 0.8150436, matching its historical
+summary. Default quicksort in the current GroupKFold environment gives the
+different baseline values above. This is direct evidence that fold assignment,
+not only forest randomness, caused the large discrepancy.
+
+The new `experiments/pipeline/folds.py` makes that ordering explicit, and
+`reproduce_dev.py` uses it. With the frozen 20-column CT/19-column MRI settings,
+forest refit AUCs become **0.8704 CT** and **0.9186 MRI**, versus saved 0.8707
+and 0.9187. Small residual estimator/preprocessing differences remain unresolved.
+Stable tie ordering is a reconstructed rule validated against saved predictions;
+it is not an original fold manifest recovered from the authors. Other historical
+analysis entry points retain their original GroupKFold imports. Do not advertise
+bitwise reproduction of all experiments. The evidence does not justify labeling
+the saved results fabricated.
 
 The old `reproduce_dev.py` default also dropped CT's constant `is_empty` column,
 despite the frozen configuration keeping it. The candidate corrects that check
-to 20 columns; the mismatch remains. Saved tables were not altered to match new
+to 20 columns; a small residual mismatch remains after stabilizing fold ordering. Saved tables were not altered to match new
 fits. New output paths prevent incidental overwrites of original evidence.
 
 ## Finding 3: surface analysis differs from frozen specification

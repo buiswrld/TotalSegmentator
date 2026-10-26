@@ -9,7 +9,9 @@ Targets (from paper_final):
 """
 import os, sys
 import numpy as np, pandas as pd
-from sklearn.model_selection import GroupKFold
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+from experiments.pipeline.folds import StableGroupKFold as GroupKFold
 from sklearn.pipeline import Pipeline
 from sklearn.impute import SimpleImputer
 from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor
