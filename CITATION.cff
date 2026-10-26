@@ -1,0 +1,29 @@
+cff-version: 1.2.0
+message: "For the reliability-assessment study, cite the preferred paper citation. Also cite TotalSegmentator, the relevant datasets, and nnU-Net when using their components."
+type: software
+title: "Research code for Reference-Free Per-Mask Reliability Assessment for Whole-Body Anatomical Segmentation Across CT and MRI"
+authors:
+  - family-names: Ansari
+    given-names: Aahil
+  - family-names: Lokhande
+    given-names: Soham Ravindra
+  - family-names: Bui
+    given-names: Ryan
+  - family-names: Zhu
+    given-names: Kevin
+repository-code: "https://github.com/buiswrld/TotalSegmentator"
+license: Apache-2.0
+preferred-citation:
+  type: unpublished
+  title: "Reference-Free Per-Mask Reliability Assessment for Whole-Body Anatomical Segmentation Across CT and MRI"
+  authors:
+    - family-names: Ansari
+      given-names: Aahil
+    - family-names: Lokhande
+      given-names: Soham Ravindra
+    - family-names: Bui
+      given-names: Ryan
+    - family-names: Zhu
+      given-names: Kevin
+  year: 2026
+  notes: "Accepted to the GenAI4Health Workshop at NeurIPS 2026. Public paper URL and proceedings metadata were not available when this file was prepared."

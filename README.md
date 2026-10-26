@@ -1,4 +1,32 @@
-> **SSAT research fork:** See [SSAT_README.md](SSAT_README.md) for our reliability-assessment code, result provenance, and reproduction instructions. The original TotalSegmentator documentation follows below.
+# Reference-Free Per-Mask Reliability Assessment
+
+Research code for **Reference-Free Per-Mask Reliability Assessment for Whole-Body
+Anatomical Segmentation Across CT and MRI**, accepted to the **GenAI4Health
+Workshop at NeurIPS 2026**.
+
+**Aahil Ansari · Soham Ravindra Lokhande · Ryan Bui · Kevin Zhu**
+
+We assess the quality of individual TotalSegmentator masks using descriptors
+from each predicted mask and its source image, without reference annotations
+at scoring time. This research evaluates quality ranking; it does not modify
+segmentation boundaries or establish clinical safety.
+
+- **Research setup, reproduction, and code availability:** [SSAT_README.md](SSAT_README.md)
+- **Paper result tables:** [experiments/paper_final/](experiments/paper_final/)
+- **Reviewer analyses:** [rebuttal_results/](rebuttal_results/)
+- **Protocol and reproduction caveats:** [repository audit](docs/ssat/REPOSITORY_AUDIT.md)
+- **Citation:** [paper citation and acknowledgments](SSAT_README.md#citation-and-acknowledgments), or GitHub's “Cite this repository” control.
+
+## Upstream credit
+
+This is a research fork of [TotalSegmentator](https://github.com/wasserth/TotalSegmentator),
+developed by Jakob Wasserthal and collaborators. Our additions concern
+reliability assessment; TotalSegmentator supplies the segmentation models and
+inherited inference code. Please cite the relevant TotalSegmentator, MRI,
+dataset, and nnU-Net publications as well as our reliability-assessment paper.
+The original license, credits, and documentation are retained below.
+
+---
 
 # TotalSegmentator
 

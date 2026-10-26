@@ -4,12 +4,18 @@ This fork adds per-mask reliability assessment to TotalSegmentator. Original
 TotalSegmentator installation, inference, licensing, and citations are documented
 in [README.md](README.md). Its upstream code and license are preserved.
 
-**Release status: review candidate.** Saved paper/rebuttal tables pass the checks
-below. Stable fold ordering recovers the original baselines exactly; forest refits are very close but not bitwise identical. The cross-branch history
-also contradicts the October claim that CT test had never been evaluated. Read
-[the audit](docs/ssat/REPOSITORY_AUDIT.md) before describing test isolation or using
-full-dataset results in the manuscript. The camera-ready paper is not in this
-export, so this candidate has not been matched line by line to that PDF.
+This is the research-code release for **Reference-Free Per-Mask Reliability
+Assessment for Whole-Body Anatomical Segmentation Across CT and MRI**, accepted
+to the **GenAI4Health Workshop at NeurIPS 2026**. Authors: Aahil Ansari, Soham
+Ravindra Lokhande, Ryan Bui, and Kevin Zhu.
+
+**Reproduction status.** The saved primary predictions, CT triage results, and
+within-structure results pass the supplied verification checks. Reconstructed
+stable fold ordering recovers the saved baselines; forest refits are close but
+not bitwise identical. Historical runs use different populations and must not
+be combined. See [the audit](docs/ssat/REPOSITORY_AUDIT.md), including its
+correction to the earlier CT test-isolation claim. Acceptance of the paper does
+not establish clinical validity or guarantee exact numerical refitting.
 
 ## Which results belong to which protocol?
 
@@ -114,3 +120,54 @@ requires `SSAT_MRI_DATASET`.
   history rather than the candidate working tree.
 - No new dataset inference, model-weight download, remote merge, or push was
   performed to prepare this candidate.
+
+
+## Code and data availability
+
+The research code, retained per-mask result tables, and provenance records are
+available at https://github.com/buiswrld/TotalSegmentator. The primary paper
+results are under `experiments/paper_final/`; reviewer analyses are under
+`rebuttal_results/`. `experiments/paper_final_v2/` is a separate full-dataset
+analysis and does not replace the main paper protocol.
+
+Original CT/MRI images, full generated masks, and fitted QC model binaries are
+not distributed with this research release. Obtain source datasets and
+TotalSegmentator weights from their original providers, following their terms
+and access requirements. Dataset links and upstream citations are retained in
+the [original TotalSegmentator documentation](README.md#totalsegmentator).
+For data provenance, the processed MRI training/test tables cover 190/49
+subjects, while historical metadata records 561/55 official train/test subjects;
+the paper development subset has 38 subjects. These counts describe different
+populations.
+
+## Citation and acknowledgments
+
+For the reliability-assessment research, cite:
+
+```bibtex
+@misc{ansari2026referencefree,
+  title = {Reference-Free Per-Mask Reliability Assessment for Whole-Body Anatomical Segmentation Across CT and MRI},
+  author = {Ansari, Aahil and Lokhande, Soham Ravindra and Bui, Ryan and Zhu, Kevin},
+  year = {2026},
+  note = {Accepted to the GenAI4Health Workshop at NeurIPS 2026},
+  howpublished = {\url{https://github.com/buiswrld/TotalSegmentator}}
+}
+```
+
+This citation records workshop acceptance; no DOI or proceedings identifier is
+claimed. Add the public paper URL when available. GitHub citation metadata is
+provided in `CITATION.cff`.
+
+This repository is a fork of
+[TotalSegmentator by Jakob Wasserthal and collaborators](https://github.com/wasserth/TotalSegmentator).
+Our contributions are the reliability descriptors, quality-prediction and
+analysis workflows, and associated research results; the segmentation models
+and inherited inference implementation are TotalSegmentator's work. Cite the
+relevant TotalSegmentator CT/MRI publications, source datasets, and nnU-Net in
+addition to this paper when using those components. Original attribution and
+the Apache-2.0 LICENSE are retained; weights and datasets retain their own terms.
+
+We thank Algoverse AI Research for research support and Lambda for GPU compute
+support, as well as the TotalSegmentator maintainers, public dataset
+contributors, and developers of the open-source software used in the study.
+The paper authors declare no competing interests.
